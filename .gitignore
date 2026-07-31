@@ -2,3 +2,9 @@ ARCHIVE/
 __pycache__/
 *.pyc
 *.log
+
+api/payment_confirm_test_9003.py
+emails/email_log.json
+orders/orders_live.json
+orders/orders_production.json
+payment/stripe_gateway.py
