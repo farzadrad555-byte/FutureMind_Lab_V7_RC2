@@ -1,0 +1,2 @@
+# FutureMind Lab V7 RC2
+# No external dependencies required

@@ -823,10 +823,13 @@ class Handler(SimpleHTTPRequestHandler):
 
 
 
-print("FutureMind Lab Security Server V2 running on 8001")
+import os
 
+PORT = int(os.environ.get("PORT", 8001))
+
+print(f"FutureMind Lab Security Server V2 running on {PORT}")
 
 HTTPServer(
-    ("0.0.0.0",8001),
+    ("0.0.0.0", PORT),
     Handler
 ).serve_forever()
