@@ -1,0 +1,116 @@
+{
+    "products": [
+        {
+            "id": "hunter-x-v44",
+            "name": "Hunter-X V44 Professional",
+            "category": "AI Trading Intelligence",
+            "version": "V44 Professional",
+            "price": 49,
+            "currency": "USD",
+            "status": "Active",
+            "page": "hunter-x.html",
+            "description": "AI Market Intelligence Platform",
+            "payment_methods": [
+                "Stripe",
+                "PayPal",
+                "ZarinPal"
+            ],
+            "download": "Hunter-X_Professional.zip",
+            "markets": {
+                "global": {
+                    "price": 49,
+                    "currency": "USD",
+                    "payment": "crypto"
+                },
+                "iran": {
+                    "price": 990000,
+                    "currency": "IRR",
+                    "payment": "local"
+                }
+            }
+        },
+        {
+            "id": "science-ai-pack",
+            "name": "Science Teacher AI Pack",
+            "category": "Education AI",
+            "version": "V1",
+            "price": 29,
+            "currency": "USD",
+            "status": "Active",
+            "page": "science-ai-pack.html",
+            "description": "AI tools for science educators",
+            "payment_methods": [
+                "Stripe",
+                "PayPal",
+                "ZarinPal"
+            ],
+            "download": "science-ai-pack.zip",
+            "markets": {
+                "global": {
+                    "price": 29,
+                    "currency": "USD",
+                    "payment": "crypto"
+                },
+                "iran": {
+                    "price": 590000,
+                    "currency": "IRR",
+                    "payment": "local"
+                }
+            }
+        },
+        {
+            "id": "math-ai-pack",
+            "name": "Math Teacher AI Pack",
+            "category": "Education AI",
+            "version": "V1",
+            "price": 29,
+            "currency": "USD",
+            "status": "Active",
+            "page": "math-ai-pack.html",
+            "description": "AI tools for mathematics teachers",
+            "payment_methods": [
+                "Stripe",
+                "PayPal",
+                "ZarinPal"
+            ],
+            "download": "math-ai-pack.zip",
+            "markets": {
+                "global": {
+                    "price": 29,
+                    "currency": "USD",
+                    "payment": "crypto"
+                },
+                "iran": {
+                    "price": 590000,
+                    "currency": "IRR",
+                    "payment": "local"
+                }
+            }
+        },
+        {
+            "id": "futuremind-templates",
+            "name": "FutureMind Templates Pack",
+            "category": "Digital Templates",
+            "version": "V1",
+            "price": 19,
+            "currency": "USD",
+            "status": "Coming Soon",
+            "page": "templates.html",
+            "description": "Professional digital templates",
+            "payment_methods": [],
+            "download": "templates.zip",
+            "markets": {
+                "global": {
+                    "price": 19,
+                    "currency": "USD",
+                    "payment": "crypto"
+                },
+                "iran": {
+                    "price": 390000,
+                    "currency": "IRR",
+                    "payment": "local"
+                }
+            }
+        }
+    ]
+}

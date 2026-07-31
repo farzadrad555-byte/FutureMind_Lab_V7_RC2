@@ -1,0 +1,85 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Order Success | FutureMind Lab</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+
+<h1><span data-lang="thank_you">Thank You!</span></h1>
+
+<h2><span data-lang="order_received">Your Hunter-X order has been received.</span></h2>
+
+<p><span data-lang="contact_soon">FutureMind Lab team will contact you soon.</span></p>
+
+<a href="../index.html"><span data-lang="back_home">Back To Home</span></a>
+
+<script src="../js/language.js"></script>
+
+
+<hr>
+
+<h2>🎉 Your Product Is Ready</h2>
+
+<p>
+Thank you for your purchase.
+Your download is available below:
+</p>
+
+<a 
+id="downloadBtn"
+href="#"
+class="btn">
+⬇ Download Hunter-X V44 Professional
+</a>
+
+
+<script>
+
+async function loadDownload(){
+
+    const token = new URLSearchParams(
+        window.location.search
+    ).get("token");
+
+
+    if(token){
+
+        localStorage.setItem(
+            "download_token",
+            token
+        );
+
+        document.getElementById("downloadBtn").href =
+        "download.html?token=" + token;
+
+    } else {
+
+        const savedToken =
+        localStorage.getItem("download_token");
+
+        if(savedToken){
+
+            document.getElementById("downloadBtn").href =
+            "download.html?token=" + savedToken;
+
+        } else {
+
+            document.getElementById("downloadBtn").innerHTML =
+            "Download link unavailable";
+
+        }
+
+    }
+
+}
+
+loadDownload();
+
+</script>
+
+
+</body>
+</html>

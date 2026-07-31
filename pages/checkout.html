@@ -1,0 +1,235 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Checkout | FutureMind Lab</title>
+
+<link rel="stylesheet" href="../css/style.css">
+
+<style>
+
+.checkout-container{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:30px;
+}
+
+.checkout-card{
+    max-width:900px;
+    width:100%;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:30px;
+    padding:35px;
+    border-radius:25px;
+    background:rgba(255,255,255,0.08);
+    backdrop-filter:blur(15px);
+}
+
+.product-box h1{
+    font-size:38px;
+}
+
+.feature{
+    margin:12px 0;
+}
+
+.checkout-form input{
+    width:100%;
+    padding:15px;
+    margin:10px 0 20px;
+    border-radius:12px;
+    border:none;
+}
+
+.checkout-form button{
+    width:100%;
+    padding:16px;
+    border-radius:12px;
+    border:none;
+    cursor:pointer;
+    font-size:18px;
+}
+
+@media(max-width:700px){
+    .checkout-card{
+        grid-template-columns:1fr;
+    }
+}
+
+</style>
+
+</head>
+
+<body>
+<div class="navigation">
+
+<div>
+<a href="../index.html">
+🏠 <span data-lang="home">Home</span>
+</a>
+
+<a href="../products/hunter-x.html">
+← <span data-lang="hunter">Hunter-X</span>
+</a>
+</div>
+
+</div>
+
+
+<div class="checkout-container">
+
+<div class="checkout-card">
+
+<div class="product-box">
+
+<h1><span data-lang="hunter">Hunter-X</span></h1>
+
+<h2>V44 Professional</h2>
+
+<p>
+<span data-lang="ai_platform">AI Market Intelligence Platform</span>
+</p>
+
+<hr>
+
+<div class="feature">✓ <span data-lang="market_scanner">Market Scanner</span></div>
+<div class="feature">✓ <span data-lang="risk_analysis">Risk Analysis</span></div>
+<div class="feature">✓ <span data-lang="opportunity_detection">Opportunity Detection</span></div>
+<div class="feature">✓ <span data-lang="professional_reports">Professional Reports</span></div>
+<div class="feature">✓ <span data-lang="professional_insights">AI Assisted Insights</span></div>
+
+</div>
+
+
+<div class="checkout-form">
+
+<h2><span data-lang="complete_order">Complete Your Order</span></h2>
+
+<label><span data-lang="name">Name</span></label>
+
+<input id="name" 
+type="text" 
+placeholder="Enter your name" data-lang-placeholder="enter_name">
+
+
+<label><span data-lang="email">Email</span></label>
+
+<input id="email" 
+type="email" 
+placeholder="Enter your email" data-lang-placeholder="enter_email">
+
+
+<button type="button" onclick="submitOrder()">
+<span data-lang="complete_order">Complete Order</span>
+</button>
+
+</div>
+
+</div>
+
+</div>
+<div id="market-info" style="margin-top:20px;text-align:center;">
+<h3 id="market-price"></h3>
+<p id="payment-method"></p>
+</div>
+
+
+<script src="../js/language.js"></script>
+
+
+
+<script src="../js/market.js"></script>
+<script>
+
+window.selectedProduct = null;
+window.productReady = false;
+
+console.log("CHECKOUT START");
+console.log("URL:", window.location.href);
+console.log(
+"PARAM ID:",
+new URLSearchParams(window.location.search).get("id")
+);
+
+
+
+fetch("../products/products_market_engine.json")
+.then(response => response.json())
+.then(data => {
+
+const params = new URLSearchParams(
+window.location.search
+);
+
+const productId = params.get("product") || params.get("id");
+
+
+window.selectedProduct = data.products.find(
+p => p.id === productId
+);
+
+window.productReady = true;
+
+console.log("PRODUCT READY:", window.selectedProduct);
+
+
+console.log("PRODUCT DATA:", data);
+console.log("FOUND PRODUCT:", window.selectedProduct);
+
+if(window.selectedProduct){
+
+let market = getMarket();
+
+console.log("CURRENT MARKET:", market);
+
+let marketData = window.selectedProduct.markets ? 
+window.selectedProduct.markets[market] : null;
+
+console.log("CURRENT MARKET:", market);
+console.log("MARKET DATA:", marketData);
+
+if(marketData){
+
+setTimeout(()=>{
+
+document.getElementById("market-price").innerText =
+"Price: " + marketData.price + " " + marketData.currency;
+
+document.getElementById("payment-method").innerText =
+"Payment: " + marketData.payment;
+
+},100);
+
+}
+
+
+document.querySelector(".product-box h1").innerText =
+window.selectedProduct.name;
+
+
+document.querySelector(".product-box h2").innerText =
+window.selectedProduct.version;
+
+
+document.querySelector(".product-box p").innerText =
+window.selectedProduct.description;
+
+
+}
+
+});
+
+
+</script>
+
+
+<script src="../js/checkout.js"></script>
+
+</body>
+</html>

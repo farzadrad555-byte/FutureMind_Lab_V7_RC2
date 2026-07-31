@@ -1,0 +1,9 @@
+{
+    "hunter-x-v44": {
+        "product_id": "hunter-x-v44",
+        "product_name": "Hunter-X Professional V44",
+        "type": "digital_product",
+        "payment_required": true,
+        "download_package": "Hunter-X_V44_CUSTOMER_EDITION.zip"
+    }
+}

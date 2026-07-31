@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<script src="../js/market.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>FutureMind Lab Store</title>
+
+<link rel="stylesheet" href="../css/style.css">
+
+<style>
+
+body{
+background:#080d1c;
+color:white;
+font-family:Arial,sans-serif;
+}
+
+.hero{
+text-align:center;
+padding:60px 20px;
+}
+
+.highlight{
+color:#00d9ff;
+}
+
+.cards{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:25px;
+padding:40px;
+}
+
+.card{
+width:280px;
+background:#121a33;
+padding:30px;
+border-radius:20px;
+text-align:center;
+}
+
+.btn{
+display:inline-block;
+padding:12px 25px;
+background:#00d9ff;
+color:black;
+border-radius:20px;
+text-decoration:none;
+font-weight:bold;
+}
+
+.status{
+color:#00d9ff;
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<div class="hero">
+
+<h1>
+FutureMind Lab <span class="highlight">Store</span>
+</h1>
+
+<p>
+AI Products • Education • Trading Intelligence
+</p>
+
+</div>
+
+
+<h2 style="text-align:center">Featured Products</h2>
+<div style="text-align:center;margin:20px;">
+<button onclick="setMarket('global');location.reload()" class="btn">
+🌍 Global
+</button>
+
+<button onclick="setMarket('iran');location.reload()" class="btn">
+🇮🇷 Iran
+</button>
+</div>
+
+
+
+<div class="cards" id="products">
+Loading...
+</div>
+
+
+
+<script>
+
+fetch("../products/products_market_engine.json")
+
+.then(res=>res.json())
+
+.then(data=>{
+
+let box=document.getElementById("products");
+
+box.innerHTML="";
+
+
+data.products.forEach(p=>{
+
+
+box.innerHTML += `
+
+<div class="card">
+
+<h2>${p.name}</h2>
+
+<h3>${p.version}</h3>
+
+<p>${p.description}</p>
+
+<h2>${p.markets[getMarket()].price} ${p.markets[getMarket()].currency}</h2>
+
+<p class="status">
+${p.status}
+</p>
+
+
+<a class="btn" href="checkout.html?id=${p.id}">
+View Product
+</a>
+
+
+</div>
+
+`;
+
+});
+
+
+});
+
+
+</script>
+
+
+</body>
+
+</html>

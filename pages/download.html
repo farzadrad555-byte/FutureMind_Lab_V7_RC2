@@ -1,0 +1,78 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>FutureMind Lab Download Portal</title>
+<style>
+body{
+background:#080d1c;
+color:white;
+font-family:Arial;
+padding:40px;
+}
+.card{
+background:#121a33;
+padding:30px;
+border-radius:20px;
+max-width:600px;
+margin:auto;
+}
+button{
+background:#00d9ff;
+border:0;
+padding:15px 25px;
+border-radius:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<h1>FutureMind Lab</h1>
+<h2>Customer Download Portal</h2>
+
+<div id="info">
+Loading...
+</div>
+
+<button id="download">
+Download Product
+</button>
+
+</div>
+
+
+<script>
+
+let token =
+new URLSearchParams(window.location.search).get("token");
+
+
+fetch("/api/download-info?token="+token)
+.then(r=>r.json())
+.then(data=>{
+
+document.getElementById("info").innerHTML =
+`
+<p>Product: ${data.product}</p>
+<p>Order ID: ${data.order_id}</p>
+<p>Downloads: ${data.downloads}/${data.limit}</p>
+<p>Remaining: ${data.remaining}</p>
+<p>Status: ${data.token_status}</p>
+`;
+
+document.getElementById("download").onclick=function(){
+
+window.location.href =
+"/api/secure-download?token="+token;
+
+}
+
+});
+
+</script>
+
+</body>
+</html>

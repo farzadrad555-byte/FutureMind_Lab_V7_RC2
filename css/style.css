@@ -1,0 +1,221 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #0f172a;
+    color: white;
+    text-align: center;
+}
+
+header {
+    padding: 60px 20px;
+    background: #111827;
+}
+
+header h1 {
+    font-size: 48px;
+    margin-bottom: 15px;
+}
+
+header p {
+    font-size: 20px;
+    color: #94a3b8;
+}
+
+section {
+    padding: 80px 20px;
+}
+
+section h2 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+section p {
+    max-width: 700px;
+    margin: auto;
+    line-height: 1.8;
+    color: #cbd5e1;
+}
+
+a {
+    display: inline-block;
+    margin-top: 30px;
+    padding: 15px 35px;
+    background: #2563eb;
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+}
+
+a:hover {
+    background: #1d4ed8;
+}
+
+footer {
+    padding: 20px;
+    background: #020617;
+}
+
+
+.hero-buttons{
+display:flex;
+justify-content:center;
+gap:15px;
+flex-wrap:wrap;
+margin-top:30px;
+}
+
+
+.btn.secondary{
+background:transparent;
+border:1px solid #00d9ff;
+color:#00d9ff;
+}
+
+
+.btn.secondary:hover{
+background:#00d9ff;
+color:#000;
+}
+
+
+
+.features{
+text-align:center;
+padding:70px 8%;
+}
+
+
+.feature-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:25px;
+margin-top:40px;
+}
+
+
+.feature-card{
+background:#111a33;
+padding:30px;
+border-radius:18px;
+transition:0.3s;
+}
+
+
+.feature-card:hover{
+transform:translateY(-8px);
+}
+
+
+.feature-card h3{
+color:#00d9ff;
+}
+
+
+
+
+.how-it-works{
+text-align:center;
+padding:70px 8%;
+}
+
+
+.steps{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:25px;
+margin-top:40px;
+}
+
+
+.step-card{
+background:#111a33;
+padding:30px;
+border-radius:18px;
+}
+
+
+.step-card h3{
+color:#00d9ff;
+font-size:24px;
+}
+
+
+.step-card p{
+line-height:1.6;
+}
+
+
+
+
+.pricing-cta{
+text-align:center;
+margin:70px auto;
+padding:50px 30px;
+max-width:700px;
+background:#111a33;
+border-radius:20px;
+}
+
+
+.pricing-cta h2{
+color:#00d9ff;
+font-size:32px;
+}
+
+
+.pricing-cta h3{
+font-size:22px;
+}
+
+
+.cta-features{
+line-height:2;
+margin:30px;
+font-size:18px;
+}
+
+
+.pricing-cta .btn{
+margin-top:20px;
+}
+
+
+
+.trust-section{
+text-align:center;
+padding:70px 8%;
+}
+
+
+.trust-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:25px;
+margin-top:40px;
+}
+
+
+.trust-card{
+background:#111a33;
+padding:30px;
+border-radius:18px;
+}
+
+
+.trust-card h3{
+color:#00d9ff;
+}
+
+
+.trust-card p{
+line-height:1.6;
+}
+
+

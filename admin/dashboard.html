@@ -1,0 +1,280 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>FutureMind Lab Admin</title>
+
+<style>
+body{
+background:#080d1c;
+color:white;
+font-family:Arial;
+padding:30px;
+}
+
+.card{
+background:#121a33;
+padding:20px;
+border-radius:15px;
+display:inline-block;
+margin:10px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:30px;
+}
+
+td,th{
+padding:12px;
+border:1px solid #444;
+}
+
+th{
+background:#00d9ff;
+color:#001;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>FutureMind Lab Admin</h1>
+
+<h2>Professional Sales Dashboard</h2>
+
+
+<div class="card">
+<h3>Total Orders</h3>
+<h1 id="total">0</h1>
+</div>
+
+
+<div class="card">
+<h3>Products Sold</h3>
+<h1 id="products">0</h1>
+</div>
+
+
+<h2>Customer Orders</h2>
+
+
+<table>
+
+<tr>
+<th>Name</th>
+<th>Email</th>
+<th>Product</th>
+<th>Date</th>
+</tr>
+
+<tbody id="orders"></tbody>
+
+</table>
+
+
+<script>
+
+fetch("../orders/orders_live.json")
+.then(r=>r.json())
+.then(data=>{
+
+document.getElementById("total").innerHTML=data.length;
+
+document.getElementById("products").innerHTML=data.length;
+
+
+let table=document.getElementById("orders");
+
+
+data.forEach(order=>{
+
+table.innerHTML += `
+<tr>
+<td>${order.name}</td>
+<td>${order.email}</td>
+<td>${order.product}</td>
+<td>${order.date}</td>
+</tr>
+`;
+
+});
+
+});
+
+
+</script>
+
+
+
+
+<h2>Download Report V6.2</h2>
+
+<table>
+
+<tr>
+<th>Order ID</th>
+<th>Product</th>
+<th>Token</th>
+<th>Downloads</th>
+<th>Last Download</th>
+<th>Status</th>
+</tr>
+
+<tbody id="downloads"></tbody>
+
+</table>
+
+
+<script>
+
+fetch("../orders/download_history.json")
+.then(r=>r.json())
+.then(data=>{
+
+let table=document.getElementById("downloads");
+
+let grouped = {};
+
+data.forEach(item=>{
+    grouped[item.token] = item;
+});
+
+Object.values(grouped).forEach(item=>{
+
+let count = data.filter(
+x=>x.token===item.token
+).length;
+
+table.innerHTML += `
+<tr>
+<td>${item.order_id}</td>
+<td>${item.product_id}</td>
+<td>${item.token}</td>
+<td>${count}</td>
+<td>${item.date}</td>
+<td>${item.status}</td>
+</tr>
+`;
+
+});
+
+});
+
+</script>
+
+
+
+
+<h2>Download Report V6.2</h2>
+
+<table>
+
+<tr>
+<th>Order ID</th>
+<th>Product</th>
+<th>Token</th>
+<th>Downloads</th>
+<th>Last Download</th>
+<th>Status</th>
+</tr>
+
+<tbody id="downloads"></tbody>
+
+</table>
+
+
+<script>
+
+fetch("../orders/download_history.json")
+.then(r=>r.json())
+.then(data=>{
+
+let table=document.getElementById("downloads");
+
+let grouped = {};
+
+data.forEach(item=>{
+    grouped[item.token] = item;
+});
+
+Object.values(grouped).forEach(item=>{
+
+let count = data.filter(
+x=>x.token===item.token
+).length;
+
+table.innerHTML += `
+<tr>
+<td>${item.order_id}</td>
+<td>${item.product_id}</td>
+<td>${item.token}</td>
+<td>${count}</td>
+<td>${item.date}</td>
+<td>${item.status}</td>
+</tr>
+`;
+
+});
+
+});
+
+</script>
+
+
+
+
+<h2>Sales Summary V6.3</h2>
+
+<div class="card">
+<h3>Paid Orders</h3>
+<h1 id="paid_orders">0</h1>
+</div>
+
+<div class="card">
+<h3>Total Revenue</h3>
+<h1 id="revenue">0</h1>
+</div>
+
+<div class="card">
+<h3>Total Downloads</h3>
+<h1 id="downloads_total">0</h1>
+</div>
+
+
+<script>
+
+Promise.all([
+fetch("../orders/orders_live.json").then(r=>r.json()),
+fetch("../orders/download_history.json").then(r=>r.json())
+])
+.then(([orders, downloads])=>{
+
+document.getElementById("paid_orders").innerHTML =
+orders.length;
+
+
+let total = 0;
+
+orders.forEach(o=>{
+    total += Number(o.amount || o.price || 0);
+});
+
+document.getElementById("revenue").innerHTML =
+total;
+
+
+document.getElementById("downloads_total").innerHTML =
+downloads.length;
+
+
+});
+
+</script>
+
+
+</body>
+</html>
