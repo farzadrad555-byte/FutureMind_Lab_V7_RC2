@@ -73,6 +73,8 @@ margin-top:30px;
 
 
 .btn.secondary{
+    background:linear-gradient(135deg,#7c3aed,#4f46e5) !important;
+    color:#ffffff !important;
 background:transparent;
 border:1px solid #00d9ff;
 color:#00d9ff;
@@ -183,6 +185,8 @@ font-size:18px;
 
 
 .pricing-cta .btn{
+    background:linear-gradient(135deg,#00c6ff,#0072ff) !important;
+    color:#ffffff !important;
 margin-top:20px;
 }
 
@@ -218,4 +222,340 @@ color:#00d9ff;
 line-height:1.6;
 }
 
+
+
+
+ /* ================================
+    Hunter-X Checkout Premium UI
+    V7 RC2 Upgrade 20260731
+ ================================= */
+
+.checkout-form {
+    max-width: 520px;
+    margin: 40px auto;
+    padding: 35px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.15);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+}
+
+.checkout-form h2 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.checkout-form label {
+    display: block;
+    margin: 18px 0 8px;
+    font-weight: 600;
+}
+
+.checkout-form input {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.checkout-form input:focus {
+    outline: none;
+    border-color: #4f46e5;
+    box-shadow: 0 0 12px rgba(79,70,229,0.35);
+}
+
+.checkout-form button {
+    width: 100%;
+    margin-top: 30px;
+    padding: 16px;
+    border-radius: 14px;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    background: linear-gradient(135deg,#4f46e5,#7c3aed);
+    color: white;
+    transition: 0.3s;
+}
+
+.checkout-form button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(124,58,237,0.35);
+}
+
+#market-info {
+    max-width:520px;
+    margin:25px auto;
+    padding:20px;
+    border-radius:16px;
+    text-align:center;
+    background:rgba(0,0,0,0.05);
+}
+
+#market-price {
+    font-size:26px;
+    font-weight:700;
+}
+
+#payment-method {
+    font-size:18px;
+}
+
+
+
+/* Hunter-X Premium Button Upgrade */
+
+.checkout-form button {
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+    color: #ffffff;
+    border: none;
+    box-shadow: 0 8px 25px rgba(0,114,255,0.35);
+}
+
+.checkout-form button:hover {
+    background: linear-gradient(135deg, #0072ff, #00c6ff);
+    transform: translateY(-4px);
+    box-shadow: 0 15px 35px rgba(0,198,255,0.45);
+}
+
+.checkout-form button:active {
+    transform: scale(0.98);
+}
+
+
+
+.checkout-form button[type="button"] {
+    background: #0072ff !important;
+    background-image: linear-gradient(135deg, #00c6ff, #0072ff) !important;
+    color: white !important;
+    border: none !important;
+    padding: 16px !important;
+    border-radius: 14px !important;
+    font-size: 18px !important;
+    font-weight: bold !important;
+}
+
+.checkout-form button[type="button"]:hover {
+    background-image: linear-gradient(135deg, #0072ff, #00c6ff) !important;
+    transform: translateY(-3px);
+}
+
+
+
+/* Hunter-X Checkout Main CTA */
+
+.hunter-buy-btn {
+    width:100%;
+    margin-top:30px;
+    padding:16px;
+    border-radius:14px;
+    border:none;
+    cursor:pointer;
+    font-size:18px;
+    font-weight:700;
+    color:#ffffff !important;
+    background:linear-gradient(135deg,#00c6ff,#0072ff) !important;
+    box-shadow:0 8px 25px rgba(0,114,255,0.35);
+    transition:all .3s ease;
+}
+
+.hunter-buy-btn:hover {
+    transform:translateY(-4px);
+    box-shadow:0 15px 35px rgba(0,198,255,0.45);
+}
+
+.hunter-buy-btn:active {
+    transform:scale(.98);
+}
+
+
+
+/* FutureMind Lab Universal Checkout CTA */
+
+.checkout-buy-btn {
+    width:100%;
+    margin-top:30px;
+    padding:16px;
+    border-radius:14px;
+    border:none;
+    cursor:pointer;
+    font-size:18px;
+    font-weight:700;
+    color:#ffffff !important;
+    background:linear-gradient(135deg,#00c6ff,#0072ff) !important;
+    box-shadow:0 8px 25px rgba(0,114,255,0.35);
+    transition:all .3s ease;
+}
+
+.checkout-buy-btn:hover {
+    transform:translateY(-4px);
+    box-shadow:0 15px 35px rgba(0,198,255,0.45);
+}
+
+.checkout-buy-btn:active {
+    transform:scale(.98);
+}
+
+
+
+/* FutureMind Checkout Price & Payment Card */
+
+#market-info {
+    max-width:520px;
+    margin:25px auto;
+    padding:25px;
+    border-radius:18px;
+    background:linear-gradient(135deg,rgba(0,198,255,0.12),rgba(0,114,255,0.12));
+    border:1px solid rgba(0,114,255,0.25);
+    box-shadow:0 10px 30px rgba(0,0,0,0.12);
+}
+
+#market-price {
+    font-size:28px;
+    font-weight:800;
+    margin-bottom:15px;
+}
+
+#payment-method {
+    font-size:18px;
+    font-weight:600;
+}
+
+
+
+/* FutureMind Premium Market Info */
+
+#market-info {
+    max-width:520px;
+    margin:25px auto;
+    padding:28px;
+    border-radius:20px;
+    background:linear-gradient(
+        135deg,
+        rgba(0,198,255,0.12),
+        rgba(124,58,237,0.12)
+    );
+    border:1px solid rgba(0,114,255,0.25);
+    box-shadow:0 12px 35px rgba(0,0,0,0.12);
+}
+
+#market-price {
+    font-size:30px;
+    font-weight:800;
+    margin-bottom:18px;
+}
+
+#payment-method {
+    font-size:19px;
+    font-weight:600;
+    padding:10px;
+    border-radius:12px;
+}
+
+
+
+/* Premium Market Info Color Override */
+
+#market-price {
+    color:#0072ff !important;
+    font-size:30px;
+    font-weight:800;
+}
+
+#payment-method {
+    color:#16a34a !important;
+    font-size:19px;
+    font-weight:700;
+    margin-top:12px;
+}
+
+#market-info {
+    background:linear-gradient(
+        135deg,
+        rgba(0,198,255,0.15),
+        rgba(124,58,237,0.15)
+    ) !important;
+    border:1px solid rgba(0,114,255,0.35);
+}
+
+
+
+/* FINAL FORCE MARKET COLORS */
+
+div#market-info h3#market-price {
+    color: #0072ff !important;
+    background: transparent !important;
+    -webkit-text-fill-color: #0072ff !important;
+}
+
+div#market-info p#payment-method {
+    color: #16a34a !important;
+    background: transparent !important;
+    -webkit-text-fill-color: #16a34a !important;
+}
+
+
+
+/* FutureMind Premium Header Buttons */
+
+.hero-buttons .btn {
+    background:linear-gradient(135deg,#00c6ff,#0072ff) !important;
+    color:#ffffff !important;
+    border:none;
+    box-shadow:0 8px 25px rgba(0,114,255,0.35);
+    transition:all .3s ease;
+}
+
+.hero-buttons .btn:hover {
+    transform:translateY(-3px);
+    box-shadow:0 15px 35px rgba(0,198,255,0.45);
+}
+
+.hero-buttons .btn.secondary {
+    background:linear-gradient(135deg,#4f46e5,#7c3aed) !important;
+    color:#ffffff !important;
+}
+
+
+
+/* FINAL HERO BUTTON FORCE */
+
+.hero-buttons a.btn,
+.hero-buttons a.btn:visited {
+    background: linear-gradient(135deg,#00c6ff,#0072ff) !important;
+    color:#ffffff !important;
+    border:none !important;
+    border-radius:14px !important;
+    padding:15px 35px !important;
+    font-weight:700;
+    box-shadow:0 10px 30px rgba(0,114,255,0.35);
+}
+
+.hero-buttons a.btn.secondary,
+.hero-buttons a.btn.secondary:visited {
+    background: linear-gradient(135deg,#7c3aed,#4f46e5) !important;
+    color:#ffffff !important;
+}
+
+.hero-buttons a.btn:hover {
+    transform:translateY(-3px);
+    box-shadow:0 15px 35px rgba(0,198,255,0.45);
+}
+
+
+
+/* FORCE SECONDARY HERO BUTTONS */
+
+.hero-buttons a.btn.secondary,
+.hero-buttons a.btn.secondary:link,
+.hero-buttons a.btn.secondary:visited,
+.hero-buttons a.btn.secondary:hover {
+    background: linear-gradient(135deg,#7c3aed,#4f46e5) !important;
+    color: #ffffff !important;
+    border: none !important;
+    opacity: 1 !important;
+    box-shadow: 0 10px 30px rgba(124,58,237,0.35) !important;
+}
 

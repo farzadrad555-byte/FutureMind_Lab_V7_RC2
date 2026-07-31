@@ -7,7 +7,7 @@
 
 <title>Checkout | FutureMind Lab</title>
 
-<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/style.css?v=20260731">
 
 <style>
 
@@ -125,7 +125,7 @@ type="email"
 placeholder="Enter your email" data-lang-placeholder="enter_email">
 
 
-<button type="button" onclick="submitOrder()">
+<button class="checkout-buy-btn" type="button" onclick="submitOrder()">
 <span data-lang="complete_order">Complete Order</span>
 </button>
 
@@ -199,10 +199,10 @@ if(marketData){
 setTimeout(()=>{
 
 document.getElementById("market-price").innerText =
-"Price: " + marketData.price + " " + marketData.currency;
+"💎 Total Price: " + marketData.price + " " + marketData.currency;
 
 document.getElementById("payment-method").innerText =
-"Payment: " + marketData.payment;
+"💳 Payment Method: " + marketData.payment;
 
 },100);
 
