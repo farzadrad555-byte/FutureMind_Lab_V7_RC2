@@ -677,6 +677,9 @@ class Handler(SimpleHTTPRequestHandler):
                     "status": "success",
                     "order_id": order_id,
                     "payment_status": "PAID",
+                    "download": {
+                        "token": token
+                    }
                 }
 
             else:
@@ -853,9 +856,10 @@ import os
 
 PORT = int(os.environ.get("PORT", 8001))
 
-print(f"FutureMind Lab Security Server V2 running on {PORT}")
+if __name__ == "__main__":
+    print(f"FutureMind Lab Security Server V2 running on {PORT}")
 
-HTTPServer(
-    ("0.0.0.0", PORT),
-    Handler
-).serve_forever()
+    HTTPServer(
+        ("0.0.0.0", PORT),
+        Handler
+    ).serve_forever()
