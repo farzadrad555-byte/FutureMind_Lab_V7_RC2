@@ -1,16 +1,37 @@
 {
-    "hunter-x-v44": {
-        "product_id": "hunter-x-v44",
-        "product_name": "Hunter-X Professional V44",
-        "type": "digital_product",
-        "payment_required": true,
-        "download_package": "Hunter-X_V44_CUSTOMER_EDITION.zip"
-    },
-    "futuremind-ai-starter-pack-v1": {
-        "product_id": "futuremind-ai-starter-pack-v1",
-        "product_name": "FutureMind AI Starter Pack V1",
-        "type": "digital_product",
-        "payment_required": true,
-        "download_package": "FutureMind_AI_Starter_Pack_V1_RELEASE.zip"
-    }
+  "hunter-x-v44": {
+    "product_id": "hunter-x-v44",
+    "product_name": "Hunter-X Professional V44",
+    "type": "digital_product",
+    "payment_required": true,
+    "download_package": "Hunter-X_V44_CUSTOMER_EDITION.zip"
+  },
+  "futuremind-ai-starter-pack-v1": {
+    "product_id": "futuremind-ai-starter-pack-v1",
+    "product_name": "FutureMind AI Starter Pack V1",
+    "type": "digital_product",
+    "payment_required": true,
+    "download_package": "FutureMind_AI_Starter_Pack_V1_RELEASE.zip"
+  },
+  "futuremind-ai-student-pack-v1": {
+    "product_id": "futuremind-ai-student-pack-v1",
+    "product_name": "FutureMind AI Student Pack V1",
+    "type": "digital_product",
+    "payment_required": true,
+    "download_package": "FutureMind_AI_Student_Pack_V1.zip"
+  },
+  "futuremind-ai-research-assistant-v1": {
+    "product_id": "futuremind-ai-research-assistant-v1",
+    "product_name": "FutureMind AI Research Assistant Pack V1",
+    "type": "digital_product",
+    "payment_required": true,
+    "download_package": "FutureMind_AI_Research_Assistant_Pack_V1.zip"
+  },
+  "futuremind-ai-business-assistant-v1": {
+    "product_id": "futuremind-ai-business-assistant-v1",
+    "product_name": "FutureMind AI Business Assistant Pack V1",
+    "type": "digital_product",
+    "payment_required": true,
+    "download_package": "FutureMind_AI_Business_Assistant_Pack_V1.zip"
+  }
 }
