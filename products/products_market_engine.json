@@ -151,7 +151,19 @@
       "status": "Active",
       "page": "futuremind-ai-teacher-pack.html",
       "description": "AI toolkit for teachers including lesson planning, exam creation and classroom assistance",
-      "download": "FutureMind_AI_Teacher_Pack.zip"
+      "download": "FutureMind_AI_Teacher_Pack.zip",
+      "markets": {
+        "global": {
+          "price": 39,
+          "currency": "USD",
+          "payment": "crypto"
+        },
+        "iran": {
+          "price": 0,
+          "currency": "IRR",
+          "payment": "local"
+        }
+      }
     },
     {
       "id": "futuremind-ai-content-creator-pack",
@@ -163,7 +175,19 @@
       "status": "Active",
       "page": "futuremind-ai-content-creator-pack.html",
       "description": "AI toolkit for creating social media content, articles, marketing copy and digital materials",
-      "download": "FutureMind_AI_Content_Creator_Pack.zip"
+      "download": "FutureMind_AI_Content_Creator_Pack.zip",
+      "markets": {
+        "global": {
+          "price": 29,
+          "currency": "USD",
+          "payment": "crypto"
+        },
+        "iran": {
+          "price": 0,
+          "currency": "IRR",
+          "payment": "local"
+        }
+      }
     },
     {
       "id": "futuremind-ai-student-pack-v1",
@@ -179,9 +203,18 @@
         "crypto"
       ],
       "download": "FutureMind_AI_Student_Pack_V1.zip",
-      "markets": [
-        "global"
-      ]
+      "markets": {
+        "global": {
+          "price": 19,
+          "currency": "USD",
+          "payment": "crypto"
+        },
+        "iran": {
+          "price": 0,
+          "currency": "IRR",
+          "payment": "local"
+        }
+      }
     },
     {
       "id": "futuremind-ai-research-assistant-v1",
@@ -197,9 +230,18 @@
         "crypto"
       ],
       "download": "FutureMind_AI_Research_Assistant_Pack_V1.zip",
-      "markets": [
-        "global"
-      ]
+      "markets": {
+        "global": {
+          "price": 29,
+          "currency": "USD",
+          "payment": "crypto"
+        },
+        "iran": {
+          "price": 0,
+          "currency": "IRR",
+          "payment": "local"
+        }
+      }
     },
     {
       "id": "futuremind-ai-business-assistant-v1",
@@ -215,9 +257,18 @@
         "crypto"
       ],
       "download": "FutureMind_AI_Business_Assistant_Pack_V1.zip",
-      "markets": [
-        "global"
-      ]
+      "markets": {
+        "global": {
+          "price": 39,
+          "currency": "USD",
+          "payment": "crypto"
+        },
+        "iran": {
+          "price": 0,
+          "currency": "IRR",
+          "payment": "local"
+        }
+      }
     }
   ]
 }
