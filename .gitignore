@@ -8,3 +8,9 @@ emails/email_log.json
 orders/orders_live.json
 orders/orders_production.json
 payment/stripe_gateway.py
+
+# Temporary backups
+*_before_*.css
+*_before_*.html
+*_before_*.py
+cloudflared
