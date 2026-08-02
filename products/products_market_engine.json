@@ -140,6 +140,30 @@
                     "payment": "local"
                 }
             }
+        },
+        {
+            "id": "futuremind-ai-teacher-pack",
+            "name": "FutureMind AI Teacher Pack",
+            "category": "Education AI",
+            "version": "V1",
+            "price": 39,
+            "currency": "USD",
+            "status": "Active",
+            "page": "futuremind-ai-teacher-pack.html",
+            "description": "AI toolkit for teachers including lesson planning, exam creation and classroom assistance",
+            "download": "FutureMind_AI_Teacher_Pack.zip"
+        },
+        {
+            "id": "futuremind-ai-content-creator-pack",
+            "name": "FutureMind AI Content Creator Pack",
+            "category": "AI Content Creation",
+            "version": "V1",
+            "price": 29,
+            "currency": "USD",
+            "status": "Active",
+            "page": "futuremind-ai-content-creator-pack.html",
+            "description": "AI toolkit for creating social media content, articles, marketing copy and digital materials",
+            "download": "FutureMind_AI_Content_Creator_Pack.zip"
         }
     ]
 }

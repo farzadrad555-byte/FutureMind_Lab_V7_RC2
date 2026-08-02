@@ -102,6 +102,24 @@
                 "ZarinPal"
             ],
             "download": "FutureMind_AI_Teacher_Pack.zip"
+        },
+        {
+            "id": "futuremind-ai-content-creator-pack",
+            "name": "FutureMind AI Content Creator Pack",
+            "category": "AI Content Creation",
+            "version": "V1",
+            "price": 29,
+            "currency": "USD",
+            "iran_price": 590000,
+            "status": "Active",
+            "page": "futuremind-ai-content-creator-pack.html",
+            "description": "AI toolkit for creating social media content, articles, marketing copy and digital materials",
+            "payment_methods": [
+                "Stripe",
+                "PayPal",
+                "ZarinPal"
+            ],
+            "download": "FutureMind_AI_Content_Creator_Pack.zip"
         }
     ]
 }
