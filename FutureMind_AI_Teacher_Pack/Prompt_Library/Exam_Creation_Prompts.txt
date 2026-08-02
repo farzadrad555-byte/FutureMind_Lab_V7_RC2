@@ -1,0 +1,7 @@
+Exam Creation Prompts:
+
+1. Create multiple choice questions with answers.
+
+2. Generate an exam based on learning objectives.
+
+3. Create difficulty levels: Easy, Medium, Advanced.

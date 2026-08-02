@@ -84,6 +84,24 @@
                 "Local"
             ],
             "download": "FutureMind_AI_Starter_Pack_V1_RELEASE.zip"
+        },
+        {
+            "id": "futuremind-ai-teacher-pack",
+            "name": "FutureMind AI Teacher Pack",
+            "category": "Education AI",
+            "version": "V1",
+            "price": 39,
+            "currency": "USD",
+            "iran_price": 790000,
+            "status": "Active",
+            "page": "futuremind-ai-teacher-pack.html",
+            "description": "AI toolkit for teachers including lesson planning, exam creation and classroom assistance",
+            "payment_methods": [
+                "Stripe",
+                "PayPal",
+                "ZarinPal"
+            ],
+            "download": "FutureMind_AI_Teacher_Pack.zip"
         }
     ]
 }

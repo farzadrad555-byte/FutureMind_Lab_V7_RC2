@@ -1,0 +1,7 @@
+Classroom AI Assistant Prompts:
+
+1. Explain a difficult concept simply.
+
+2. Create classroom activities.
+
+3. Generate student engagement ideas.
