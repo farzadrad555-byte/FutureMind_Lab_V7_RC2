@@ -5,5 +5,12 @@
         "type": "digital_product",
         "payment_required": true,
         "download_package": "Hunter-X_V44_CUSTOMER_EDITION.zip"
+    },
+    "futuremind-ai-starter-pack-v1": {
+        "product_id": "futuremind-ai-starter-pack-v1",
+        "product_name": "FutureMind AI Starter Pack V1",
+        "type": "digital_product",
+        "payment_required": true,
+        "download_package": "FutureMind_AI_Starter_Pack_V1_RELEASE.zip"
     }
 }

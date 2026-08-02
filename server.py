@@ -115,10 +115,36 @@ class Handler(SimpleHTTPRequestHandler):
             return
 
 
+        # Dynamic Product Download Engine
+        # V7 RC2 Multi Product
+
+        mapping_file = BASE / "store_integration" / "payment_mapping.json"
+
+        mappings = json.loads(
+            mapping_file.read_text(
+                encoding="utf-8"
+            )
+        )
+
+        product_id = valid.get("product_id")
+
+        package = None
+
+        if product_id in mappings:
+            package = mappings[product_id].get(
+                "download_package"
+            )
+
+
+        if not package:
+            self.send_error(404)
+            return
+
+
         file_path = (
             BASE /
             "downloads" /
-            "Hunter-X_Professional.zip"
+            package
         )
 
 

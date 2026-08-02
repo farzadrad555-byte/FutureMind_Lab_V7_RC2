@@ -111,6 +111,35 @@
                     "payment": "local"
                 }
             }
+        },
+        {
+            "id": "futuremind-ai-starter-pack-v1",
+            "name": "FutureMind AI Starter Pack V1",
+            "category": "AI Productivity",
+            "version": "V1",
+            "price": 39,
+            "currency": "USD",
+            "iran_price": 790000,
+            "status": "Active",
+            "page": "futuremind-ai-starter-pack.html",
+            "description": "AI starter toolkit with prompts, guides and workflow assets",
+            "payment_methods": [
+                "Crypto",
+                "Local"
+            ],
+            "download": "FutureMind_AI_Starter_Pack_V1_RELEASE.zip",
+            "markets": {
+                "global": {
+                    "price": 39,
+                    "currency": "USD",
+                    "payment": "crypto"
+                },
+                "iran": {
+                    "price": 790000,
+                    "currency": "IRR",
+                    "payment": "local"
+                }
+            }
         }
     ]
 }
