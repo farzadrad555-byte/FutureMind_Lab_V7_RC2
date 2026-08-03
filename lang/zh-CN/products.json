@@ -1,0 +1,52 @@
+{
+  "hunter_x_v44": {
+    "title": "Hunter-X V44 Professional",
+    "category": "Trading Intelligence",
+    "description": "Advanced market analysis and trading intelligence toolkit."
+  },
+  "science_teacher_ai": {
+    "title": "Science Teacher AI Pack",
+    "category": "Education AI",
+    "description": "AI tools for science teachers and educational content creation."
+  },
+  "math_teacher_ai": {
+    "title": "Math Teacher AI Pack",
+    "category": "Education AI",
+    "description": "AI assistant for mathematics teaching and exercises."
+  },
+  "futuremind_templates": {
+    "title": "FutureMind Templates Pack",
+    "category": "Digital Templates",
+    "description": "Professional templates for digital productivity."
+  },
+  "ai_starter_pack": {
+    "title": "FutureMind AI Starter Pack V1",
+    "category": "AI Tools",
+    "description": "Essential AI tools for creators and beginners."
+  },
+  "ai_teacher_pack": {
+    "title": "FutureMind AI Teacher Pack",
+    "category": "Education AI",
+    "description": "Complete AI assistant package for teachers."
+  },
+  "content_creator_pack": {
+    "title": "FutureMind AI Content Creator Pack",
+    "category": "Creator AI",
+    "description": "AI tools for content creation and planning."
+  },
+  "student_pack": {
+    "title": "FutureMind AI Student Pack V1",
+    "category": "Student AI",
+    "description": "AI productivity tools for students."
+  },
+  "research_assistant_pack": {
+    "title": "FutureMind AI Research Assistant Pack V1",
+    "category": "Research AI",
+    "description": "AI assistant for research and analysis."
+  },
+  "business_assistant_pack": {
+    "title": "FutureMind AI Business Assistant Pack V1",
+    "category": "Business AI",
+    "description": "AI tools for business planning and productivity."
+  }
+}

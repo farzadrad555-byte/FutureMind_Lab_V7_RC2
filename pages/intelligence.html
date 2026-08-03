@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>FutureMind Intelligence</title>
+
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/intelligence.css">
+
+</head>
+
+
+<body>
+
+
+<h1>🧠 FutureMind Intelligence</h1>
+
+<div id="status">
+Loading Intelligence...
+</div>
+
+
+<h2>🚀 Top Opportunities</h2>
+
+<div id="opportunities"></div>
+
+
+<h2>⚠️ Market Threats</h2>
+
+<div id="threats"></div>
+
+
+<h2>💡 Product Recommendations</h2>
+
+<div id="products"></div>
+
+
+
+<script>
+
+async function loadIntelligence(){
+
+
+let res =
+await fetch(
+"/api/intelligence"
+);
+
+
+let data =
+await res.json();
+
+
+
+document.getElementById("status")
+.innerHTML =
+"Status: " + data.status;
+
+
+
+data.top_opportunities
+.sort((a,b)=>b.score-a.score)
+.slice(0,5)
+.forEach(x=>{
+
+document.getElementById("opportunities")
+.innerHTML +=
+`
+<div class="card">
+<h3>${x.name}</h3>
+<p>Score: ${x.score}</p>
+<p>${x.status}</p>
+</div>
+`;
+
+});
+
+
+
+data.market_threats.forEach(x=>{
+
+document.getElementById("threats")
+.innerHTML +=
+`
+<div class="card">
+<h3>${x.name}</h3>
+<p>Risk: ${x.risk}</p>
+<p>${x.reasons.join(", ")}</p>
+</div>
+`;
+
+});
+
+
+
+data.recommended_products.forEach(x=>{
+
+document.getElementById("products")
+.innerHTML +=
+`
+<div class="card">
+<h3>${x.product}</h3>
+<p>Market: ${x.market}</p>
+<p>${x.recommendation}</p>
+</div>
+`;
+
+});
+
+
+}
+
+
+loadIntelligence();
+
+</script>
+
+
+
+
+<h2>🚀 FutureMind Product Radar</h2>
+
+<div id="productRadar">
+Loading Products...
+</div>
+
+
+<script>
+
+async function loadProductRadar(){
+
+
+let res =
+await fetch(
+"/smart_engine/reports/futuremind_products_report.json"
+);
+
+
+let data =
+await res.json();
+
+
+
+let box =
+document.getElementById(
+"productRadar"
+);
+
+
+
+data
+.sort((a,b)=>b.score-a.score)
+.forEach(p=>{
+
+
+box.innerHTML +=
+
+`
+<div class="intelligence-card">
+
+<h3>${p.product}</h3>
+
+<p>
+Market:
+${p.market}
+</p>
+
+<p class="score">
+${p.score}
+</p>
+
+<p>
+${p.recommendation}
+</p>
+
+</div>
+`;
+
+
+});
+
+
+}
+
+
+
+loadProductRadar();
+
+
+</script>
+
+
+</body>
+
+</html>

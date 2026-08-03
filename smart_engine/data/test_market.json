@@ -1,0 +1,26 @@
+[
+  {
+    "name": "AI Teacher Assistant",
+    "market": "Global Education",
+    "growth": 90,
+    "demand": 85,
+    "competition": 30,
+    "future": 90
+  },
+  {
+    "name": "AI Content Creator",
+    "market": "Creator Economy",
+    "growth": 80,
+    "demand": 75,
+    "competition": 50,
+    "future": 85
+  },
+  {
+    "name": "Basic Chat App",
+    "market": "Communication",
+    "growth": 25,
+    "demand": 30,
+    "competition": 90,
+    "future": 20
+  }
+]

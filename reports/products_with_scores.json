@@ -1,0 +1,185 @@
+{
+    "engine": "FutureMind Score Connector V1",
+    "generated": "2026-08-03T12:41:28.757323",
+    "products": [
+        {
+            "id": "hunter-x-v44",
+            "name": "Hunter-X V44 Professional",
+            "category": "AI Trading Intelligence",
+            "version": "V44 Professional",
+            "price": 49,
+            "currency": "USD",
+            "iran_price": 990000,
+            "status": "Active",
+            "page": "hunter-x.html",
+            "description": "AI Market Intelligence Platform",
+            "payment_methods": [
+                "Stripe",
+                "PayPal",
+                "ZarinPal"
+            ],
+            "download": "Hunter-X_Professional.zip",
+            "score": 142
+        },
+        {
+            "id": "science-ai-pack",
+            "name": "Science Teacher AI Pack",
+            "category": "Education AI",
+            "version": "V1",
+            "price": 29,
+            "currency": "USD",
+            "iran_price": 590000,
+            "status": "Active",
+            "page": "science-ai-pack.html",
+            "description": "AI tools for science educators",
+            "payment_methods": [
+                "Stripe",
+                "PayPal",
+                "ZarinPal"
+            ],
+            "download": "science-ai-pack.zip",
+            "score": 168
+        },
+        {
+            "id": "math-ai-pack",
+            "name": "Math Teacher AI Pack",
+            "category": "Education AI",
+            "version": "V1",
+            "price": 29,
+            "currency": "USD",
+            "iran_price": 590000,
+            "status": "Active",
+            "page": "math-ai-pack.html",
+            "description": "AI tools for mathematics teachers",
+            "payment_methods": [
+                "Stripe",
+                "PayPal",
+                "ZarinPal"
+            ],
+            "download": "math-ai-pack.zip",
+            "score": 0
+        },
+        {
+            "id": "futuremind-templates",
+            "name": "FutureMind Templates Pack",
+            "category": "Digital Templates",
+            "version": "V1",
+            "price": 19,
+            "currency": "USD",
+            "iran_price": 390000,
+            "status": "Coming Soon",
+            "page": "templates.html",
+            "description": "Professional digital templates",
+            "payment_methods": [],
+            "download": "templates.zip",
+            "score": 0
+        },
+        {
+            "id": "futuremind-ai-starter-pack-v1",
+            "name": "FutureMind AI Starter Pack V1",
+            "category": "AI Productivity",
+            "version": "V1",
+            "price": 39,
+            "currency": "USD",
+            "iran_price": 790000,
+            "status": "Active",
+            "page": "futuremind-ai-starter-pack.html",
+            "description": "AI starter toolkit with prompts, guides and workflow assets",
+            "payment_methods": [
+                "Crypto",
+                "Local"
+            ],
+            "download": "FutureMind_AI_Starter_Pack_V1_RELEASE.zip",
+            "score": 0
+        },
+        {
+            "id": "futuremind-ai-teacher-pack",
+            "name": "FutureMind AI Teacher Pack",
+            "category": "Education AI",
+            "version": "V1",
+            "price": 39,
+            "currency": "USD",
+            "iran_price": 790000,
+            "status": "Active",
+            "page": "futuremind-ai-teacher-pack.html",
+            "description": "AI toolkit for teachers including lesson planning, exam creation and classroom assistance",
+            "payment_methods": [
+                "Stripe",
+                "PayPal",
+                "ZarinPal"
+            ],
+            "download": "FutureMind_AI_Teacher_Pack.zip",
+            "score": 0
+        },
+        {
+            "id": "futuremind-ai-content-creator-pack",
+            "name": "FutureMind AI Content Creator Pack",
+            "category": "AI Content Creation",
+            "version": "V1",
+            "price": 29,
+            "currency": "USD",
+            "iran_price": 590000,
+            "status": "Active",
+            "page": "futuremind-ai-content-creator-pack.html",
+            "description": "AI toolkit for creating social media content, articles, marketing copy and digital materials",
+            "payment_methods": [
+                "Stripe",
+                "PayPal",
+                "ZarinPal"
+            ],
+            "download": "FutureMind_AI_Content_Creator_Pack.zip",
+            "score": 0
+        },
+        {
+            "id": "futuremind-ai-student-pack-v1",
+            "name": "FutureMind AI Student Pack V1",
+            "category": "education",
+            "version": "V1",
+            "price": 19,
+            "currency": "USD",
+            "iran_price": 0,
+            "status": "active",
+            "page": "student-pack.html",
+            "description": "AI learning assistant pack for students including study planning, exam preparation, note making and learning prompts.",
+            "payment_methods": [
+                "crypto"
+            ],
+            "download": "FutureMind_AI_Student_Pack_V1.zip",
+            "score": 0
+        },
+        {
+            "id": "futuremind-ai-research-assistant-v1",
+            "name": "FutureMind AI Research Assistant Pack V1",
+            "category": "education",
+            "version": "V1",
+            "price": 29,
+            "currency": "USD",
+            "iran_price": 0,
+            "status": "Active",
+            "page": "research-assistant.html",
+            "description": "AI research assistant pack for study, paper analysis, academic writing and knowledge organization.",
+            "payment_methods": [
+                "crypto"
+            ],
+            "download": "FutureMind_AI_Research_Assistant_Pack_V1.zip",
+            "score": 0
+        },
+        {
+            "id": "futuremind-ai-business-assistant-v1",
+            "name": "FutureMind AI Business Assistant Pack V1",
+            "category": "business",
+            "version": "V1",
+            "price": 39,
+            "currency": "USD",
+            "iran_price": 0,
+            "status": "Active",
+            "page": "business-assistant.html",
+            "description": "AI business assistant pack for productivity, marketing, planning and automation workflows.",
+            "payment_methods": [
+                "crypto"
+            ],
+            "download": "FutureMind_AI_Business_Assistant_Pack_V1.zip",
+            "score": 0
+        }
+    ]
+}

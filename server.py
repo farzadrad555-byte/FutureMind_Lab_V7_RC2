@@ -858,8 +858,8 @@ PORT = int(os.environ.get("PORT", 8001))
 
 if __name__ == "__main__":
     print(f"FutureMind Lab Security Server V2 running on {PORT}")
-
-    HTTPServer(
+HTTPServer(
         ("0.0.0.0", PORT),
         Handler
     ).serve_forever()
+

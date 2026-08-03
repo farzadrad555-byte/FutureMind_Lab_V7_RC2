@@ -1,0 +1,41 @@
+
+
+.intelligence-card{
+
+padding:20px;
+margin:15px;
+border-radius:12px;
+background:#f5f5f5;
+
+}
+
+
+.score{
+
+font-size:28px;
+font-weight:bold;
+
+}
+
+
+.high{
+
+border-left:5px solid green;
+
+}
+
+
+.medium{
+
+border-left:5px solid orange;
+
+}
+
+
+.low{
+
+border-left:5px solid red;
+
+}
+
+
