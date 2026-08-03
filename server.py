@@ -892,3 +892,8 @@ def intelligence_api():
             "message":str(e)
         })
 
+
+    HTTPServer(
+        ("0.0.0.0", PORT),
+        Handler
+    ).serve_forever()
