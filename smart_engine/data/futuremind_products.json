@@ -1,0 +1,29 @@
+[
+  {
+    "name": "Hunter-X V44 Professional",
+    "category": "AI Trading Intelligence",
+    "market": "Global Finance",
+    "growth": 85,
+    "demand": 80,
+    "competition": 45,
+    "future": 90
+  },
+  {
+    "name": "Science Teacher AI Pack",
+    "category": "AI Education",
+    "market": "Global Education",
+    "growth": 90,
+    "demand": 95,
+    "competition": 35,
+    "future": 95
+  },
+  {
+    "name": "AI Content Creator Pack",
+    "category": "Creator Economy",
+    "market": "Global Creator Market",
+    "growth": 88,
+    "demand": 85,
+    "competition": 50,
+    "future": 90
+  }
+]

@@ -1,0 +1,28 @@
+{
+    "engine": "FutureMind Product Radar Priority Engine V1",
+    "generated": "2026-08-03T12:33:14.638187",
+    "total_products": 3,
+    "priority_queue": [
+        {
+            "product": "Science Teacher AI Pack",
+            "market": "Global Education",
+            "score": 168,
+            "action": "BUILD NOW",
+            "analyzed": "2026-08-03T12:33:14.638145"
+        },
+        {
+            "product": "AI Content Creator Pack",
+            "market": "Global Creator Market",
+            "score": 148,
+            "action": "BUILD + MARKET TEST",
+            "analyzed": "2026-08-03T12:33:14.638165"
+        },
+        {
+            "product": "Hunter-X V44 Professional",
+            "market": "Global Finance",
+            "score": 142,
+            "action": "BUILD + MARKET TEST",
+            "analyzed": "2026-08-03T12:33:14.638169"
+        }
+    ]
+}

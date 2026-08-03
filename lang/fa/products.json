@@ -1,0 +1,52 @@
+{
+  "hunter_x_v44": {
+    "title": "Hunter-X V44 Professional",
+    "category": "هوش معاملاتی",
+    "description": "ابزار پیشرفته تحلیل بازار و هوش معاملاتی."
+  },
+  "science_teacher_ai": {
+    "title": "پک هوش مصنوعی معلم علوم",
+    "category": "هوش مصنوعی آموزشی",
+    "description": "ابزار هوش مصنوعی برای معلمان علوم و تولید محتوای آموزشی."
+  },
+  "math_teacher_ai": {
+    "title": "پک هوش مصنوعی معلم ریاضی",
+    "category": "هوش مصنوعی آموزشی",
+    "description": "دستیار هوشمند آموزش ریاضی و تمرین‌ها."
+  },
+  "futuremind_templates": {
+    "title": "پک قالب‌های FutureMind",
+    "category": "قالب دیجیتال",
+    "description": "قالب‌های حرفه‌ای برای کار دیجیتال."
+  },
+  "ai_starter_pack": {
+    "title": "پک شروع هوش مصنوعی FutureMind V1",
+    "category": "ابزار هوش مصنوعی",
+    "description": "ابزارهای ضروری هوش مصنوعی برای شروع."
+  },
+  "ai_teacher_pack": {
+    "title": "پک هوش مصنوعی معلم FutureMind",
+    "category": "آموزشی",
+    "description": "دستیار کامل هوش مصنوعی برای معلمان."
+  },
+  "content_creator_pack": {
+    "title": "پک تولید محتوای هوش مصنوعی",
+    "category": "تولید محتوا",
+    "description": "ابزارهای هوشمند تولید و مدیریت محتوا."
+  },
+  "student_pack": {
+    "title": "پک دانش‌آموز هوش مصنوعی FutureMind V1",
+    "category": "دانش‌آموزی",
+    "description": "ابزارهای هوشمند برای یادگیری."
+  },
+  "research_assistant_pack": {
+    "title": "پک دستیار تحقیقاتی هوش مصنوعی V1",
+    "category": "پژوهش",
+    "description": "دستیار هوشمند تحقیق و تحلیل."
+  },
+  "business_assistant_pack": {
+    "title": "پک دستیار کسب‌وکار هوش مصنوعی V1",
+    "category": "کسب‌وکار",
+    "description": "ابزارهای هوشمند مدیریت و برنامه‌ریزی."
+  }
+}

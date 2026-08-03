@@ -1,0 +1,106 @@
+{
+    "engine": "FutureMind AI Market Simulator V1",
+    "generated": "2026-08-03T12:54:19.015697",
+    "simulation": [
+        {
+            "product": "Science Teacher AI Pack",
+            "score": 168,
+            "simulation": {
+                "market_potential": "HIGH",
+                "risk": "LOW",
+                "launch": "YES",
+                "suggested_price": "$29-$49"
+            }
+        },
+        {
+            "product": "FutureMind AI Content Creator Pack",
+            "score": 148,
+            "simulation": {
+                "market_potential": "MEDIUM-HIGH",
+                "risk": "MEDIUM",
+                "launch": "TEST FIRST",
+                "suggested_price": "$19-$39"
+            }
+        },
+        {
+            "product": "Hunter-X V44 Professional",
+            "score": 142,
+            "simulation": {
+                "market_potential": "MEDIUM-HIGH",
+                "risk": "MEDIUM",
+                "launch": "TEST FIRST",
+                "suggested_price": "$19-$39"
+            }
+        },
+        {
+            "product": "Math Teacher AI Pack",
+            "score": 0,
+            "simulation": {
+                "market_potential": "NO DATA",
+                "risk": "UNKNOWN",
+                "launch": "COLLECT DATA",
+                "suggested_price": "NOT SET"
+            }
+        },
+        {
+            "product": "FutureMind Templates Pack",
+            "score": 0,
+            "simulation": {
+                "market_potential": "NO DATA",
+                "risk": "UNKNOWN",
+                "launch": "COLLECT DATA",
+                "suggested_price": "NOT SET"
+            }
+        },
+        {
+            "product": "FutureMind AI Starter Pack V1",
+            "score": 0,
+            "simulation": {
+                "market_potential": "NO DATA",
+                "risk": "UNKNOWN",
+                "launch": "COLLECT DATA",
+                "suggested_price": "NOT SET"
+            }
+        },
+        {
+            "product": "FutureMind AI Teacher Pack",
+            "score": 0,
+            "simulation": {
+                "market_potential": "NO DATA",
+                "risk": "UNKNOWN",
+                "launch": "COLLECT DATA",
+                "suggested_price": "NOT SET"
+            }
+        },
+        {
+            "product": "FutureMind AI Student Pack V1",
+            "score": 0,
+            "simulation": {
+                "market_potential": "NO DATA",
+                "risk": "UNKNOWN",
+                "launch": "COLLECT DATA",
+                "suggested_price": "NOT SET"
+            }
+        },
+        {
+            "product": "FutureMind AI Research Assistant Pack V1",
+            "score": 0,
+            "simulation": {
+                "market_potential": "NO DATA",
+                "risk": "UNKNOWN",
+                "launch": "COLLECT DATA",
+                "suggested_price": "NOT SET"
+            }
+        },
+        {
+            "product": "FutureMind AI Business Assistant Pack V1",
+            "score": 0,
+            "simulation": {
+                "market_potential": "NO DATA",
+                "risk": "UNKNOWN",
+                "launch": "COLLECT DATA",
+                "suggested_price": "NOT SET"
+            }
+        }
+    ]
+}

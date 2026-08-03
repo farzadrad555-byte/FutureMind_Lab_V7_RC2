@@ -1,0 +1,70 @@
+{
+  "date": "2026-08-03",
+  "top_opportunities": [
+    {
+      "name": "AI Teacher Assistant",
+      "score": 100,
+      "status": "HIGH OPPORTUNITY",
+      "checked": "2026-08-03T12:18:53.711310"
+    },
+    {
+      "name": "AI Content Creator",
+      "score": 100,
+      "status": "HIGH OPPORTUNITY",
+      "checked": "2026-08-03T12:18:53.711357"
+    },
+    {
+      "name": "Basic Chat App",
+      "score": 5,
+      "status": "WATCH",
+      "checked": "2026-08-03T12:18:53.711368"
+    }
+  ],
+  "market_threats": [
+    {
+      "name": "AI Teacher Assistant",
+      "risk": "LOW",
+      "reasons": [],
+      "checked": "2026-08-03T12:18:53.713994"
+    },
+    {
+      "name": "AI Content Creator",
+      "risk": "LOW",
+      "reasons": [],
+      "checked": "2026-08-03T12:18:53.714033"
+    },
+    {
+      "name": "Basic Chat App",
+      "risk": "HIGH",
+      "reasons": [
+        "High Competition",
+        "Low Growth"
+      ],
+      "checked": "2026-08-03T12:18:53.714044"
+    }
+  ],
+  "recommended_products": [
+    {
+      "product": "AI Teacher Assistant",
+      "market": "Global Education",
+      "score": 160,
+      "recommendation": "BUILD",
+      "generated": "2026-08-03T12:18:53.717244"
+    },
+    {
+      "product": "AI Content Creator",
+      "market": "Creator Economy",
+      "score": 130,
+      "recommendation": "BUILD",
+      "generated": "2026-08-03T12:18:53.717271"
+    },
+    {
+      "product": "Basic Chat App",
+      "market": "Communication",
+      "score": 10,
+      "recommendation": "AVOID",
+      "generated": "2026-08-03T12:18:53.717278"
+    }
+  ],
+  "status": "READY"
+}

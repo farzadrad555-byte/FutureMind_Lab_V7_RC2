@@ -1,0 +1,66 @@
+{
+    "engine": "FutureMind Smart Decision Engine V1",
+    "generated": "2026-08-03T12:47:25.556814",
+    "decisions": [
+        {
+            "product": "Science Teacher AI Pack",
+            "score": 168,
+            "decision": "BUILD NOW",
+            "generated": "2026-08-03T12:47:25.537807"
+        },
+        {
+            "product": "FutureMind AI Content Creator Pack",
+            "score": 148,
+            "decision": "BUILD + MARKET TEST",
+            "generated": "2026-08-03T12:47:25.537836"
+        },
+        {
+            "product": "Hunter-X V44 Professional",
+            "score": 142,
+            "decision": "BUILD + MARKET TEST",
+            "generated": "2026-08-03T12:47:25.537779"
+        },
+        {
+            "product": "Math Teacher AI Pack",
+            "score": 0,
+            "decision": "NEED MARKET ANALYSIS",
+            "generated": "2026-08-03T12:47:25.537814"
+        },
+        {
+            "product": "FutureMind Templates Pack",
+            "score": 0,
+            "decision": "NEED MARKET ANALYSIS",
+            "generated": "2026-08-03T12:47:25.537820"
+        },
+        {
+            "product": "FutureMind AI Starter Pack V1",
+            "score": 0,
+            "decision": "NEED MARKET ANALYSIS",
+            "generated": "2026-08-03T12:47:25.537825"
+        },
+        {
+            "product": "FutureMind AI Teacher Pack",
+            "score": 0,
+            "decision": "NEED MARKET ANALYSIS",
+            "generated": "2026-08-03T12:47:25.537831"
+        },
+        {
+            "product": "FutureMind AI Student Pack V1",
+            "score": 0,
+            "decision": "NEED MARKET ANALYSIS",
+            "generated": "2026-08-03T12:47:25.537841"
+        },
+        {
+            "product": "FutureMind AI Research Assistant Pack V1",
+            "score": 0,
+            "decision": "NEED MARKET ANALYSIS",
+            "generated": "2026-08-03T12:47:25.537846"
+        },
+        {
+            "product": "FutureMind AI Business Assistant Pack V1",
+            "score": 0,
+            "decision": "NEED MARKET ANALYSIS",
+            "generated": "2026-08-03T12:47:25.537852"
+        }
+    ]
+}

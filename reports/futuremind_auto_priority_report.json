@@ -1,0 +1,87 @@
+{
+    "engine": "FutureMind Product Radar V2",
+    "generated": "2026-08-03T12:39:09.240724",
+    "total_products": 10,
+    "products": [
+        {
+            "product": "Hunter-X V44 Professional",
+            "market": "Global",
+            "price": 49,
+            "score": 0,
+            "action": "HOLD",
+            "scan_time": "2026-08-03T12:39:09.237881"
+        },
+        {
+            "product": "Science Teacher AI Pack",
+            "market": "Global",
+            "price": 29,
+            "score": 0,
+            "action": "HOLD",
+            "scan_time": "2026-08-03T12:39:09.237908"
+        },
+        {
+            "product": "Math Teacher AI Pack",
+            "market": "Global",
+            "price": 29,
+            "score": 0,
+            "action": "HOLD",
+            "scan_time": "2026-08-03T12:39:09.237915"
+        },
+        {
+            "product": "FutureMind Templates Pack",
+            "market": "Global",
+            "price": 19,
+            "score": 0,
+            "action": "HOLD",
+            "scan_time": "2026-08-03T12:39:09.237921"
+        },
+        {
+            "product": "FutureMind AI Starter Pack V1",
+            "market": "Global",
+            "price": 39,
+            "score": 0,
+            "action": "HOLD",
+            "scan_time": "2026-08-03T12:39:09.237927"
+        },
+        {
+            "product": "FutureMind AI Teacher Pack",
+            "market": "Global",
+            "price": 39,
+            "score": 0,
+            "action": "HOLD",
+            "scan_time": "2026-08-03T12:39:09.237934"
+        },
+        {
+            "product": "FutureMind AI Content Creator Pack",
+            "market": "Global",
+            "price": 29,
+            "score": 0,
+            "action": "HOLD",
+            "scan_time": "2026-08-03T12:39:09.237939"
+        },
+        {
+            "product": "FutureMind AI Student Pack V1",
+            "market": "Global",
+            "price": 19,
+            "score": 0,
+            "action": "HOLD",
+            "scan_time": "2026-08-03T12:39:09.237945"
+        },
+        {
+            "product": "FutureMind AI Research Assistant Pack V1",
+            "market": "Global",
+            "price": 29,
+            "score": 0,
+            "action": "HOLD",
+            "scan_time": "2026-08-03T12:39:09.237951"
+        },
+        {
+            "product": "FutureMind AI Business Assistant Pack V1",
+            "market": "Global",
+            "price": 39,
+            "score": 0,
+            "action": "HOLD",
+            "scan_time": "2026-08-03T12:39:09.237957"
+        }
+    ]
+}
