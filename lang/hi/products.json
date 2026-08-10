@@ -1,0 +1,52 @@
+{
+  "hunter_x_v44": {
+    "title": "Hunter-X V44 Professional",
+    "category": "मार्केट इंटेलिजेंस",
+    "description": "उन्नत बाजार विश्लेषण और ट्रेडिंग इंटेलिजेंस टूलकिट।"
+  },
+  "science_teacher_ai": {
+    "title": "Science Teacher AI Pack",
+    "category": "शिक्षा एआई",
+    "description": "विज्ञान शिक्षकों और शैक्षिक सामग्री निर्माण के लिए एआई उपकरण।"
+  },
+  "math_teacher_ai": {
+    "title": "Math Teacher AI Pack",
+    "category": "शिक्षा एआई",
+    "description": "गणित शिक्षण और अभ्यास के लिए एआई सहायक।"
+  },
+  "futuremind_templates": {
+    "title": "FutureMind Templates Pack",
+    "category": "डिजिटल टेम्पलेट्स",
+    "description": "डिजिटल उत्पादकता के लिए पेशेवर टेम्पलेट्स।"
+  },
+  "ai_starter_pack": {
+    "title": "FutureMind AI Starter Pack V1",
+    "category": "एआई टूल्स",
+    "description": "निर्माताओं और शुरुआती उपयोगकर्ताओं के लिए आवश्यक एआई उपकरण।"
+  },
+  "ai_teacher_pack": {
+    "title": "FutureMind AI Teacher Pack",
+    "category": "शिक्षा एआई",
+    "description": "शिक्षकों के लिए पूर्ण एआई सहायक पैकेज।"
+  },
+  "content_creator_pack": {
+    "title": "FutureMind AI Content Creator Pack",
+    "category": "क्रिएटर एआई",
+    "description": "सामग्री निर्माण और योजना के लिए एआई उपकरण।"
+  },
+  "student_pack": {
+    "title": "FutureMind AI Student Pack V1",
+    "category": "स्टूडेंट एआई",
+    "description": "छात्रों के लिए एआई उत्पादकता उपकरण।"
+  },
+  "research_assistant_pack": {
+    "title": "FutureMind AI Research Assistant Pack V1",
+    "category": "रिसर्च एआई",
+    "description": "अनुसंधान और विश्लेषण के लिए एआई सहायक।"
+  },
+  "business_assistant_pack": {
+    "title": "FutureMind AI Business Assistant Pack V1",
+    "category": "बिजनेस एआई",
+    "description": "व्यापार योजना और उत्पादकता के लिए एआई उपकरण।"
+  }
+}

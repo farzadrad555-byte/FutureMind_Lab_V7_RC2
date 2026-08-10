@@ -1,35 +1,56 @@
 
-document.addEventListener(
-"DOMContentLoaded",
-()=>{
+document.addEventListener("DOMContentLoaded",()=>{
 
 
-const selector =
-document.getElementById(
-"languageSwitcher"
-);
+const btn = document.getElementById("languageMenuBtn");
+const menu = document.getElementById("languageMenu");
 
 
+if(!btn || !menu){
+    return;
+}
 
-if(!selector)
-return;
 
-
-
-selector.value =
-futuremindLanguage.lang;
+btn.onclick = ()=>{
+    menu.classList.toggle("show");
+};
 
 
 
-selector.addEventListener(
-"change",
-async(e)=>{
+document.querySelectorAll(".lang-option").forEach(item=>{
 
 
-await futuremindLanguage
-.change(
-e.target.value
-);
+item.onclick = async ()=>{
+
+
+const lang = item.dataset.langCode;
+
+
+if(window.futuremindLanguage){
+
+    await futuremindLanguage.change(lang);
+
+}
+
+
+
+document.querySelectorAll(".lang-option")
+.forEach(x=>{
+
+x.innerHTML = x.innerHTML.replace("✓ ","");
+
+});
+
+
+
+item.innerHTML = "✓ " + item.innerHTML;
+
+
+
+menu.classList.remove("show");
+
+
+};
 
 
 });

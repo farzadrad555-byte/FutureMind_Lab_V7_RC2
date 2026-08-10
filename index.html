@@ -7,11 +7,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title><span data-i18n="brand"></span> | <span data-i18n="hero_title"></span></title>
+<title>FutureMind Lab | Build The Future With AI</title>
 
 <link rel="stylesheet" href="css/style.css?v=20260731b">
 
 <script src="js/language.js"></script>
+<script src="js/language_engine.js"></script>
+<script src="js/language_switcher.js"></script>
 <script src="js/market.js"></script>
 
 
@@ -159,6 +161,77 @@ margin:auto;
 
 </style>
 
+<style>
+
+/* FutureMind 14-Language Dropdown */
+.language-switcher {
+    position: relative;
+    display: inline-block;
+    z-index: 9999;
+}
+
+.language-switcher .lang-btn {
+    cursor: pointer;
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: 8px;
+    padding: 8px 14px;
+    background: rgba(0,0,0,.15);
+    color: inherit;
+    white-space: nowrap;
+}
+
+.language-switcher .language-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    min-width: 210px;
+    max-height: 420px;
+    overflow-y: auto;
+    background: #ffffff;
+    border: 1px solid #dddddd;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.18);
+    padding: 6px;
+    z-index: 10000;
+}
+
+.language-switcher .language-menu.show {
+    display: flex;
+    flex-direction: column;
+}
+
+.language-switcher .lang-option {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 9px 12px;
+    margin: 0;
+    border: 0;
+    border-radius: 7px;
+    background: transparent;
+    color: #222222;
+    text-align: left;
+    font-size: 14px;
+    line-height: 1.4;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.language-switcher .lang-option:hover {
+    background: #f1f1f1;
+}
+
+@media (max-width: 600px) {
+    .language-switcher .language-menu {
+        right: 0;
+        left: auto;
+        min-width: 190px;
+        max-height: 65vh;
+    }
+}
+
+</style>
 </head>
 
 
@@ -166,41 +239,55 @@ margin:auto;
 <div class="navigation">
 
 <a href="index.html" data-lang="home">
-🏠 <span data-i18n="home"></span>
+🏠 Home
 </a>
 
 
 <a href="pages/customer_demo.html">
-<span data-lang="demo"><span data-i18n="demo"></span></span>
+<span data-lang="demo">Demo</span>
 </a>
 
 <a href="pages/pricing.html">
-<span data-lang="pricing"><span data-i18n="pricing"></span></span>
+<span data-lang="pricing">Pricing</span>
 </a>
 
 
 <a href="pages/contact.html" data-lang="contact">
-<span data-i18n="contact"></span>
+Contact
 </a>
 
 <a href="pages/store.html" data-lang="store">
-<span data-i18n="store"></span>
+Store
 </a>
 
 <a href="products/hunter-x.html">
-<span data-i18n="hunter_title"></span>
+Hunter-X
 </a>
 
 <div class="language-switcher">
 
-<button class="lang-btn" onclick="changeLanguage('en')">
-🇺🇸 EN
+<button id="languageMenuBtn" class="lang-btn" type="button">
+🌐 Language ▾
 </button>
 
-<button class="lang-btn" onclick="changeLanguage('fa')">
-🇮🇷 FA
-</button>
+<div id="languageMenu" class="language-menu">
 
+<button class="lang-option" data-lang-code="en">🇺🇸 English</button>
+<button class="lang-option" data-lang-code="fa">🇮🇷 فارسی</button>
+<button class="lang-option" data-lang-code="ar">🇸🇦 العربية</button>
+<button class="lang-option" data-lang-code="de">🇩🇪 Deutsch</button>
+<button class="lang-option" data-lang-code="es">🇪🇸 Español</button>
+<button class="lang-option" data-lang-code="fr">🇫🇷 Français</button>
+<button class="lang-option" data-lang-code="hi">🇮🇳 हिन्दी</button>
+<button class="lang-option" data-lang-code="id">🇮🇩 Indonesia</button>
+<button class="lang-option" data-lang-code="it">🇮🇹 Italiano</button>
+<button class="lang-option" data-lang-code="ja">🇯🇵 日本語</button>
+<button class="lang-option" data-lang-code="ko">🇰🇷 한국어</button>
+<button class="lang-option" data-lang-code="pt">🇵🇹 Português</button>
+<button class="lang-option" data-lang-code="tr">🇹🇷 Türkçe</button>
+<button class="lang-option" data-lang-code="zh-CN">🇨🇳 中文</button>
+
+</div>
 </div>
 
 </div>
@@ -211,11 +298,11 @@ margin:auto;
 <section class="hero">
 
 <h1 data-lang="brand">
-<span data-i18n="brand"></span>
+FutureMind Lab
 </h1>
 
 <h2 data-lang="hero_title">
-<span data-i18n="hero_title"></span>
+Build The Future With AI
 </h2>
 
 <p data-lang="hero_text">
@@ -231,15 +318,15 @@ into intelligent solutions.
 <div class="hero-buttons">
 
 <a class="btn" href="products/hunter-x.html">
-🚀 <span data-lang="explore">Explore <span data-i18n="hunter_title"></span></span>
+🚀 <span data-lang="explore">Explore Hunter-X</span>
 </a>
 
 <a class="btn secondary" href="pages/customer_demo.html">
-🤖 <span data-lang="view_demo">View <span data-i18n="demo"></span></span>
+🤖 <span data-lang="view_demo">View Demo</span>
 </a>
 
 <a class="btn secondary" href="pages/pricing.html">
-💎 <span data-lang="pricing"><span data-i18n="pricing"></span></span>
+💎 <span data-lang="pricing">Pricing</span>
 </a>
 
 </div>
@@ -253,7 +340,7 @@ into intelligent solutions.
 
 
 <h2>
-<span data-lang="featured"><span data-i18n="featured"></span></span>
+<span data-lang="featured">Featured Product</span>
 </h2>
 
 
@@ -261,12 +348,12 @@ into intelligent solutions.
 
 
 <h2 data-lang="hunter_title">
-🤖 <span data-i18n="hunter_title"></span> V44 Professional
+🤖 Hunter-X V44 Professional
 </h2>
 
 
 <p data-lang="hunter_platform">
-<span data-lang="ai_platform"><span data-i18n="hunter_description"></span></span>
+<span data-lang="ai_platform">AI Market Intelligence Platform</span>
 </p>
 
 
@@ -280,7 +367,7 @@ into intelligent solutions.
 
 
 <a class="btn" href="products/hunter-x.html">
-<span data-lang="learn_more"><span data-i18n="learn_more"></span></span>
+<span data-lang="learn_more">Learn More</span>
 </a>
 
 
@@ -296,7 +383,7 @@ into intelligent solutions.
 
 
 <h2>
-<span data-lang="why">Why <span data-i18n="brand"></span>?</span>
+<span data-lang="why">Why FutureMind Lab?</span>
 </h2>
 
 
@@ -304,7 +391,7 @@ into intelligent solutions.
 
 
 <div class="card">
-<h3>🤖 <span data-lang="ai_innovation"><span data-i18n="ai_innovation"></span></span></h3>
+<h3>🤖 <span data-lang="ai_innovation">AI Innovation</span></h3>
 <p>
 <span data-lang="ai_innovation_text">Smart solutions powered by intelligence.</span>
 </p>
@@ -336,7 +423,7 @@ into intelligent solutions.
 
 <footer class="section">
 
-<span data-lang="footer"><span data-i18n="brand"></span> © 2026</span>
+<span data-lang="footer">FutureMind Lab © 2026</span>
 
 </footer>
 
@@ -347,7 +434,7 @@ into intelligent solutions.
 <section class="features">
 
 <h2>
-<span data-lang="why_hunter"><span data-lang="why_hunter">Why Choose <span data-i18n="hunter_title"></span>?</span></span>
+<span data-lang="why_hunter"><span data-lang="why_hunter">Why Choose Hunter-X?</span></span>
 </h2>
 
 <p>
@@ -422,7 +509,7 @@ with AI assistance.
 <section class="how-it-works">
 
 <h2>
-<span data-lang="how_hunter_works"><span data-lang="how_hunter">How <span data-i18n="hunter_title"></span> Works</span></span>
+<span data-lang="how_hunter_works"><span data-lang="how_hunter">How Hunter-X Works</span></span>
 </h2>
 
 <p>
@@ -485,11 +572,11 @@ AI-assisted insights.
 <section class="pricing-cta">
 
 <h2>
-💎 <span data-i18n="hunter_title"></span> V44 Professional
+💎 Hunter-X V44 Professional
 </h2>
 
 <h3>
-<span data-lang="ai_platform"><span data-i18n="hunter_description"></span></span>
+<span data-lang="ai_platform">AI Market Intelligence Platform</span>
 </h3>
 
 <p>
@@ -525,7 +612,7 @@ AI-assisted insights.
 <section class="trust-section">
 
 <h2>
-<span data-lang="why">Why <span data-i18n="brand"></span>?</span>
+<span data-lang="why">Why FutureMind Lab?</span>
 </h2>
 
 <p>
@@ -539,7 +626,7 @@ AI-assisted insights.
 <div class="trust-card">
 
 <h3>
-🤖 <span data-lang="ai_innovation"><span data-i18n="ai_innovation"></span></span>
+🤖 <span data-lang="ai_innovation">AI Innovation</span>
 </h3>
 
 <p>
@@ -592,25 +679,6 @@ AI-assisted insights.
 
 </section>
 
-
-
-<div class="language-selector">
-<select id="languageSwitcher">
-<option value="en">English</option>
-<option value="fa">فارسی</option>
-<option value="es">Español</option>
-<option value="de">Deutsch</option>
-<option value="fr">Français</option>
-<option value="ar">العربية</option>
-<option value="tr">Türkçe</option>
-<option value="zh-CN">中文</option>
-<option value="ja">日本語</option>
-<option value="ko">한국어</option>
-</select>
-</div>
-
-<script src="/js/language_engine.js"></script>
-<script src="/js/language_switcher.js"></script>
 
 </body>
 

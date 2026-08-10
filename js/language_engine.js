@@ -41,7 +41,8 @@ let files=[
 "home",
 "store",
 "checkout",
-"products"
+"products",
+"remaining"
 ];
 
 
@@ -99,13 +100,13 @@ translate(){
 
 document
 .querySelectorAll(
-"[data-i18n]"
+"[data-i18n],[data-lang]"
 )
 .forEach(el=>{
 
 
 let key =
-el.dataset.i18n;
+el.dataset.i18n || el.dataset.lang;
 
 
 el.innerText =
@@ -180,6 +181,6 @@ document.addEventListener(
 "DOMContentLoaded",
 ()=>{
 
-futuremindLanguage.init();
+window.futuremindLanguage.init();
 
 });
