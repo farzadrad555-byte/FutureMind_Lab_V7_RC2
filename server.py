@@ -858,8 +858,42 @@ PORT = int(os.environ.get("PORT", 8001))
 
 if __name__ == "__main__":
     print(f"FutureMind Lab Security Server V2 running on {PORT}")
-HTTPServer(
+
+    HTTPServer(
         ("0.0.0.0", PORT),
         Handler
     ).serve_forever()
 
+
+
+@app.route("/api/intelligence")
+def intelligence_api():
+
+    import json
+
+    try:
+
+        with open(
+        "smart_engine/reports/daily_intelligence.json",
+        "r",
+        encoding="utf-8"
+        ) as f:
+
+            data=json.load(f)
+
+
+        return jsonify(data)
+
+
+    except Exception as e:
+
+        return jsonify({
+            "status":"ERROR",
+            "message":str(e)
+        })
+
+
+    HTTPServer(
+        ("0.0.0.0", PORT),
+        Handler
+    ).serve_forever()
