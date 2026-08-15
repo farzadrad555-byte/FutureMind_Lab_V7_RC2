@@ -1,1 +1,6 @@
-{}
+{
+  "checkout_order_failed": "Bestellung fehlgeschlagen",
+  "checkout_name_email": "Bitte geben Sie Ihren Namen und Ihre E-Mail-Adresse ein",
+  "checkout_loading": "Bitte warten, das Produkt wird geladen...",
+  "checkout_connection_error": "Verbindungsfehler"
+}

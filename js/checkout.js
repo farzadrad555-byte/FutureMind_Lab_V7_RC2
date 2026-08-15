@@ -5,7 +5,7 @@ async function submitOrder(){
     console.log("PRODUCT:", window.selectedProduct);
 
     if(!window.productReady || !window.selectedProduct){
-        alert("Please wait, product is loading...");
+        alert(window.futuremindLanguage?.t("checkout_loading") || "Please wait, product is loading...");
         return;
     }
 
@@ -13,7 +13,7 @@ async function submitOrder(){
     const email = document.getElementById("email").value;
 
     if(!name || !email){
-        alert("Please enter your name and email");
+        alert(window.futuremindLanguage?.t("checkout_name_email") || "Please enter your name and email");
         return;
     }
 
@@ -109,7 +109,7 @@ async function submitOrder(){
         }
         else{
 
-            alert("Order failed");
+            alert(window.futuremindLanguage?.t("checkout_order_failed") || "Order failed");
 
         }
 
@@ -119,7 +119,7 @@ async function submitOrder(){
 
         console.log(error);
 
-        alert("Connection error");
+        alert(window.futuremindLanguage?.t("checkout_connection_error") || "Connection error");
 
     }
 

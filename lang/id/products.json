@@ -1,0 +1,52 @@
+{
+  "hunter_x_v44": {
+    "title": "Hunter-X V44 Professional",
+    "category": "Intelijen Pasar",
+    "description": "Toolkit analisis pasar dan kecerdasan trading tingkat lanjut."
+  },
+  "science_teacher_ai": {
+    "title": "Science Teacher AI Pack",
+    "category": "AI Pendidikan",
+    "description": "Alat AI untuk guru sains dan pembuatan konten pendidikan."
+  },
+  "math_teacher_ai": {
+    "title": "Math Teacher AI Pack",
+    "category": "AI Pendidikan",
+    "description": "Asisten AI untuk pengajaran matematika dan latihan."
+  },
+  "futuremind_templates": {
+    "title": "FutureMind Templates Pack",
+    "category": "Template Digital",
+    "description": "Template profesional untuk produktivitas digital."
+  },
+  "ai_starter_pack": {
+    "title": "FutureMind AI Starter Pack V1",
+    "category": "Alat AI",
+    "description": "Alat AI penting untuk kreator dan pemula."
+  },
+  "ai_teacher_pack": {
+    "title": "FutureMind AI Teacher Pack",
+    "category": "AI Pendidikan",
+    "description": "Paket asisten AI lengkap untuk guru."
+  },
+  "content_creator_pack": {
+    "title": "FutureMind AI Content Creator Pack",
+    "category": "AI Kreator",
+    "description": "Alat AI untuk pembuatan dan perencanaan konten."
+  },
+  "student_pack": {
+    "title": "FutureMind AI Student Pack V1",
+    "category": "AI Siswa",
+    "description": "Alat produktivitas AI untuk siswa."
+  },
+  "research_assistant_pack": {
+    "title": "FutureMind AI Research Assistant Pack V1",
+    "category": "AI Riset",
+    "description": "Asisten AI untuk penelitian dan analisis."
+  },
+  "business_assistant_pack": {
+    "title": "FutureMind AI Business Assistant Pack V1",
+    "category": "AI Bisnis",
+    "description": "Alat AI untuk perencanaan bisnis dan produktivitas."
+  }
+}

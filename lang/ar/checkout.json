@@ -1,1 +1,6 @@
-{}
+{
+  "checkout_order_failed": "فشل إنشاء الطلب",
+  "checkout_name_email": "يرجى إدخال اسمك وبريدك الإلكتروني",
+  "checkout_loading": "يرجى الانتظار، جارٍ تحميل المنتج...",
+  "checkout_connection_error": "خطأ في الاتصال"
+}

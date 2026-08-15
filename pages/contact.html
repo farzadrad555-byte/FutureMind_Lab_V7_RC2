@@ -40,7 +40,8 @@ font-weight:bold;
 
 </style>
 
-<script src="../js/language.js" defer></script>
+<script src="../js/language_engine.js" defer></script>
+<script src="../js/language_switcher.js" defer></script>
 
 </head>
 
@@ -61,11 +62,11 @@ font-weight:bold;
 <span data-lang="pricing">Pricing</span>
 </a>
 
-<button onclick="changeLanguage('en')">
+<button onclick="window.futuremindLanguage && window.futuremindLanguage.change('en')">
 🇺🇸 <span data-lang="english">English</span>
 </button>
 
-<button onclick="changeLanguage('fa')">
+<button onclick="window.futuremindLanguage && window.futuremindLanguage.change('fa')">
 🇮🇷 <span data-lang="persian">فارسی</span>
 </button>
 

@@ -1,1 +1,6 @@
-{}
+{
+  "checkout_order_failed": "주문에 실패했습니다",
+  "checkout_name_email": "이름과 이메일을 입력해 주세요",
+  "checkout_loading": "잠시만 기다려 주세요. 상품을 불러오는 중입니다...",
+  "checkout_connection_error": "연결 오류"
+}

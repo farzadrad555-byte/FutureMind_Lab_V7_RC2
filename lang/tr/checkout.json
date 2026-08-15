@@ -1,1 +1,6 @@
-{}
+{
+  "checkout_order_failed": "Sipariş başarısız oldu",
+  "checkout_name_email": "Lütfen adınızı ve e-posta adresinizi girin",
+  "checkout_loading": "Lütfen bekleyin, ürün yükleniyor...",
+  "checkout_connection_error": "Bağlantı hatası"
+}

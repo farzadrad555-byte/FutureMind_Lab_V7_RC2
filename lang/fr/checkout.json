@@ -1,1 +1,6 @@
-{}
+{
+  "checkout_order_failed": "Échec de la commande",
+  "checkout_name_email": "Veuillez saisir votre nom et votre adresse e-mail",
+  "checkout_loading": "Veuillez patienter, le produit est en cours de chargement...",
+  "checkout_connection_error": "Erreur de connexion"
+}
