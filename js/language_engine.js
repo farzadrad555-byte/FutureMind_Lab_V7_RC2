@@ -78,12 +78,12 @@ class FutureMindLanguage {
 
         this.loaded = true;
 
-        document.documentElement.setAttribute("lang", this.lang);
+        document.documentElement.lang = this.lang;
 
         if (this.lang === "fa" || this.lang === "ar") {
-            document.documentElement.setAttribute("dir", "rtl");
+            document.documentElement.dir = "rtl";
         } else {
-            document.documentElement.setAttribute("dir", "ltr");
+            document.documentElement.dir = "ltr";
         }
 
         this.applyTranslations();
