@@ -29,10 +29,8 @@
     function getLegacyLanguage(){
 
         try{
-            return (
-                localStorage.getItem(
-                    LEGACY_STORAGE_KEY
-                ) || "en"
+            return localStorage.getItem(
+                LEGACY_STORAGE_KEY
             );
         }catch(e){
             return "en";
@@ -143,8 +141,8 @@
                     getModernLanguage();
 
                 const initialLang =
-                    legacyLang ||
                     modernLang ||
+                    legacyLang ||
                     "en";
 
                 await delegateChange(

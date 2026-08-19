@@ -1,6 +1,6 @@
 {
   "brand": "FutureMind Lab",
-  "home": "Home",
+  "home": "Início",
   "store": "Store",
   "about": "About",
   "contact": "Contact",
@@ -17,7 +17,5 @@
   "hunter_description": "AI Market Intelligence Platform",
   "learn_more": "Learn More",
   "why": "Why FutureMind Lab?",
-  "ai_innovation": "AI Innovation",
-  "intelligence": "Intelligence",
-  "market_radar": "Market Radar"
+  "ai_innovation": "AI Innovation"
 }

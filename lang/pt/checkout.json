@@ -1,1 +1,6 @@
-{}
+{
+  "checkout_connection_error": "Erro de conexão",
+  "checkout_loading": "Aguarde, o produto está carregando...",
+  "checkout_name_email": "Digite seu nome e e-mail",
+  "checkout_order_failed": "Falha ao realizar o pedido"
+}

@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -134,6 +133,345 @@ body{
 }
 
 </style>
+
+<script src="../js/language_engine.js"></script>
+
+<script src="../js/language_switcher.js"></script>
+
+<style id="r98-hunterx-language-dropdown">
+/* R98 — Hunter-X global language dropdown */
+.navigation {
+    position: relative;
+}
+
+.navigation #futuremind-global-language-ui {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 10001;
+}
+
+.navigation #futuremind-global-language-ui .language-menu {
+    right: 0;
+    left: auto;
+}
+
+#futuremind-global-language-ui.language-switcher {
+    position: absolute;
+    display: inline-block;
+    z-index: 10001;
+}
+
+#futuremind-global-language-ui .lang-btn {
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+#futuremind-global-language-ui .language-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    left: auto;
+    min-width: 210px;
+    max-height: 65vh;
+    overflow-y: auto;
+    flex-direction: column;
+    box-sizing: border-box;
+    z-index: 10002;
+}
+
+#futuremind-global-language-ui .language-menu.show {
+    display: flex;
+    flex-direction: column;
+}
+
+#futuremind-global-language-ui .lang-option {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+    .navigation {
+        position: relative;
+    }
+
+    .navigation #futuremind-global-language-ui {
+        top: 8px;
+        right: 8px;
+        margin: 0;
+    }
+
+    .navigation #futuremind-global-language-ui .language-menu {
+        top: calc(100% + 8px);
+        right: 0;
+        left: auto;
+        min-width: 190px;
+        max-width: calc(100vw - 16px);
+        max-height: 65vh;
+        overflow-y: auto;
+    }
+}
+</style>
+
+
+<style id="R98-HUNTERX-LANGUAGE-VISUAL-FIX">
+
+/* ============================================================
+   R98 — Hunter-X Language UI visual alignment with Home
+   ============================================================ */
+
+#futuremind-global-language-ui.language-switcher {
+    position: relative !important;
+    display: inline-block !important;
+    width: auto !important;
+    height: auto !important;
+    margin-left: 15px !important;
+    vertical-align: middle !important;
+    z-index: 9999 !important;
+}
+
+/* REAL LANGUAGE BUTTON */
+#futuremind-global-language-ui.language-switcher .lang-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    box-sizing: border-box !important;
+    width: auto !important;
+    min-width: 112px !important;
+    height: 38px !important;
+
+    padding: 8px 14px !important;
+    margin: 0 !important;
+
+    border: 1px solid rgba(255,255,255,.25) !important;
+    border-radius: 8px !important;
+
+    background: rgba(0,0,0,.15) !important;
+    color: white !important;
+
+    font-family: inherit !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    line-height: 20px !important;
+
+    cursor: pointer !important;
+    white-space: nowrap !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+/* HOVER */
+#futuremind-global-language-ui.language-switcher .lang-btn:hover {
+    background: #00d9ff !important;
+    color: #001 !important;
+}
+
+/* MENU */
+#futuremind-global-language-ui.language-switcher .language-menu {
+    position: absolute !important;
+    top: calc(100% + 8px) !important;
+    right: 0 !important;
+    left: auto !important;
+
+    min-width: 190px !important;
+    width: 215px !important;
+
+    z-index: 2147483647 !important;
+}
+
+/* OPTIONS */
+#futuremind-global-language-ui.language-switcher .lang-option {
+    display: block !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+
+    padding: 8px 12px;
+    margin: 0 !important;
+
+    font-family: inherit !important;
+    font-size: 14px !important;
+    line-height: 20px !important;
+
+    white-space: nowrap !important;
+    cursor: pointer !important;
+}
+
+/* MOBILE */
+@media (max-width: 600px) {
+
+    #futuremind-global-language-ui.language-switcher {
+        margin-left: 8px !important;
+    }
+
+    #futuremind-global-language-ui.language-switcher .lang-btn {
+        min-width: 112px !important;
+        height: 38px !important;
+        padding: 8px 12px !important;
+    }
+
+    #futuremind-global-language-ui.language-switcher .language-menu {
+        top: calc(100% + 8px) !important;
+        right: 0 !important;
+        left: auto !important;
+        width: 215px !important;
+        max-width: calc(100vw - 16px) !important;
+        max-height: 65vh !important;
+        overflow-y: auto !important;
+    }
+}
+
+</style>
+
+
+<!-- R98-LANG-HUNTERX-ZH-FINAL-CSS -->
+<style id="R98-LANG-HUNTERX-ZH-FINAL-CSS">
+/* R98 final Hunter-X language dropdown geometry */
+#futuremind-global-language-ui.language-switcher {
+    position: relative !important;
+    display: inline-flex !important;
+    align-items: center !important;
+}
+
+#futuremind-global-language-ui.language-switcher .lang-btn {
+    width: 112px !important;
+    min-width: 112px !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    max-height: 38px !important;
+    padding: 0 12px !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+    border: 1px solid rgba(255,255,255,.25) !important;
+    border-radius: 8px !important;
+    background: rgba(255,255,255,.08) !important;
+    color: inherit !important;
+    font: inherit !important;
+    line-height: 36px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+}
+
+#futuremind-global-language-ui.language-switcher .language-menu {
+    position: absolute !important;
+    top: calc(100% + 8px) !important;
+    right: 0 !important;
+    left: auto !important;
+
+    width: 215px !important;
+    min-width: 215px !important;
+    max-width: 215px !important;
+
+    height: 532px !important;
+    min-height: 532px !important;
+    max-height: 532px !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    display: none !important;
+    flex-direction: column !important;
+    flex-wrap: nowrap !important;
+
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+
+    box-sizing: border-box !important;
+    z-index: 2147483647 !important;
+}
+
+#futuremind-global-language-ui.language-switcher
+.language-menu.show {
+    display: flex !important;
+}
+
+#futuremind-global-language-ui.language-switcher
+.language-menu .lang-option {
+    display: flex !important;
+    position: static !important;
+
+    width: 215px !important;
+    min-width: 215px !important;
+    max-width: 215px !important;
+
+    height: 38px !important;
+    min-height: 38px !important;
+    max-height: 38px !important;
+
+    flex: 0 0 38px !important;
+    flex-shrink: 0 !important;
+
+    padding: 0 12px !important;
+    margin: 0 !important;
+
+    box-sizing: border-box !important;
+
+    align-items: center !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+}
+
+</style>
+
+
+<style id="r98-hunterx-language-button-align">
+/* R98-LANG-HUNTERX-MATCH-STORE-VISUAL */
+
+#futuremind-global-language-ui.language-switcher .lang-btn {
+    display: inline-flex !important;
+    position: static !important;
+
+    width: 112px !important;
+    min-width: 112px !important;
+
+    height: 38px !important;
+    min-height: 0 !important;
+
+    padding: 7px 12px !important;
+    margin: 0 !important;
+
+    box-sizing: border-box !important;
+
+    border: 1px solid rgba(255,255,255,0.28) !important;
+    border-radius: 20px !important;
+
+    background: rgba(18,26,51,0.96) !important;
+    color: #ffffff !important;
+
+    font-family: Arial, sans-serif !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    line-height: 13px !important;
+
+    justify-content: center !important;
+    align-items: center !important;
+
+    appearance: auto !important;
+    -webkit-appearance: auto !important;
+
+    text-align: center !important;
+    white-space: nowrap !important;
+    cursor: pointer !important;
+}
+
+/* Keep the already-correct dropdown untouched */
+#futuremind-global-language-ui.language-switcher .language-menu {
+    right: 0 !important;
+    left: auto !important;
+}
+
+/* R98-LANG-HUNTERX-MATCH-STORE-VISUAL-END */
+</style>
+
 </head>
 
 
