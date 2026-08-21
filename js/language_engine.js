@@ -165,6 +165,8 @@ rtl.includes(this.lang)
 :
 "ltr";
 
+document.documentElement.lang = this.lang;
+
 
 }
 

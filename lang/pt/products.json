@@ -1,0 +1,52 @@
+{
+  "hunter_x_v44": {
+    "title": "Hunter-X V44 Professional",
+    "category": "Inteligência de Mercado",
+    "description": "Kit avançado de análise de mercado e inteligência de negociação."
+  },
+  "science_teacher_ai": {
+    "title": "Pacote Science Teacher AI",
+    "category": "IA Educacional",
+    "description": "Ferramentas de IA para professores de ciências e criação de conteúdo educacional."
+  },
+  "math_teacher_ai": {
+    "title": "Pacote Math Teacher AI",
+    "category": "IA Educacional",
+    "description": "Assistente de IA para ensino de matemática e exercícios."
+  },
+  "futuremind_templates": {
+    "title": "Pacote de Modelos FutureMind",
+    "category": "Modelos Digitais",
+    "description": "Modelos profissionais para produtividade digital."
+  },
+  "ai_starter_pack": {
+    "title": "Pacote Inicial FutureMind AI V1",
+    "category": "Ferramentas de IA",
+    "description": "Ferramentas essenciais de IA para criadores e iniciantes."
+  },
+  "ai_teacher_pack": {
+    "title": "Pacote FutureMind AI Teacher",
+    "category": "IA Educacional",
+    "description": "Pacote completo de assistente de IA para professores."
+  },
+  "content_creator_pack": {
+    "title": "Pacote FutureMind AI Content Creator",
+    "category": "IA para Criadores",
+    "description": "Ferramentas de IA para criação e planejamento de conteúdo."
+  },
+  "student_pack": {
+    "title": "Pacote FutureMind AI Student V1",
+    "category": "IA para Estudantes",
+    "description": "Ferramentas de produtividade com IA para estudantes."
+  },
+  "research_assistant_pack": {
+    "title": "Pacote FutureMind AI Research Assistant V1",
+    "category": "IA de Pesquisa",
+    "description": "Assistente de IA para pesquisa e análise."
+  },
+  "business_assistant_pack": {
+    "title": "Pacote FutureMind AI Business Assistant V1",
+    "category": "IA Empresarial",
+    "description": "Ferramentas de IA para planejamento e produtividade empresarial."
+  }
+}
