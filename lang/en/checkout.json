@@ -1,1 +1,6 @@
-{}
+{
+  "checkout_order_failed": "Order failed",
+  "checkout_name_email": "Please enter your name and email",
+  "checkout_loading": "Please wait, product is loading...",
+  "checkout_connection_error": "Connection error"
+}

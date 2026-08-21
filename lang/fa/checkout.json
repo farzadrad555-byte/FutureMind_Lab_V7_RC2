@@ -1,1 +1,6 @@
-{}
+{
+  "checkout_order_failed": "ثبت سفارش ناموفق بود",
+  "checkout_name_email": "لطفاً نام و ایمیل خود را وارد کنید",
+  "checkout_loading": "لطفاً صبر کنید، محصول در حال بارگذاری است...",
+  "checkout_connection_error": "خطا در اتصال"
+}

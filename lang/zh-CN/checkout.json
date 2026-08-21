@@ -1,1 +1,6 @@
-{}
+{
+  "checkout_order_failed": "订单失败",
+  "checkout_name_email": "请输入您的姓名和电子邮箱",
+  "checkout_loading": "请稍候，正在加载产品...",
+  "checkout_connection_error": "连接错误"
+}

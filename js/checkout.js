@@ -5,7 +5,7 @@ async function submitOrder(){
     console.log("PRODUCT:", window.selectedProduct);
 
     if(!window.productReady || !window.selectedProduct){
-        alert("Please wait, product is loading...");
+        alert(window.futuremindLanguage?.t("checkout_loading") || "Please wait, product is loading...");
         return;
     }
 
@@ -13,7 +13,7 @@ async function submitOrder(){
     const email = document.getElementById("email").value;
 
     if(!name || !email){
-        alert("Please enter your name and email");
+        alert(window.futuremindLanguage?.t("checkout_name_email") || "Please enter your name and email");
         return;
     }
 
@@ -65,51 +65,46 @@ async function submitOrder(){
                 "order_id",
                 data.order_id
             );
+            /*
+             * R100-F.1
+             * SECURITY-FIRST FAIL-CLOSED BOUNDARY
+             *
+             * The browser does not possess server-verifiable
+             * payment evidence at this stage.
+             *
+             * Therefore this client MUST NOT mark an order paid,
+             * request a download token, or redirect to download
+             * after order creation alone.
+             */
 
+            localStorage.setItem(
+                "order_id",
+                data.order_id
+            );
 
-            const payment = await fetch("/api/payment/confirm",{
+            localStorage.setItem(
+                "payment_status",
+                "PENDING"
+            );
 
-                method:"POST",
+            console.log(
+                "ORDER CREATED — PAYMENT PENDING:",
+                data.order_id
+            );
 
-                headers:{
-                    "Content-Type":"application/json"
-                },
+            alert(
+                "Order created successfully.\n\n" +
+                "Order ID: " + data.order_id + "\n\n" +
+                "Payment verification is required before download."
+            );
 
-                body:JSON.stringify({
-                    order_id:data.order_id
-                })
+            return;
 
-            });
-
-
-            const paymentData = await payment.json();
-
-
-            if(paymentData.status === "success"){
-
-                localStorage.setItem(
-                    "download_portal",
-                    paymentData.download_portal
-                );
-
-                localStorage.setItem(
-                    "payment_status",
-                    paymentData.payment_status
-                );
-
-            }
-
-
-            const token =
-            paymentData.download.token;
-
-            window.location.href =
-            "order_success.html?token=" + token;
 
         }
         else{
 
-            alert("Order failed");
+            alert(window.futuremindLanguage?.t("checkout_order_failed") || "Order failed");
 
         }
 
@@ -119,7 +114,7 @@ async function submitOrder(){
 
         console.log(error);
 
-        alert("Connection error");
+        alert(window.futuremindLanguage?.t("checkout_connection_error") || "Connection error");
 
     }
 

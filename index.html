@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,7 +10,9 @@
 
 <link rel="stylesheet" href="css/style.css?v=20260731b">
 
-
+<script src="js/language.js"></script>
+<script src="js/language_engine.js"></script>
+<script src="js/language_switcher.js"></script>
 <script src="js/market.js"></script>
 
 
@@ -92,6 +93,41 @@ border-radius:20px;
 }
 
 
+
+/* R69.4 — CTA visual consistency */
+.hero-buttons .btn.secondary {
+    background: #00d9ff;
+    color: #001;
+    border: none;
+}
+
+.hero-buttons .btn.secondary:hover {
+    background: #00d9ff;
+    color: #001;
+    filter: brightness(1.08);
+}
+
+
+/* R69.8 — Professional active language indicator */
+.language-switcher .lang-option {
+    position: relative;
+    padding-right: 36px;
+}
+
+.language-switcher .lang-option.active {
+    font-weight: 700;
+    background: rgba(0,217,255,.16);
+    color: #00d9ff;
+}
+
+.language-switcher .lang-option.active::after {
+    content: "✓";
+    position: absolute;
+    right: 12px;
+    font-weight: 800;
+    color: #00d9ff;
+}
+
 </style>
 
 
@@ -159,6 +195,165 @@ margin:auto;
 
 </style>
 
+<style>
+
+
+/* R98-L2S — MOBILE LANGUAGE POSITION
+   Keep the language UI inside navigation,
+   but pin it to the upper-right corner.
+*/
+.navigation {
+    position: relative;
+}
+
+.navigation #futuremind-global-language-ui {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 10001;
+}
+
+.navigation #futuremind-global-language-ui .language-menu {
+    right: 0;
+    left: auto;
+}
+
+@media (max-width: 600px) {
+    .navigation {
+        position: relative;
+        padding-top: 52px;
+    }
+
+    .navigation #futuremind-global-language-ui {
+        top: 8px;
+        right: 8px;
+        margin: 0;
+    }
+
+    .navigation #futuremind-global-language-ui .language-menu {
+        top: calc(100% + 8px);
+        right: 0;
+        left: auto;
+    }
+}
+
+/* FutureMind 14-Language Dropdown */
+.language-switcher {
+    position: relative;
+    display: inline-block;
+    z-index: 9999;
+}
+
+.language-switcher .lang-btn {
+    cursor: pointer;
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: 8px;
+    padding: 8px 14px;
+    background: rgba(0,0,0,.15);
+    color: inherit;
+    white-space: nowrap;
+}
+
+.language-switcher .language-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    min-width: 210px;
+    max-height: 420px;
+    overflow-y: auto;
+    background: #ffffff;
+    border: 1px solid #dddddd;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.18);
+    padding: 6px;
+    z-index: 10000;
+}
+
+.language-switcher .language-menu.show {
+    display: flex;
+    flex-direction: column;
+}
+
+.language-switcher .lang-option {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 9px 12px;
+    margin: 0;
+    border: 0;
+    border-radius: 7px;
+    background: transparent;
+    color: #222222;
+    text-align: left;
+    font-size: 14px;
+    line-height: 1.4;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.language-switcher .lang-option:hover {
+    background: #f1f1f1;
+}
+
+@media (max-width: 600px) {
+    .language-switcher .language-menu {
+        right: 0;
+        left: auto;
+        min-width: 190px;
+        max-height: 65vh;
+    }
+}
+
+</style>
+
+<style id="futuremind-r57-home-cta">
+/* ================================================================
+   FutureMind R57 — Home CTA hierarchy
+   ================================================================ */
+
+.hero-buttons .btn{
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease,
+        background .18s ease,
+        border-color .18s ease;
+}
+
+.hero-buttons .btn.primary-cta{
+    background:#00d9ff;
+    color:#001018;
+    border:1px solid #00d9ff;
+    box-shadow:0 8px 24px rgba(0,217,255,.20);
+}
+
+.hero-buttons .btn.demo-cta{
+    background:linear-gradient(135deg,#6d5dfc,#8b5cf6);
+    color:#ffffff;
+    border:1px solid #9b8cff;
+    box-shadow:0 8px 24px rgba(124,92,246,.28);
+}
+
+.hero-buttons .btn.pricing-cta{
+    background:linear-gradient(135deg,#10b981,#14b8a6);
+    color:#ffffff;
+    border:1px solid #34d399;
+    box-shadow:0 8px 24px rgba(16,185,129,.24);
+}
+
+.hero-buttons .btn:hover{
+    transform:translateY(-2px);
+}
+
+.hero-buttons .btn.demo-cta:hover{
+    box-shadow:0 12px 30px rgba(124,92,246,.38);
+}
+
+.hero-buttons .btn.pricing-cta:hover{
+    box-shadow:0 12px 30px rgba(16,185,129,.34);
+}
+</style>
+
 </head>
 
 
@@ -191,15 +386,6 @@ margin:auto;
 <span data-i18n="hunter_title"></span>
 </a>
 
-<div class="language-switcher">
-
-<button class="lang-btn" onclick="changeLanguage('en')">
-🇺🇸 EN
-</button>
-
-<button class="lang-btn" onclick="changeLanguage('fa')">
-🇮🇷 FA
-</button>
 
 </div>
 
@@ -230,15 +416,15 @@ into intelligent solutions.
 
 <div class="hero-buttons">
 
-<a class="btn" href="products/hunter-x.html">
+<a class="btn primary-cta" href="products/hunter-x.html">
 🚀 <span data-lang="explore">Explore <span data-i18n="hunter_title"></span></span>
 </a>
 
-<a class="btn secondary" href="pages/customer_demo.html">
+<a class="btn demo-cta" href="pages/customer_demo.html">
 🤖 <span data-lang="view_demo">View <span data-i18n="demo"></span></span>
 </a>
 
-<a class="btn secondary" href="pages/pricing.html">
+<a class="btn pricing-cta" href="pages/pricing.html">
 💎 <span data-lang="pricing"><span data-i18n="pricing"></span></span>
 </a>
 
@@ -260,20 +446,19 @@ into intelligent solutions.
 <div class="card product-card">
 
 
-<h2 data-lang="hunter_title">
-🤖 <span data-i18n="hunter_title"></span> V44 Professional
+<h2>
+🤖 <span data-i18n="hunter_title"></span>
 </h2>
 
 
-<p data-lang="hunter_platform">
-<span data-lang="ai_platform"><span data-i18n="hunter_description"></span></span>
-</p>
+<p data-lang="hunter_platform">AI Market Intelligence Platform</p>
+
 
 
 <p>
 ✓ <span data-lang="market_scanner">Market Scanner</span>
 <br>
-✓ <span data-lang="risk_analysis"><span data-lang="risk_analysis">Risk Analysis</span></span>
+✓ <span data-lang="risk_analysis">Risk Analysis</span>
 <br>
 ✓ <span data-lang="professional_reports">Professional Reports</span>
 </p>
@@ -334,11 +519,7 @@ into intelligent solutions.
 
 
 
-<footer class="section">
 
-<span data-lang="footer"><span data-i18n="brand"></span> © 2026</span>
-
-</footer>
 
 
 
@@ -347,11 +528,11 @@ into intelligent solutions.
 <section class="features">
 
 <h2>
-<span data-lang="why_hunter"><span data-lang="why_hunter">Why Choose <span data-i18n="hunter_title"></span>?</span></span>
+<span data-lang="why_hunter">Why Choose <span data-i18n="hunter_title"></span>?</span>
 </h2>
 
 <p>
-<span data-lang="hunter_desc"><span data-lang="smart_market">AI-powered intelligence for smarter market decisions.</span></span>
+<span data-lang="hunter_desc">AI-powered intelligence for smarter market decisions.</span>
 </p>
 
 
@@ -379,7 +560,7 @@ with intelligent scanning.
 </h3>
 
 <p>
-<span data-lang="risk_analysis_text"><span data-lang="risk_description">Evaluate risks before making decisions.</span></span>
+<span data-lang="risk_analysis_text">Evaluate risks before making decisions.</span>
 </p>
 
 </div>
@@ -388,7 +569,7 @@ with intelligent scanning.
 <div class="feature-card">
 
 <h3>
-🎯 <span data-lang="opportunity"><span data-lang="opportunity_detection">Opportunity Detection</span></span>
+🎯 <span data-lang="opportunity_detection">Opportunity Detection</span>
 </h3>
 
 <p data-lang="opportunity_text">
@@ -406,7 +587,7 @@ with AI assistance.
 </h3>
 
 <p>
-<span data-lang="professional_reports_text"><span data-lang="reports_description">Generate actionable intelligence reports.</span></span>
+<span data-lang="professional_reports_text">Generate actionable intelligence reports.</span>
 </p>
 
 </div>
@@ -422,11 +603,11 @@ with AI assistance.
 <section class="how-it-works">
 
 <h2>
-<span data-lang="how_hunter_works"><span data-lang="how_hunter">How <span data-i18n="hunter_title"></span> Works</span></span>
+<span data-lang="how_hunter_works">How <span data-i18n="hunter_title"></span> Works</span>
 </h2>
 
 <p>
-<span data-lang="how_desc"><span data-lang="market_insights">From market data to intelligent insights.</span></span>
+<span data-lang="how_desc">From market data to intelligent insights.</span>
 </p>
 
 
@@ -485,15 +666,15 @@ AI-assisted insights.
 <section class="pricing-cta">
 
 <h2>
-💎 <span data-i18n="hunter_title"></span> V44 Professional
+💎 <span data-i18n="hunter_title"></span>
 </h2>
 
 <h3>
-<span data-lang="ai_platform"><span data-i18n="hunter_description"></span></span>
+<span data-lang="ai_platform"></span>
 </h3>
 
 <p>
-<span data-lang="lifetime_access"><span data-lang="lifetime_access">Lifetime Professional Access</span></span>
+<span data-lang="lifetime_access">Lifetime Professional Access</span>
 </p>
 
 
@@ -505,15 +686,15 @@ AI-assisted insights.
 <br>
 ✓ <span data-lang="risk_analysis">Risk Analysis</span>
 <br>
-✓ <span data-lang="opportunity"><span data-lang="opportunity_detection">Opportunity Detection</span></span>
+✓ <span data-lang="opportunity_detection">Opportunity Detection</span>
 <br>
-✓ <span data-lang="future_updates"><span data-lang="future_updates">Future Updates</span></span>
+✓ <span data-lang="future_updates">Future Updates</span>
 
 </div>
 
 
 <a class="btn" href="pages/pricing.html">
-<span data-lang="get_access"><span data-lang="get_access">Get Professional Access</span></span>
+<span data-lang="get_access">Get Professional Access</span>
 </a>
 
 
@@ -578,11 +759,11 @@ AI-assisted insights.
 <div class="trust-card">
 
 <h3>
-⭐ <span data-lang="professional_quality"><span data-lang="professional_quality">Professional Quality</span></span>
+⭐ <span data-lang="professional_quality">Professional Quality</span>
 </h3>
 
 <p>
-<span data-lang="professional_quality_text"><span data-lang="reliable_products">Reliable digital products and experiences.</span></span>
+<span data-lang="professional_quality_text">Reliable digital products and experiences.</span>
 </p>
 
 </div>
@@ -594,23 +775,14 @@ AI-assisted insights.
 
 
 
-<div class="language-selector">
-<select id="languageSwitcher">
-<option value="en">English</option>
-<option value="fa">فارسی</option>
-<option value="es">Español</option>
-<option value="de">Deutsch</option>
-<option value="fr">Français</option>
-<option value="ar">العربية</option>
-<option value="tr">Türkçe</option>
-<option value="zh-CN">中文</option>
-<option value="ja">日本語</option>
-<option value="ko">한국어</option>
-</select>
-</div>
 
-<script src="/js/language_engine.js"></script>
-<script src="/js/language_switcher.js"></script>
+
+
+<footer class="section">
+
+<span data-lang="footer"><span data-i18n="brand"></span> © 2026</span>
+
+</footer>
 
 </body>
 

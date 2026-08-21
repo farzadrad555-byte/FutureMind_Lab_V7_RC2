@@ -1,1 +1,6 @@
-{}
+{
+  "checkout_order_failed": "注文に失敗しました",
+  "checkout_name_email": "名前とメールアドレスを入力してください",
+  "checkout_loading": "お待ちください。商品を読み込んでいます...",
+  "checkout_connection_error": "接続エラー"
+}

@@ -60,9 +60,280 @@ color:#00d9ff;
 
 </style>
 
+
+<!-- R98-LANG-STORE-DROPDOWN-FIX START -->
+<style>
+/* =========================================================
+   FutureMind Global Language Switcher — STORE
+   R98-LANG-STORE-DROPDOWN-FIX
+   ========================================================= */
+
+#futuremind-global-language-ui.language-switcher {
+    position: relative !important;
+    display: inline-block !important;
+    width: auto !important;
+    height: auto !important;
+    margin-left: 10px !important;
+    vertical-align: middle !important;
+    z-index: 100000 !important;
+    box-sizing: border-box !important;
+}
+
+/* Single language button */
+#futuremind-global-language-ui.language-switcher .lang-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 5px !important;
+
+    min-width: 118px !important;
+    height: 40px !important;
+    padding: 8px 14px !important;
+    margin: 0 !important;
+
+    border: 1px solid rgba(255,255,255,.28) !important;
+    border-radius: 20px !important;
+
+    background: rgba(18,26,51,.96) !important;
+    color: #fff !important;
+
+    cursor: pointer !important;
+    white-space: nowrap !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    line-height: 1 !important;
+
+    box-sizing: border-box !important;
+}
+
+/* Dropdown is CLOSED by default */
+#futuremind-global-language-ui.language-switcher .language-menu {
+    display: none !important;
+
+    position: absolute !important;
+    top: calc(100% + 8px) !important;
+    right: 0 !important;
+    left: auto !important;
+
+    width: 215px !important;
+    min-width: 215px !important;
+    max-width: 215px !important;
+
+    max-height: 65vh !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+
+    padding: 6px !important;
+    margin: 0 !important;
+
+    flex-direction: column !important;
+    gap: 2px !important;
+
+    background: rgba(12,18,38,.98) !important;
+    border: 1px solid rgba(0,217,255,.28) !important;
+    border-radius: 12px !important;
+
+    box-shadow: 0 12px 35px rgba(0,0,0,.45) !important;
+
+    z-index: 100001 !important;
+    box-sizing: border-box !important;
+}
+
+/* Dropdown OPEN state */
+#futuremind-global-language-ui.language-switcher
+.language-menu.show {
+    display: flex !important;
+}
+
+/* Every language is one clean row */
+#futuremind-global-language-ui.language-switcher .lang-option {
+    display: block !important;
+    width: 100% !important;
+    min-height: 38px !important;
+
+    padding: 9px 12px !important;
+    margin: 0 !important;
+
+    border: 0 !important;
+    border-radius: 7px !important;
+
+    background: transparent !important;
+    color: #fff !important;
+
+    text-align: left !important;
+    white-space: nowrap !important;
+
+    cursor: pointer !important;
+    box-sizing: border-box !important;
+    line-height: 20px !important;
+}
+
+/* Hover */
+#futuremind-global-language-ui.language-switcher
+.lang-option:hover {
+    background: rgba(0,217,255,.14) !important;
+}
+
+/* Active language */
+#futuremind-global-language-ui.language-switcher
+.lang-option.active {
+    background: rgba(0,217,255,.16) !important;
+    color: #00d9ff !important;
+    font-weight: 700 !important;
+}
+
+/* Prevent language options from becoming inline text */
+#futuremind-global-language-ui.language-switcher
+.language-menu > * {
+    flex: 0 0 auto !important;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+
+    #futuremind-global-language-ui.language-switcher {
+        margin-left: 6px !important;
+    }
+
+    #futuremind-global-language-ui.language-switcher .lang-btn {
+        min-width: 112px !important;
+        height: 38px !important;
+        padding: 7px 12px !important;
+        font-size: 13px !important;
+    }
+
+    #futuremind-global-language-ui.language-switcher .language-menu {
+        position: fixed !important;
+
+        top: 58px !important;
+        right: 8px !important;
+        left: auto !important;
+
+        width: min(215px, calc(100vw - 16px)) !important;
+        min-width: 0 !important;
+        max-width: calc(100vw - 16px) !important;
+
+        max-height: 70vh !important;
+        overflow-y: auto !important;
+    }
+}
+</style>
+<!-- R98-LANG-STORE-DROPDOWN-FIX END -->
+
+
+<!-- R98-STORE-NAV-HOME-ALIGN START -->
+<style>
+
+/* =========================================================
+   R98 — STORE NAVIGATION = HOME NAVIGATION
+   Language switcher intentionally excluded.
+   ========================================================= */
+
+.navigation {
+    display: flex !important;
+    align-items: center !important;
+    gap: 14px !important;
+    box-sizing: border-box !important;
+}
+
+/* Normal navigation links only */
+.navigation > a {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    min-height: 38px !important;
+    padding: 8px 12px !important;
+    margin: 0 !important;
+
+    box-sizing: border-box !important;
+
+    border-radius: 8px !important;
+
+    text-decoration: none !important;
+    white-space: nowrap !important;
+
+    line-height: 1.2 !important;
+    font-size: 14px !important;
+}
+
+/* Keep Home / Demo / Pricing / Contact / Store / Hunter-X
+   visually consistent with Home navigation. */
+.navigation > a:hover {
+    text-decoration: none !important;
+}
+
+/* Language UI remains independently controlled */
+.navigation #futuremind-global-language-ui {
+    flex: 0 0 auto !important;
+}
+
+/* ---------------------------------------------------------
+   MOBILE
+   --------------------------------------------------------- */
+@media (max-width: 600px) {
+
+    .navigation {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        align-items: center !important;
+        gap: 6px !important;
+
+        padding: 8px !important;
+        box-sizing: border-box !important;
+    }
+
+    .navigation > a {
+        min-height: 36px !important;
+        padding: 7px 9px !important;
+        font-size: 13px !important;
+    }
+
+    /* Language remains a single dropdown button */
+    .navigation #futuremind-global-language-ui {
+        flex: 0 0 auto !important;
+    }
+}
+
+</style>
+<!-- R98-STORE-NAV-HOME-ALIGN END -->
+
 </head>
 
 <body>
+
+<div class="navigation">
+
+<a href="../index.html" data-lang="home">
+🏠 <span data-i18n="home"></span>
+</a>
+
+
+<a href="customer_demo.html">
+<span data-lang="demo"><span data-i18n="demo"></span></span>
+</a>
+
+<a href="pricing.html">
+<span data-lang="pricing"><span data-i18n="pricing"></span></span>
+</a>
+
+
+<a href="contact.html" data-lang="contact">
+<span data-i18n="contact"></span>
+</a>
+
+<a href="store.html" data-lang="store">
+<span data-i18n="store"></span>
+</a>
+
+<a href="../products/hunter-x.html">
+<span data-i18n="hunter_title"></span>
+</a>
+
+
+</div>
+
+
 
 
 <div class="hero">
@@ -126,7 +397,7 @@ ${p.version}
 
 <p>${p.description}</p>
 
-<h2>${p.markets[getMarket()].price} ${p.markets[getMarket()].currency}</h2>
+<h2>${(() => { const price = resolveMarketPrice(p); const currency = getCurrency() || (getMarket() === "iran" ? "IRR" : "USD"); return (price !== null && price !== undefined && Number(price) > 0) ? `${Number(price).toLocaleString()} ${currency}` : "—"; })()}</h2>
 
 <p class="status">
 ${p.status}
@@ -145,30 +416,13 @@ ${p.status}
 });
 
 if(window.loadLanguage){
-    loadLanguage(localStorage.getItem("language") || "en");
+
 }
 
 });
 
 
 </script>
-
-
-
-<div class="language-selector">
-<select id="languageSwitcher">
-<option value="en">English</option>
-<option value="fa">فارسی</option>
-<option value="es">Español</option>
-<option value="de">Deutsch</option>
-<option value="fr">Français</option>
-<option value="ar">العربية</option>
-<option value="tr">Türkçe</option>
-<option value="zh-CN">中文</option>
-<option value="ja">日本語</option>
-<option value="ko">한국어</option>
-</select>
-</div>
 
 <script src="/js/language_engine.js"></script>
 <script src="/js/language_switcher.js"></script>

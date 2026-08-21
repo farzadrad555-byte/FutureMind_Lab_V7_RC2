@@ -96,7 +96,7 @@ class Handler(SimpleHTTPRequestHandler):
 
                     if (
                         order.get("order_id") == valid.get("order_id")
-                        and (order.get("status") == "PAID" or order.get("payment_status") == "PAID")
+                        and order.get("status") == "PAID"
                     ):
                         paid = True
                         break
@@ -436,6 +436,40 @@ class Handler(SimpleHTTPRequestHandler):
 
             return
 
+        # ----------------------------------------------------------
+        # R98-STATIC-DOWNLOAD-FAIL-CLOSED
+        # ----------------------------------------------------------
+        # Product ZIP packages must NEVER be served through the
+        # SimpleHTTPRequestHandler static fallback.
+        #
+        # Authorized delivery is handled only by the explicit
+        # token/payment-protected download routes above.
+        #
+        # This blocks direct public access such as:
+        #   /downloads/Hunter-X_Professional.zip
+        #
+        # IMPORTANT:
+        #   - no payment state is created here
+        #   - no token is accepted here
+        #   - no product file is served here
+        #   - explicit secure-download route remains unchanged
+        # ----------------------------------------------------------
+
+        from urllib.parse import urlparse
+
+        _r98_path = urlparse(self.path).path
+
+        if (
+            _r98_path == "/downloads"
+            or _r98_path.startswith("/downloads/")
+        ):
+            self.send_error(403, "Direct download access forbidden")
+            return
+
+        # ----------------------------------------------------------
+        # R98-STATIC-DOWNLOAD-FAIL-CLOSED END
+        # ----------------------------------------------------------
+
         return SimpleHTTPRequestHandler.do_GET(self)
 
     def do_POST(self):
@@ -540,157 +574,26 @@ class Handler(SimpleHTTPRequestHandler):
 
         if self.path == "/api/payment/confirm":
 
-            order_id = body.get("order_id")
+            # R100-N.1 — FAIL-CLOSED PAYMENT PROOF BOUNDARY
+            #
+            # Client-supplied payment fields are NOT authorization.
+            #
+            # Until a real server-side gateway verifier exists,
+            # payment confirmation remains closed.
+            #
+            # Future gateway verification must happen server-side
+            # and independently verify payment identity, amount,
+            # currency, product, order binding, and gateway proof.
 
-            orders = json.loads(
-                ORDERS.read_text(
-                    encoding="utf-8"
+            response = {
+                "status": "error",
+                "message": (
+                    "Payment confirmation unavailable: "
+                    "server-side payment verification required"
                 )
-            )
+            }
 
-            found = False
-
-            for order in orders:
-
-                if order.get("order_id") == order_id:
-
-                    order["status"] = "PAID"
-                    found = True
-                    break
-
-
-            if found:
-
-
-                # Auto Token Creation V6.4 FINAL
-
-                token = secrets.token_hex(16)
-
-                tokens_file = BASE / "orders" / "download_tokens.json"
-
-
-                if tokens_file.exists():
-
-                    tokens = json.loads(
-                        tokens_file.read_text(
-                            encoding="utf-8"
-                        )
-                    )
-
-                else:
-
-                    tokens = []
-
-
-                tokens.append({
-
-                    "order_id": order_id,
-
-                    "product_id": order.get("product_id"),
-
-                    "token": token,
-
-                    "status": "ACTIVE",
-
-                    "date": str(datetime.now())
-
-                })
-
-
-
-                # Email Logger Auto Connect V6.4
-
-                email_log_file = BASE / "emails" / "email_log.json"
-
-
-                if email_log_file.exists():
-
-                    email_logs = json.loads(
-                        email_log_file.read_text(
-                            encoding="utf-8"
-                        )
-                    )
-
-                else:
-
-                    email_logs = []
-
-
-                email_logs.append({
-
-                    "order_id": order_id,
-
-                    "email": order.get("email"),
-
-                    "product": order.get("product"),
-
-                    "portal_link":
-                    "/pages/download.html?token=" + token,
-
-                    "status": "READY",
-
-                    "date": str(datetime.now())
-
-                })
-
-
-                email_log_file.parent.mkdir(
-                    exist_ok=True
-                )
-
-
-                email_log_file.write_text(
-
-                    json.dumps(
-                        email_logs,
-                        indent=2,
-                        ensure_ascii=False
-                    ),
-
-                    encoding="utf-8"
-
-                )
-
-
-                tokens_file.write_text(
-
-                    json.dumps(
-                        tokens,
-                        indent=2,
-                        ensure_ascii=False
-                    ),
-
-                    encoding="utf-8"
-
-                )
-
-                ORDERS.write_text(
-                    json.dumps(
-                        orders,
-                        indent=2,
-                        ensure_ascii=False
-                    ),
-                    encoding="utf-8"
-                )
-
-                response = {
-                    "status": "success",
-                    "order_id": order_id,
-                    "payment_status": "PAID",
-                    "download": {
-                        "token": token
-                    }
-                }
-
-            else:
-
-                response = {
-                    "status": "error",
-                    "message": "Order not found"
-                }
-
-
-            self.send_response(200)
+            self.send_response(402)
 
             self.send_header(
                 "Content-Type",
@@ -700,7 +603,7 @@ class Handler(SimpleHTTPRequestHandler):
             self.end_headers()
 
             self.wfile.write(
-                json.dumps(response).encode()
+                json.dumps(response).encode("utf-8")
             )
 
             return
@@ -858,8 +761,42 @@ PORT = int(os.environ.get("PORT", 8001))
 
 if __name__ == "__main__":
     print(f"FutureMind Lab Security Server V2 running on {PORT}")
-HTTPServer(
+
+    HTTPServer(
         ("0.0.0.0", PORT),
         Handler
     ).serve_forever()
 
+
+
+@app.route("/api/intelligence")
+def intelligence_api():
+
+    import json
+
+    try:
+
+        with open(
+        "smart_engine/reports/daily_intelligence.json",
+        "r",
+        encoding="utf-8"
+        ) as f:
+
+            data=json.load(f)
+
+
+        return jsonify(data)
+
+
+    except Exception as e:
+
+        return jsonify({
+            "status":"ERROR",
+            "message":str(e)
+        })
+
+
+    HTTPServer(
+        ("0.0.0.0", PORT),
+        Handler
+    ).serve_forever()

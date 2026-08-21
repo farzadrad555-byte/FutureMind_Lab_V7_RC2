@@ -64,6 +64,313 @@
 
 </style>
 
+
+<style id="r86-70-checkout-lower-ui">
+
+/* ============================================================
+   R86.70 — Checkout lower market information
+   ============================================================ */
+
+#market-info {
+    width: min(100%, 520px);
+    margin: 22px auto 32px auto !important;
+    padding: 18px 20px;
+    box-sizing: border-box;
+
+    text-align: center;
+
+    background: rgba(255,255,255,.96);
+    border: 1px solid rgba(0,0,0,.10);
+    border-radius: 14px;
+
+    box-shadow:
+        0 8px 24px rgba(0,0,0,.10);
+
+    direction: inherit;
+}
+
+#market-info #market-price {
+    margin: 0 0 10px 0;
+    font-size: 21px;
+    font-weight: 800;
+    line-height: 1.5;
+}
+
+#market-info #payment-method {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+[dir="rtl"] #market-info {
+    direction: rtl;
+}
+
+</style>
+
+
+<style id="r141-checkout-language-fix">
+
+/* ============================================================
+   R141 — Checkout Language Switcher UI Fix
+   Temporary visual alignment.
+   R143 will replace this with Global Language Controller.
+   ============================================================ */
+
+.language-switcher {
+    position: fixed !important;
+    top: 22px !important;
+    right: 22px !important;
+    left: auto !important;
+    z-index: 99999 !important;
+
+    width: auto !important;
+    max-width: none !important;
+
+    display: block !important;
+}
+
+.language-switcher .lang-btn,
+#languageMenuBtn {
+    display: block !important;
+
+    width: auto !important;
+    min-width: 150px !important;
+
+    white-space: nowrap !important;
+
+    padding: 10px 16px !important;
+    border-radius: 12px !important;
+
+    cursor: pointer !important;
+}
+
+.language-menu,
+#languageMenu {
+    position: absolute !important;
+
+    top: calc(100% + 8px) !important;
+    right: 0 !important;
+    left: auto !important;
+
+    width: 190px !important;
+    max-height: 70vh !important;
+
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+
+    display: none !important;
+
+    flex-direction: column !important;
+    flex-wrap: nowrap !important;
+
+    padding: 8px !important;
+    margin: 0 !important;
+
+    border-radius: 14px !important;
+
+    z-index: 100000 !important;
+
+    box-sizing: border-box !important;
+}
+
+/* language_switcher.js uses .show */
+.language-menu.show,
+#languageMenu.show {
+    display: flex !important;
+}
+
+.lang-option,
+.language-menu .lang-option,
+#languageMenu .lang-option {
+    display: block !important;
+
+    width: 100% !important;
+    min-width: 0 !important;
+
+    box-sizing: border-box !important;
+
+    padding: 9px 12px !important;
+    margin: 2px 0 !important;
+
+    text-align: left !important;
+    white-space: nowrap !important;
+
+    cursor: pointer !important;
+
+    border: 0 !important;
+    border-radius: 9px !important;
+
+    flex: 0 0 auto !important;
+}
+
+[dir="rtl"] .language-switcher {
+    right: auto !important;
+    left: 22px !important;
+}
+
+[dir="rtl"] .language-menu,
+[dir="rtl"] #languageMenu {
+    right: auto !important;
+    left: 0 !important;
+}
+
+[dir="rtl"] .lang-option {
+    text-align: right !important;
+}
+
+@media (max-width: 700px) {
+
+    .language-switcher {
+        top: 12px !important;
+        right: 12px !important;
+        left: auto !important;
+    }
+
+    [dir="rtl"] .language-switcher {
+        right: auto !important;
+        left: 12px !important;
+    }
+
+    .language-menu,
+    #languageMenu {
+        width: 185px !important;
+        max-height: 65vh !important;
+    }
+
+}
+
+</style>
+
+
+<style id="r142-checkout-language-position">
+
+/* ============================================================
+   R142 — Checkout Language Button Position
+   Place Language directly below the top navigation links.
+   ============================================================ */
+
+.language-switcher {
+    position: absolute !important;
+
+    top: 90px !important;
+    right: 22px !important;
+    left: auto !important;
+
+    width: auto !important;
+
+    z-index: 99999 !important;
+}
+
+.language-switcher .lang-btn,
+#languageMenuBtn {
+    margin: 0 !important;
+}
+
+/* RTL */
+[dir="rtl"] .language-switcher {
+    right: auto !important;
+    left: 22px !important;
+}
+
+/* Keep dropdown directly under the button */
+.language-menu,
+#languageMenu {
+    top: calc(100% + 8px) !important;
+    right: 0 !important;
+    left: auto !important;
+}
+
+[dir="rtl"] .language-menu,
+[dir="rtl"] #languageMenu {
+    right: auto !important;
+    left: 0 !important;
+}
+
+@media (max-width: 700px) {
+
+    .language-switcher {
+        top: 68px !important;
+        right: 12px !important;
+        left: auto !important;
+    }
+
+    [dir="rtl"] .language-switcher {
+        right: auto !important;
+        left: 12px !important;
+    }
+
+}
+
+</style>
+
+
+<style id="r142-1-checkout-language-center">
+
+/* ============================================================
+   R142.1 — Language Button
+   Centered directly underneath the two top navigation links.
+   ============================================================ */
+
+.navigation {
+    position: relative !important;
+}
+
+.language-switcher {
+    position: absolute !important;
+
+    top: 72px !important;
+
+    left: 50% !important;
+    right: auto !important;
+
+    transform: translateX(-50%) !important;
+
+    width: max-content !important;
+    margin: 0 !important;
+
+    z-index: 99999 !important;
+}
+
+.language-switcher .lang-btn,
+#languageMenuBtn {
+    margin: 0 auto !important;
+}
+
+/* Dropdown stays centered below button */
+.language-menu,
+#languageMenu {
+    top: calc(100% + 8px) !important;
+
+    left: 50% !important;
+    right: auto !important;
+
+    transform: translateX(-50%) !important;
+}
+
+/* RTL must remain centered */
+[dir="rtl"] .language-switcher,
+[dir="rtl"] .language-menu,
+[dir="rtl"] #languageMenu {
+    left: 50% !important;
+    right: auto !important;
+}
+
+@media (max-width: 700px) {
+
+    .language-switcher {
+        top: 68px !important;
+        left: 50% !important;
+        right: auto !important;
+
+        transform: translateX(-50%) !important;
+    }
+
+}
+
+</style>
+
 </head>
 
 <body>
@@ -80,6 +387,10 @@
 </div>
 
 </div>
+
+
+
+
 
 
 <div class="checkout-container">
@@ -140,6 +451,41 @@ placeholder="Enter your email" data-lang-placeholder="enter_email">
 </div>
 
 
+
+<script>
+/* R86.70 — Checkout lower UI visibility guard */
+(function () {
+
+    function ensureCheckoutMarketInfo() {
+
+        const info = document.getElementById("market-info");
+        const card = document.querySelector(".checkout-card");
+
+        if (!info || !card) {
+            return;
+        }
+
+        /*
+         * Keep the market information immediately after the checkout card.
+         * Do not duplicate it.
+         */
+        info.style.display = "block";
+        info.style.visibility = "visible";
+        info.style.opacity = "1";
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener(
+            "DOMContentLoaded",
+            ensureCheckoutMarketInfo
+        );
+    } else {
+        ensureCheckoutMarketInfo();
+    }
+
+})();
+</script>
+
 <script src="../js/language.js"></script>
 
 
@@ -170,9 +516,11 @@ window.location.search
 const productId = params.get("product") || params.get("id");
 
 
-window.selectedProduct = data.products.find(
-p => p.id === productId
-);
+const resolvedProductId =
+    productId === "hunter-x" ? "hunter-x-v44" : productId;
+
+selectedProduct =
+    data.products.find(p => p.id === resolvedProductId);
 
 window.productReady = true;
 
@@ -199,26 +547,60 @@ if(marketData){
 setTimeout(()=>{
 
 document.getElementById("market-price").innerText =
-"💎 Total Price: " + marketData.price + " " + marketData.currency;
+(window.futuremindLanguage?.t("total_price") || "💎 Total Price") + ": " + marketData.price + " " + marketData.currency;
 
 document.getElementById("payment-method").innerText =
-"💳 Payment Method: " + marketData.payment;
+(window.futuremindLanguage?.t("payment_method") || "💳 Payment Method") + ": " + marketData.payment;
 
 },100);
 
 }
 
 
-document.querySelector(".product-box h1").innerText =
-window.selectedProduct.name;
+const productTitle =
+document.querySelector(".product-box h1");
+
+const productVersion =
+document.querySelector(".product-box h2");
+
+const productDescription =
+document.querySelector(".product-box p");
 
 
-document.querySelector(".product-box h2").innerText =
-window.selectedProduct.version;
+if(productTitle){
+
+    const translatedTitle =
+        productTitle.querySelector("[data-lang], [data-i18n]");
+
+    if(!translatedTitle){
+        productTitle.textContent =
+            window.selectedProduct.name;
+    }
+
+}
 
 
-document.querySelector(".product-box p").innerText =
-window.selectedProduct.description;
+if(productVersion){
+
+    productVersion.textContent =
+        window.selectedProduct.version;
+
+}
+
+
+if(productDescription){
+
+    const translatedDescription =
+        productDescription.querySelector(
+            "[data-lang], [data-i18n]"
+        );
+
+    if(!translatedDescription){
+        productDescription.textContent =
+            window.selectedProduct.description;
+    }
+
+}
 
 
 }
@@ -231,24 +613,130 @@ window.selectedProduct.description;
 
 <script src="../js/checkout.js"></script>
 
-
-<div class="language-selector">
-<select id="languageSwitcher">
-<option value="en">English</option>
-<option value="fa">فارسی</option>
-<option value="es">Español</option>
-<option value="de">Deutsch</option>
-<option value="fr">Français</option>
-<option value="ar">العربية</option>
-<option value="tr">Türkçe</option>
-<option value="zh-CN">中文</option>
-<option value="ja">日本語</option>
-<option value="ko">한국어</option>
-</select>
-</div>
-
 <script src="/js/language_engine.js"></script>
+
+<script>
+/* R86.75 — Checkout lower UI language refresh */
+(function () {
+
+    function refreshCheckoutMarketLabels() {
+
+        if (!window.futuremindLanguage) {
+            return;
+        }
+
+        const priceEl =
+            document.getElementById("market-price");
+
+        const paymentEl =
+            document.getElementById("payment-method");
+
+        if (!priceEl && !paymentEl) {
+            return;
+        }
+
+        const product =
+            window.selectedProduct;
+
+        const market =
+            window.market ||
+            localStorage.getItem("futuremind_market") ||
+            "global";
+
+        const marketData =
+            product &&
+            product.markets ?
+            product.markets[market] :
+            null;
+
+        if (!marketData) {
+            return;
+        }
+
+        if (priceEl) {
+            priceEl.innerText =
+                window.futuremindLanguage.t("total_price") +
+                ": " +
+                marketData.price +
+                " " +
+                marketData.currency;
+        }
+
+        if (paymentEl) {
+            paymentEl.innerText =
+                window.futuremindLanguage.t("payment_method") +
+                ": " +
+                marketData.payment;
+        }
+    }
+
+    window.refreshCheckoutMarketLabels =
+        refreshCheckoutMarketLabels;
+
+    function installLanguageRefreshHook() {
+
+        if (!window.futuremindLanguage) {
+            return false;
+        }
+
+        if (window.futuremindLanguage.__checkoutR8675Hook) {
+            return true;
+        }
+
+        const originalChange =
+            window.futuremindLanguage.change;
+
+        if (typeof originalChange !== "function") {
+            return false;
+        }
+
+        window.futuremindLanguage.change =
+            async function (lang) {
+
+                const result =
+                    await originalChange.call(this, lang);
+
+                refreshCheckoutMarketLabels();
+
+                return result;
+            };
+
+        window.futuremindLanguage.__checkoutR8675Hook = true;
+
+        refreshCheckoutMarketLabels();
+
+        return true;
+    }
+
+    let attempts = 0;
+
+    const timer = setInterval(function () {
+
+        attempts++;
+
+        if (installLanguageRefreshHook()) {
+            clearInterval(timer);
+            return;
+        }
+
+        if (attempts >= 100) {
+            clearInterval(timer);
+        }
+
+    }, 50);
+
+})();
+</script>
+
 <script src="/js/language_switcher.js"></script>
+
+
+
+<footer class="section">
+<span data-lang="footer">
+<span data-i18n="brand"></span> © 2026
+</span>
+</footer>
 
 </body>
 </html>
