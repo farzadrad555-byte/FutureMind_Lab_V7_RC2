@@ -1,10 +1,24 @@
 {
   "hunter-x-v44": {
     "product_id": "hunter-x-v44",
-    "product_name": "Hunter-X Professional V44",
+    "product_name": "Hunter-X V44 Professional",
     "type": "digital_product",
     "payment_required": true,
-    "download_package": "Hunter-X_Professional.zip"
+    "download_package": "Hunter-X_Professional.zip",
+    "market": "global",
+    "currency": "USD",
+    "amount": 49,
+    "payment_method": "crypto",
+    "crypto": {
+      "asset": "USDT",
+      "network": "TRON",
+      "standard": "TRC20",
+      "destination": "TEST_DESTINATION_ONLY"
+    },
+    "real_gateway_enabled": false,
+    "sandbox": true,
+    "token_creation_enabled": false,
+    "download_authorization_enabled": false
   },
   "futuremind-ai-starter-pack-v1": {
     "product_id": "futuremind-ai-starter-pack-v1",
@@ -33,5 +47,63 @@
     "type": "digital_product",
     "payment_required": true,
     "download_package": "FutureMind_AI_Business_Assistant_Pack_V1.zip"
+  },
+  "futuremind-ai-teacher-pack": {
+    "product_id": "futuremind-ai-teacher-pack",
+    "product_name": "FutureMind AI Teacher Pack",
+    "type": "digital_product",
+    "payment_required": true,
+    "download_package": "FutureMind_AI_Teacher_Pack.zip"
+  },
+  "futuremind-ai-content-creator-pack": {
+    "product_id": "futuremind-ai-content-creator-pack",
+    "product_name": "FutureMind AI Content Creator Pack",
+    "type": "digital_product",
+    "payment_required": true,
+    "download_package": "FutureMind_AI_Content_Creator_Pack.zip"
+  },
+  "science-ai-pack": {
+    "product_id": "science-ai-pack",
+    "product_name": "Science Teacher AI Pack",
+    "type": "digital_product",
+    "payment_required": true,
+    "download_package": "Science_Teacher_AI_Pack.zip"
+  },
+  "math-ai-pack": {
+    "product_id": "math-ai-pack",
+    "product_name": "Math Teacher AI Pack",
+    "type": "digital_product",
+    "payment_required": true,
+    "download_package": "Math_Teacher_AI_Pack.zip"
+  },
+  "iran-teacher-ai-v1": {
+    "product_id": "iran-teacher-ai-v1",
+    "product_name": "معلم‌یار AI ایران",
+    "type": "digital_product",
+    "payment_required": true,
+    "download_package": "Iran_Teacher_AI_V1.zip",
+    "amount": 790000,
+    "currency": "IRR"
+  },
+  "instagram-assistant": {
+    "product_id": "instagram-assistant",
+    "product_name": "FutureMind Instagram Sales Assistant",
+    "type": "digital_product",
+    "payment_required": true,
+    "download_package": "FutureMind_Instagram_Sales_Assistant_V1.4.zip",
+    "market": "global",
+    "currency": "USD",
+    "amount": 29,
+    "payment_method": "crypto",
+    "crypto": {
+      "asset": "USDT",
+      "network": "TRON",
+      "standard": "TRC20",
+      "destination": "TEST_DESTINATION_ONLY"
+    },
+    "real_gateway_enabled": false,
+    "sandbox": true,
+    "token_creation_enabled": false,
+    "download_authorization_enabled": false
   }
 }

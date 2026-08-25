@@ -20,7 +20,10 @@
         "global": {
           "price": 49,
           "currency": "USD",
-          "payment": "crypto"
+          "payment": "crypto",
+          "asset": "USDT",
+          "network": "TRON",
+          "standard": "TRC20"
         },
         "iran": {
           "price": 990000,
@@ -260,6 +263,56 @@
       "markets": {
         "global": {
           "price": 39,
+          "currency": "USD",
+          "payment": "crypto"
+        },
+        "iran": {
+          "price": 0,
+          "currency": "IRR",
+          "payment": "local"
+        }
+      }
+    },
+    {
+      "id": "iran-teacher-ai-v1",
+      "name": "معلم‌یار AI ایران",
+      "category": "AI Education",
+      "version": "V1",
+      "price": 790000,
+      "currency": "IRR",
+      "status": "Active",
+      "page": "iran-teacher-ai-v1.html",
+      "description": "AI Teacher Assistant for Iran",
+      "payment_methods": [
+        "Local",
+        "Crypto"
+      ],
+      "download": "Iran_Teacher_AI_V1.zip",
+      "markets": {
+        "iran": {
+          "price": 790000,
+          "currency": "IRR",
+          "payment": "local"
+        }
+      }
+    },
+    {
+      "id": "instagram-assistant",
+      "name": "FutureMind Instagram Sales Assistant",
+      "category": "Instagram Sales AI",
+      "version": "V1.4",
+      "price": 29,
+      "currency": "USD",
+      "status": "Active",
+      "page": "instagram-assistant.html",
+      "description": "FutureMind Instagram Sales Assistant V1.4",
+      "payment_methods": [
+        "Crypto"
+      ],
+      "download": "FutureMind_Instagram_Sales_Assistant_V1.4.zip",
+      "markets": {
+        "global": {
+          "price": 29,
           "currency": "USD",
           "payment": "crypto"
         },

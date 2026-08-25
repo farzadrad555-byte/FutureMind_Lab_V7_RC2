@@ -505,9 +505,68 @@ new URLSearchParams(window.location.search).get("id")
 
 
 
-fetch("../products/products_market_engine.json")
+fetch("../products/products.json")
 .then(response => response.json())
 .then(data => {
+
+    /*
+     * R-GATEWAY-CHECKOUT-CANONICAL-ADAPTER
+     *
+     * Canonical source:
+     * /products/products.json
+     *
+     * Canonical contract:
+     * price / currency / iran_price / payment_methods
+     *
+     * Checkout compatibility layer:
+     * markets.global / markets.iran
+     */
+    if (data && Array.isArray(data.products)) {
+
+        data.products = data.products.map(product => {
+
+            const methods =
+                Array.isArray(product.payment_methods)
+                    ? product.payment_methods
+                    : [];
+
+            const globalPayment =
+                methods.length
+                    ? methods[0]
+                    : "crypto";
+
+            const iranPayment =
+                methods.includes("ZarinPal")
+                    ? "ZarinPal"
+                    : globalPayment;
+
+            const globalMarket = {
+                price: Number(product.price),
+                currency: product.currency || "USD",
+                payment: globalPayment
+            };
+
+            const iranPrice = Number(product.iran_price);
+
+            const iranMarket =
+                Number.isFinite(iranPrice) && iranPrice > 0
+                    ? {
+                        price: iranPrice,
+                        currency: "IRR",
+                        payment: iranPayment
+                    }
+                    : null;
+
+            return {
+                ...product,
+                markets: {
+                    global: globalMarket,
+                    iran: iranMarket
+                }
+            };
+        });
+    }
+
 
 const params = new URLSearchParams(
 window.location.search
@@ -519,10 +578,37 @@ const productId = params.get("product") || params.get("id");
 const resolvedProductId =
     productId === "hunter-x" ? "hunter-x-v44" : productId;
 
-selectedProduct =
+window.selectedProduct =
     data.products.find(p => p.id === resolvedProductId);
 
-window.productReady = true;
+/*
+ * R_V3_29_2_INSTAGRAM_PRODUCT_RESOLUTION
+ *
+ * Narrow compatibility layer for FutureMind Instagram Sales Assistant.
+ *
+ * Canonical source remains:
+ *     /products/products.json
+ *
+ * This does NOT create payment authorization,
+ * token authorization, or gateway activation.
+ */
+if (
+    !window.selectedProduct &&
+    resolvedProductId === "instagram-assistant"
+) {
+    window.selectedProduct =
+        data.products.find(
+            p => p &&
+                 String(p.id) === "instagram-assistant"
+        );
+}
+
+if (window.selectedProduct) {
+    window.selectedProduct.__checkout_resolved_id =
+        String(window.selectedProduct.id);
+}
+
+window.productReady = !!window.selectedProduct;
 
 console.log("PRODUCT READY:", window.selectedProduct);
 
@@ -737,6 +823,248 @@ if(productDescription){
 <span data-i18n="brand"></span> © 2026
 </span>
 </footer>
+
+
+<script>
+(function () {
+    const params = new URLSearchParams(window.location.search);
+    const productId = params.get("product_id");
+
+    if (productId === "iran-teacher-ai-v1") {
+        document.documentElement.lang = "fa";
+        document.documentElement.dir = "rtl";
+
+        window.FUTUREMIND_IRAN_PRODUCT = {
+            id: "iran-teacher-ai-v1",
+            price: 790000,
+            currency: "IRR",
+            market: "iran"
+        };
+    }
+})();
+</script>
+
+
+<script>
+/*
+ * R_V3_29_2_INSTAGRAM_DOM_FALLBACK
+ *
+ * Product-display-only compatibility layer.
+ */
+(function () {
+
+    const PRODUCT_ID = "instagram-assistant";
+
+    function renderInstagramProduct() {
+
+        if (!window.selectedProduct) return;
+
+        if (
+            String(window.selectedProduct.id) !== PRODUCT_ID
+        ) return;
+
+        const product = window.selectedProduct;
+
+        const selectors = [
+            "#productTitle",
+            "#productName",
+            "#product-name",
+            ".product-title",
+            ".product-name",
+            "[data-product-name]",
+            "[data-product-title]"
+        ];
+
+        let target = null;
+
+        for (const selector of selectors) {
+            target = document.querySelector(selector);
+            if (target) break;
+        }
+
+        if (!target) {
+            const candidates =
+                document.querySelectorAll(
+                    "h1,h2,h3,.product-box,.product"
+                );
+
+            for (const el of candidates) {
+                const txt =
+                    (el.textContent || "").trim().toLowerCase();
+
+                if (
+                    txt.includes("product") ||
+                    txt.includes("checkout")
+                ) {
+                    target = el;
+                    break;
+                }
+            }
+        }
+
+        if (target) {
+            target.textContent = product.name;
+            target.setAttribute(
+                "data-product-id",
+                PRODUCT_ID
+            );
+        }
+
+        document.documentElement.setAttribute(
+            "data-checkout-product-id",
+            PRODUCT_ID
+        );
+
+        document.documentElement.setAttribute(
+            "data-checkout-product-ready",
+            "true"
+        );
+    }
+
+    let tries = 0;
+
+    const timer = setInterval(function () {
+
+        renderInstagramProduct();
+
+        tries++;
+
+        if (
+            window.productReady &&
+            window.selectedProduct
+        ) {
+            renderInstagramProduct();
+            clearInterval(timer);
+        }
+
+        if (tries >= 100) {
+            clearInterval(timer);
+        }
+
+    }, 100);
+
+})();
+</script>
+
+
+<script>
+/*
+ * R_V3_29_4_INSTAGRAM_NAME_VISIBILITY
+ *
+ * Product-name display only.
+ * No payment / gateway / token / download changes.
+ */
+(function () {
+
+    const PRODUCT_ID = "instagram-assistant";
+
+    function showInstagramProductName() {
+
+        const product = window.selectedProduct;
+
+        if (!product) return;
+
+        if (String(product.id) !== PRODUCT_ID) return;
+
+        /*
+         * Existing visible product-name elements.
+         */
+        const selectors = [
+            "#productTitle",
+            "#productName",
+            "#product-name",
+            ".product-title",
+            ".product-name",
+            "[data-product-name]",
+            "[data-product-title]"
+        ];
+
+        let target = null;
+
+        for (const selector of selectors) {
+
+            const el = document.querySelector(selector);
+
+            if (el) {
+                target = el;
+                break;
+            }
+        }
+
+        /*
+         * If the existing element is absent or hidden,
+         * create a dedicated visible element.
+         */
+        if (!target) {
+
+            target = document.createElement("h2");
+
+            target.id = "instagram-assistant-product-name";
+
+            target.setAttribute(
+                "data-product-id",
+                PRODUCT_ID
+            );
+
+            target.style.display = "block";
+            target.style.visibility = "visible";
+            target.style.opacity = "1";
+            target.style.margin = "16px 0";
+            target.style.fontWeight = "700";
+
+            const container =
+                document.querySelector(
+                    "#checkout-container"
+                ) ||
+                document.querySelector(
+                    "main"
+                ) ||
+                document.body;
+
+            container.prepend(target);
+        }
+
+        /*
+         * Force only the product name.
+         */
+        target.textContent = product.name;
+
+        target.style.display = "block";
+        target.style.visibility = "visible";
+        target.style.opacity = "1";
+
+        target.setAttribute(
+            "data-product-name-rendered",
+            "true"
+        );
+    }
+
+    /*
+     * Checkout data loads asynchronously.
+     */
+    let attempts = 0;
+
+    const timer = setInterval(function () {
+
+        showInstagramProductName();
+
+        attempts++;
+
+        if (
+            window.productReady &&
+            window.selectedProduct
+        ) {
+            showInstagramProductName();
+        }
+
+        if (attempts >= 100) {
+            clearInterval(timer);
+        }
+
+    }, 100);
+
+})();
+</script>
 
 </body>
 </html>

@@ -16,7 +16,14 @@
         "PayPal",
         "ZarinPal"
       ],
-      "download": "Hunter-X_Professional.zip"
+      "download": "Hunter-X_Professional.zip",
+      "global_payment": "crypto",
+      "global_currency": "USD",
+      "global_crypto": {
+        "asset": "USDT",
+        "network": "TRON",
+        "standard": "TRC20"
+      }
     },
     {
       "id": "science-ai-pack",
@@ -168,6 +175,39 @@
         "crypto"
       ],
       "download": "FutureMind_AI_Business_Assistant_Pack_V1.zip"
+    },
+    {
+      "id": "iran-teacher-ai-v1",
+      "name": "معلم‌یار AI ایران",
+      "category": "AI Education",
+      "version": "V1",
+      "price": 790000,
+      "currency": "IRR",
+      "iran_price": 790000,
+      "status": "Active",
+      "page": "iran-teacher-ai-v1.html",
+      "description": "AI Teacher Assistant for Iran",
+      "payment_methods": [
+        "Local",
+        "Crypto"
+      ],
+      "download": "Iran_Teacher_AI_V1.zip"
+    },
+    {
+      "id": "instagram-assistant",
+      "name": "FutureMind Instagram Sales Assistant",
+      "category": "Instagram Sales AI",
+      "version": "V1.4",
+      "price": 29,
+      "currency": "USD",
+      "iran_price": 0,
+      "status": "Active",
+      "page": "instagram-assistant.html",
+      "description": "FutureMind Instagram Sales Assistant V1.4 — read-only sales intelligence assistant for Instagram product discovery, sales analysis and workflow assistance.",
+      "payment_methods": [
+        "Crypto"
+      ],
+      "download": "FutureMind_Instagram_Sales_Assistant_V1.4.zip"
     }
   ]
 }
