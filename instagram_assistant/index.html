@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>FutureMind Instagram Sales Assistant</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #f4f5f7;
+    font-family: Arial, Tahoma, sans-serif;
+    color: #202124;
+}
+
+.app {
+    max-width: 900px;
+    margin: 0 auto;
+    min-height: 100vh;
+    background: white;
+}
+
+.header {
+    background: #111827;
+    color: white;
+    padding: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header-title {
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.status {
+    font-size: 12px;
+    background: #1f2937;
+    padding: 7px 10px;
+    border-radius: 20px;
+}
+
+.chat {
+    padding: 18px;
+    min-height: 65vh;
+}
+
+.message-row {
+    display: flex;
+    margin: 14px 0;
+}
+
+.message-row.user {
+    justify-content: flex-start;
+}
+
+.message-row.assistant {
+    justify-content: flex-end;
+}
+
+.bubble {
+    max-width: 82%;
+    padding: 13px 15px;
+    border-radius: 16px;
+    line-height: 1.8;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.user .bubble {
+    background: #e9ecef;
+}
+
+.assistant .bubble {
+    background: #f1f3f5;
+}
+
+.product-card {
+    margin-top: 12px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 14px;
+    padding: 15px;
+}
+
+.product-name {
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+.product-price {
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.product-description {
+    color: #555;
+    line-height: 1.8;
+    margin-bottom: 12px;
+
+    /*
+       IMPORTANT:
+       Description is selectable.
+       It is NOT a parent of the buttons.
+    */
+    user-select: text;
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.action-btn {
+    border: 0;
+    border-radius: 10px;
+    padding: 10px 14px;
+    cursor: pointer;
+    background: #111827;
+    color: white;
+    font-size: 13px;
+}
+
+.action-btn:hover {
+    opacity: .88;
+}
+
+.action-btn.primary {
+    background: #2563eb;
+}
+
+.action-btn.success {
+    background: #16803c;
+}
+
+.composer {
+    position: sticky;
+    bottom: 0;
+    background: white;
+    border-top: 1px solid #ddd;
+    padding: 12px;
+    display: flex;
+    gap: 8px;
+}
+
+.input {
+    flex: 1;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 15px;
+    outline: none;
+}
+
+.send {
+    border: 0;
+    border-radius: 12px;
+    padding: 0 18px;
+    background: #111827;
+    color: white;
+    cursor: pointer;
+}
+
+.info {
+    padding: 10px 15px;
+    background: #fff8e1;
+    border-top: 1px solid #eee;
+    font-size: 12px;
+    color: #555;
+}
+
+.hidden {
+    display: none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <div class="header">
+        <div class="header-title">
+            Instagram Sales Assistant
+        </div>
+
+        <div class="status">
+            READ ONLY
+        </div>
+    </div>
+
+    <div id="chat" class="chat"></div>
+
+    <div class="info">
+        Instagram API خاموش است — ارسال DM، پاسخ کامنت، سفارش و پرداخت از این UI انجام نمی‌شود.
+    </div>
+
+    <div class="composer">
+
+        <input
+            id="messageInput"
+            class="input"
+            type="text"
+            placeholder="پیام مشتری را وارد کنید..."
+            autocomplete="off"
+        >
+
+        <button
+            id="sendButton"
+            class="send"
+            type="button"
+        >
+            ارسال
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const PRODUCTS = [{"id": "hunter-x-v44", "name": "Hunter-X V44 Professional", "price": 49, "currency": "USD", "page": "hunter-x.html", "description": "AI Market Intelligence Platform"}, {"id": "science-ai-pack", "name": "Science Teacher AI Pack", "price": 29, "currency": "USD", "page": "science-ai-pack.html", "description": "AI tools for science educators"}, {"id": "math-ai-pack", "name": "Math Teacher AI Pack", "price": 29, "currency": "USD", "page": "math-ai-pack.html", "description": "AI tools for mathematics teachers"}, {"id": "futuremind-templates", "name": "FutureMind Templates Pack", "price": 19, "currency": "USD", "page": "templates.html", "description": "Professional digital templates"}, {"id": "futuremind-ai-starter-pack-v1", "name": "FutureMind AI Starter Pack V1", "price": 39, "currency": "USD", "page": "futuremind-ai-starter-pack.html", "description": "AI starter toolkit with prompts, guides and workflow assets"}, {"id": "futuremind-ai-teacher-pack", "name": "FutureMind AI Teacher Pack", "price": 39, "currency": "USD", "page": "futuremind-ai-teacher-pack.html", "description": "AI toolkit for teachers including lesson planning, exam creation and classroom assistance"}, {"id": "futuremind-ai-content-creator-pack", "name": "FutureMind AI Content Creator Pack", "price": 29, "currency": "USD", "page": "futuremind-ai-content-creator-pack.html", "description": "AI toolkit for creating social media content, articles, marketing copy and digital materials"}, {"id": "futuremind-ai-student-pack-v1", "name": "FutureMind AI Student Pack V1", "price": 19, "currency": "USD", "page": "student-pack.html", "description": "AI learning assistant pack for students including study planning, exam preparation, note making and learning prompts."}, {"id": "futuremind-ai-research-assistant-v1", "name": "FutureMind AI Research Assistant Pack V1", "price": 29, "currency": "USD", "page": "research-assistant.html", "description": "AI research assistant pack for study, paper analysis, academic writing and knowledge organization."}, {"id": "futuremind-ai-business-assistant-v1", "name": "FutureMind AI Business Assistant Pack V1", "price": 39, "currency": "USD", "page": "business-assistant.html", "description": "AI business assistant pack for productivity, marketing, planning and automation workflows."}, {"id": "iran-teacher-ai-v1", "name": "معلم‌یار AI ایران", "price": 790000, "currency": "IRR", "page": "iran-teacher-ai-v1.html", "description": "AI Teacher Assistant for Iran"}];
+
+const INTENTS = {
+    trading: [
+        "trading", "trade", "crypto", "bitcoin",
+        "forex", "بورس", "ترید", "معامله"
+    ],
+
+    student: [
+        "student",
+        "school",
+        "homework",
+        "دانش آموز",
+        "دانش‌آموز",
+        "مدرسه",
+        "تکلیف",
+        "study",
+        "studying",
+        "exam",
+        "exams",
+        "learning",
+        "learn",
+        "education",
+        "مطالعه",
+        "درس",
+        "امتحان",
+        "آزمون",
+        "یادگیری"
+    ],
+
+    teacher: [
+        "teacher", "teaching", "lesson",
+        "معلم", "دبیر", "تدریس", "کلاس"
+    ],
+
+    content: [
+        "content", "instagram", "reels", "post",
+        "محتوا", "اینستاگرام", "ریلز", "پست"
+    ],
+
+    business: [
+        "business", "sales", "selling", "marketing",
+        "customer", "کسب و کار", "فروش",
+        "بازاریابی", "مشتری"
+    ],
+
+    research: [
+        "research", "paper",
+        "تحقیق", "پژوهش", "مقاله"
+    ]
+};
+
+const PRODUCT_INTENTS = {
+    "hunter-x-v44": "trading",
+    "futuremind-ai-student-pack-v1": "student",
+    "futuremind-ai-teacher-pack": "teacher",
+    "science-teacher-ai-pack": "teacher",
+    "math-teacher-ai-pack": "teacher",
+    "futuremind-ai-content-creator-pack": "content",
+    "futuremind-ai-business-assistant-v1": "business",
+    "futuremind-ai-research-assistant-v1": "research"
+};
+
+const BUY_WORDS = [
+    "buy",
+    "purchase",
+    "checkout",
+    "order",
+    "خرید",
+    "میخرم",
+    "می‌خرم",
+    "میخوام بخرم",
+    "می‌خوام بخرم",
+    "میخواهم بخرم",
+    "می‌خواهم بخرم",
+    "پرداخت",
+    "سفارش"
+];
+
+const DETAIL_WORDS = [
+    "details",
+    "detail",
+    "features",
+    "مشخصات",
+    "امکانات",
+    "توضیحات"
+];
+
+let state = {
+    stage: "DISCOVERY",
+    intent: null,
+    product: null,
+    leadScore: 0
+};
+
+
+function norm(value) {
+
+    return String(value || "")
+        .toLowerCase()
+        .replaceAll("‌", " ")
+        .replace(/\s+/g, " ")
+        .trim();
+}
+
+
+function hasWord(text, words) {
+
+    const value = norm(text);
+
+    return words.some(
+        word => value.includes(norm(word))
+    );
+}
+
+
+function detectIntent(text) {
+
+    const value = norm(text);
+
+    /*
+     * V2.7.2 — Intent Collision Fix
+     *
+     * Rules:
+     * 1. Exact token matching prevents "exam" + "exams"
+     *    from double-scoring.
+     * 2. Explicit teacher-role words get priority.
+     * 3. Student exam/study language remains student
+     *    when no teacher-role marker exists.
+     * 4. Local-only. No network access.
+     */
+
+    const teacherWords = [
+        "teacher",
+        "teaching",
+        "lesson",
+        "lessons",
+        "معلم",
+        "دبیر",
+        "تدریس",
+        "کلاس"
+    ];
+
+    const studentWords = [
+        "student",
+        "school",
+        "homework",
+        "study",
+        "studying",
+        "exam",
+        "exams",
+        "learning",
+        "learn",
+        "education",
+        "دانش آموز",
+        "دانش‌آموز",
+        "مدرسه",
+        "تکلیف",
+        "مطالعه",
+        "درس",
+        "امتحان",
+        "آزمون",
+        "یادگیری"
+    ];
+
+    function exactHit(word) {
+
+        const w = norm(word);
+
+        if (!w) {
+            return false;
+        }
+
+        /*
+         * Persian / Latin safe boundary check.
+         * Avoids substring double counting such as:
+         * exam inside exams
+         * lesson inside lessons
+         */
+
+        const escaped = w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+        return new RegExp(
+            "(^|[^\\p{L}\\p{N}_])" +
+            escaped +
+            "($|[^\\p{L}\\p{N}_])",
+            "iu"
+        ).test(value);
+    }
+
+    /*
+     * Explicit teacher identity / role markers.
+     * These dominate generic exam-related student vocabulary.
+     */
+    const explicitTeacher = [
+        "teacher",
+        "teaching",
+        "lesson",
+        "lessons",
+        "معلم",
+        "دبیر",
+        "تدریس",
+        "کلاس"
+    ].some(exactHit);
+
+    if (explicitTeacher) {
+        return "teacher";
+    }
+
+    let best = null;
+    let bestScore = 0;
+
+    for (const [intent, words] of Object.entries(INTENTS)) {
+
+        let score = 0;
+
+        for (const word of words) {
+
+            if (exactHit(word)) {
+                score += 20;
+            }
+        }
+
+        /*
+         * Student vocabulary is evaluated normally.
+         * Because matching is exact-token based, "exam"
+         * and "exams" cannot both score on "exams".
+         */
+        if (intent === "student") {
+
+            for (const word of studentWords) {
+
+                if (
+                    !INTENTS.student.includes(word) &&
+                    exactHit(word)
+                ) {
+                    score += 20;
+                }
+            }
+        }
+
+        if (score > bestScore) {
+            bestScore = score;
+            best = intent;
+        }
+    }
+
+    return best;
+}
+
+
+function matchProduct(text) {
+
+    const intent = detectIntent(text);
+
+    if (!intent) {
+        return null;
+    }
+
+    let best = null;
+    let bestScore = 0;
+
+    for (const product of PRODUCTS) {
+
+        if (
+            PRODUCT_INTENTS[product.id] !== intent
+        ) {
+            continue;
+        }
+
+        let score = 60;
+
+        const searchable = norm(
+            `${product.name} ${product.description}`
+        );
+
+        for (const word of INTENTS[intent]) {
+
+            if (searchable.includes(norm(word))) {
+                score += 5;
+            }
+        }
+
+        if (score > bestScore) {
+
+            bestScore = score;
+
+            best = {
+                ...product,
+                score
+            };
+        }
+    }
+
+    return best;
+}
+
+
+function addUserMessage(text) {
+
+    const row = document.createElement("div");
+
+    row.className = "message-row user";
+
+    const bubble = document.createElement("div");
+
+    bubble.className = "bubble";
+
+    bubble.textContent = text;
+
+    row.appendChild(bubble);
+
+    document
+        .getElementById("chat")
+        .appendChild(row);
+
+    scrollChat();
+}
+
+
+function addAssistantMessage(text, product = null, actions = []) {
+
+    const row = document.createElement("div");
+
+    row.className = "message-row assistant";
+
+    const bubble = document.createElement("div");
+
+    bubble.className = "bubble";
+
+    /*
+       textContent is intentionally used.
+       This prevents user text from becoming HTML.
+    */
+
+    const textNode = document.createElement("div");
+
+    textNode.textContent = text;
+
+    bubble.appendChild(textNode);
+
+    if (product) {
+
+        const card = document.createElement("div");
+
+        card.className = "product-card";
+
+        const name = document.createElement("div");
+
+        name.className = "product-name";
+
+        name.textContent = product.name;
+
+        card.appendChild(name);
+
+        const price = document.createElement("div");
+
+        price.className = "product-price";
+
+        price.textContent =
+            `قیمت: ${product.price} ${product.currency || "USD"}`;
+
+        card.appendChild(price);
+
+        const description = document.createElement("div");
+
+        description.className = "product-description";
+
+        description.textContent =
+            product.description || "";
+
+        card.appendChild(description);
+
+        const actionBox = document.createElement("div");
+
+        actionBox.className = "actions";
+
+        /*
+           IMPORTANT:
+           Buttons are siblings of description.
+           They are NOT inside selectable description text.
+        */
+
+        for (const action of actions) {
+
+            const button = document.createElement("button");
+
+            button.type = "button";
+
+            button.className = "action-btn";
+
+            if (action.id === "checkout") {
+                button.classList.add("success");
+            }
+
+            if (action.id === "details") {
+                button.classList.add("primary");
+            }
+
+            button.textContent = action.label;
+
+            button.addEventListener(
+                "click",
+                function(event) {
+
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    handleAction(
+                        action.id,
+                        product
+                    );
+                }
+            );
+
+            actionBox.appendChild(button);
+        }
+
+        card.appendChild(actionBox);
+
+        bubble.appendChild(card);
+    }
+
+    row.appendChild(bubble);
+
+    document
+        .getElementById("chat")
+        .appendChild(row);
+
+    scrollChat();
+}
+
+
+function scrollChat() {
+
+    const chat = document.getElementById("chat");
+
+    chat.scrollTop = chat.scrollHeight;
+}
+
+
+
+/*
+ * V3.2 — Local CTA / Lead Journey Behavior
+ *
+ * LOCAL ONLY.
+ * No Instagram API.
+ * No DM.
+ * No comments.
+ * No orders.
+ * No gateway.
+ * No payment navigation.
+ */
+
+function qualificationCTA(qualification, product = null) {
+
+    const name =
+        product && product.name
+            ? product.name
+            : "محصول انتخابی";
+
+    if (qualification === "HIGH_INTENT") {
+
+        return {
+            label: "ادامه بررسی خرید",
+            message:
+                `عالی 👌\n\n` +
+                `قصد خرید شما بالاست.\n` +
+                `محصول: ${name}\n\n` +
+                `برای ادامه، صفحه محصول را بررسی کنید.`,
+            type: "HIGH_INTENT"
+        };
+    }
+
+    if (qualification === "HOT") {
+
+        return {
+            label: "مشاهده محصول",
+            message:
+                `انتخاب خوبی است 🔥\n\n` +
+                `محصول پیشنهادی: ${name}\n\n` +
+                `می‌توانید مشخصات محصول را بررسی کنید.`,
+            type: "HOT"
+        };
+    }
+
+    if (qualification === "WARM") {
+
+        return {
+            label: "مشاهده مشخصات",
+            message:
+                `به نظر می‌رسد این محصول به نیاز شما نزدیک است 👍\n\n` +
+                `محصول: ${name}\n\n` +
+                `اگر بخواهید، مشخصات و امکانات آن را بررسی می‌کنیم.`,
+            type: "WARM"
+        };
+    }
+
+    return {
+        label: "ادامه گفتگو",
+        message:
+            "برای اینکه محصول مناسب‌تری پیشنهاد کنم، کمی بیشتر درباره نیازتان بگویید.",
+        type: "COLD"
+    };
+}
+
+
+function handleAction(action, product) {
+
+    if (action === "details") {
+
+        state.stage = "DETAILS";
+
+        addAssistantMessage(
+            `📦 ${product.name}\n\n${product.description}\n\nقیمت: ${product.price} ${product.currency || "USD"}`,
+            null,
+            []
+        );
+
+        return;
+    }
+
+    if (action === "product") {
+
+        state.stage = "PRODUCT_PAGE";
+
+        addAssistantMessage(
+            "صفحه محصول برای این محصول آماده است.",
+            null,
+            []
+        );
+
+        return;
+    }
+
+    if (action === "checkout") {
+
+        state.stage = "CHECKOUT_HANDOFF";
+
+        addAssistantMessage(
+            `عالی 👌\n\nمحصول انتخابی:\n${product.name}\n\nبرای ادامه خرید وارد صفحه محصول شوید.`,
+            null,
+            []
+        );
+
+        return;
+    }
+}
+
+
+
+/*
+ * V2.2 — Lead Qualification Engine
+ *
+ * Local-only classification.
+ * No network access.
+ * No Instagram API.
+ * No DM.
+ * No comments.
+ * No order writes.
+ * No gateway writes.
+ */
+
+function qualifyLead(score) {
+
+    const value = Number(score);
+
+    if (!Number.isFinite(value)) {
+        return "COLD";
+    }
+
+    if (value >= 90) {
+        return "HIGH_INTENT";
+    }
+
+    if (value >= 70) {
+        return "HOT";
+    }
+
+    if (value >= 40) {
+        return "WARM";
+    }
+
+    return "COLD";
+}
+
+function processMessage(message) {
+
+    const text = norm(message);
+
+    // BUY
+    if (
+        hasWord(text, BUY_WORDS) &&
+        state.product
+    ) {
+
+        state.stage = "CHECKOUT_HANDOFF";
+
+        addAssistantMessage(
+            `عالی 👌\n\nمحصول انتخابی:\n${state.product.name}\n\nبرای ادامه خرید وارد صفحه محصول شوید.`,
+            state.product,
+            [
+                {
+                    id: "checkout",
+                    label: "ادامه خرید"
+                }
+            ]
+        );
+
+        return;
+    }
+
+    // DETAILS
+    if (
+        hasWord(text, DETAIL_WORDS) &&
+        state.product
+    ) {
+
+        state.stage = "DETAILS";
+
+        addAssistantMessage(
+            `📦 ${state.product.name}`,
+            state.product,
+            [
+                {
+                    id: "product",
+                    label: "صفحه محصول"
+                },
+                {
+                    id: "checkout",
+                    label: "ادامه خرید"
+                }
+            ]
+        );
+
+        return;
+    }
+
+    // PRODUCT MATCH
+    const product = matchProduct(text);
+
+    if (product) {
+
+        state.intent = detectIntent(text);
+
+        state.product = product;
+
+        state.leadScore = product.score;
+
+        state.qualification = qualifyLead(state.leadScore);
+
+        
+        state.qualification = qualifyLead(state.leadScore);state.stage = "PRODUCT_MATCH";
+
+        const qualification = qualifyLead(
+            state.leadScore
+        );
+
+        let qualificationMessage = "";
+
+        if (qualification === "COLD") {
+
+            qualificationMessage =
+                "اگر هنوز در مرحله بررسی هستید، می‌توانم بیشتر راهنمایی‌تان کنم.";
+
+        } else if (qualification === "WARM") {
+
+            qualificationMessage =
+                "اگر دوست دارید، مشخصات و امکانات محصول را برایتان می‌فرستم.";
+
+        } else if (qualification === "HOT") {
+
+            qualificationMessage =
+                "این گزینه با نیاز شما تطابق خوبی دارد. می‌توانید مشخصات را ببینید یا برای خرید ادامه دهید.";
+
+        } else if (qualification === "HIGH_INTENT") {
+
+            qualificationMessage =
+                "به نظر می‌رسد انتخاب شما مشخص است. می‌توانید برای ادامه خرید وارد مرحله بعد شوید.";
+
+        } else {
+
+            qualificationMessage =
+                "اگر دوست دارید، مشخصات و امکانات محصول را هم برایتان می‌فرستم.";
+        }
+
+        addAssistantMessage(
+            `سلام 👋\n\nبرای نیاز شما، «${product.name}» می‌تواند گزینه مناسبی باشد.\n\nقیمت: ${product.price} ${product.currency || "USD"}\n\n${qualificationMessage}`,
+            product,
+            [
+                {
+                    id: "details",
+                    label: "توضیحات محصول"
+                },
+                {
+                    id: "product",
+                    label: "صفحه محصول"
+                },
+                {
+                    id: "checkout",
+                    label: "ادامه خرید"
+                }
+            ]
+        );
+
+        return;
+    }
+
+    // FALLBACK
+
+    state.stage = "DISCOVERY";
+
+    addAssistantMessage(
+        "سلام 👋\nبرای اینکه بهتر راهنمایی‌تان کنم، بگویید ابزار AI را برای چه کاری می‌خواهید؟",
+        null,
+        []
+    );
+}
+
+
+function sendMessage() {
+
+    const input =
+        document.getElementById("messageInput");
+
+    const message =
+        input.value.trim();
+
+    if (!message) {
+        return;
+    }
+
+    addUserMessage(message);
+
+    input.value = "";
+
+    setTimeout(
+        () => processMessage(message),
+        120
+    );
+}
+
+
+document
+    .getElementById("sendButton")
+    .addEventListener(
+        "click",
+        sendMessage
+    );
+
+
+document
+    .getElementById("messageInput")
+    .addEventListener(
+        "keydown",
+        function(event) {
+
+            if (event.key === "Enter") {
+
+                event.preventDefault();
+
+                sendMessage();
+            }
+        }
+    );
+
+
+// Initial message
+
+addAssistantMessage(
+    "سلام 👋\nمن دستیار فروش FutureMind هستم. چه نوع ابزار AI دنبال می‌کنید؟"
+);
+
+</script>
+
+</body>
+</html>
