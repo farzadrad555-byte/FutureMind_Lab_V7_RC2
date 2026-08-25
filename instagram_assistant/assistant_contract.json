@@ -1,0 +1,14 @@
+{
+  "name": "FutureMind Instagram Sales Assistant",
+  "version": "V1.4",
+  "independent": true,
+  "instagram_api": false,
+  "dm_send": false,
+  "comment_reply": false,
+  "customer_write": false,
+  "order_write": false,
+  "gateway_write": false,
+  "token_write": false,
+  "autonomous_action": false,
+  "product_source": "/content/drive/MyDrive/FutureMind_Lab_V7_RC2_IRAN_GATEWAY_WORKING_20260822_183110/products/products.json"
+}

@@ -48,5 +48,11 @@
     "title": "FutureMind AI Business Assistant Pack V1",
     "category": "Business AI",
     "description": "AI tools for business planning and productivity."
+  },
+  "instagram-assistant": {
+    "name": "مساعد مبيعات FutureMind لإنستغرام",
+    "category": "Instagram Sales AI",
+    "version": "V1.4",
+    "description": "مساعد مبيعات للقراءة فقط لاكتشاف المنتجات وتحليل المبيعات وسير العمل على Instagram."
   }
 }

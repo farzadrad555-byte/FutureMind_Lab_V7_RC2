@@ -48,5 +48,11 @@
     "title": "Pacote FutureMind AI Business Assistant V1",
     "category": "IA Empresarial",
     "description": "Ferramentas de IA para planejamento e produtividade empresarial."
+  },
+  "instagram-assistant": {
+    "name": "FutureMind Instagram Sales Assistant",
+    "category": "Instagram Sales AI",
+    "version": "V1.4",
+    "description": "Assistente de vendas somente leitura para Instagram, descoberta de produtos, análise de vendas e suporte a fluxos de trabalho."
   }
 }
