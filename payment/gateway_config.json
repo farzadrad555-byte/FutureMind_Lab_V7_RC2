@@ -1,0 +1,39 @@
+{
+  "mode": "FAIL_CLOSED",
+  "real_gateway_enabled": false,
+  "primary": "zarinpal",
+  "failover": "idpay",
+  "product": {
+    "product_id": "iran-teacher-ai-v1",
+    "amount": 790000,
+    "currency": "IRR"
+  },
+  "gateways": {
+    "zarinpal": {
+      "enabled": false,
+      "sandbox": true,
+      "merchant_id": "",
+      "callback_url": "",
+      "require_server_verify": true,
+      "require_order_binding": true,
+      "require_product_binding": true,
+      "require_amount_match": true,
+      "require_currency_match": true
+    },
+    "idpay": {
+      "enabled": false,
+      "sandbox": true,
+      "api_key": "",
+      "callback_url": "",
+      "require_server_verify": true,
+      "require_order_binding": true,
+      "require_product_binding": true,
+      "require_amount_match": true,
+      "require_currency_match": true
+    }
+  },
+  "routing": {
+    "primary": "zarinpal",
+    "fallback": "idpay"
+  }
+}

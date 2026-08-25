@@ -5,7 +5,7 @@ from pathlib import Path
 from datetime import datetime
 
 
-BASE = Path("/content/drive/MyDrive/FutureMind_Lab_V7_RC2_LANGUAGE_COMPLETE_20260730_0740")
+BASE = Path("/content/drive/MyDrive/FutureMind_Lab_V7_RC2_IRAN_GATEWAY_WORKING_20260822_183110")
 
 TOKENS_FILE = BASE / "orders" / "download_tokens.json"
 
@@ -24,9 +24,16 @@ def create_download_token(order_id, product):
     tokens.append({
         "token": token,
         "order_id": order_id,
+
+        # Canonical product binding
+        "product_id": product,
+
+        # Backward compatibility with legacy token consumers
         "product": product,
+
         "status": "ACTIVE",
         "created": str(datetime.now()),
+        "date": str(datetime.now()),
         "downloads": 0
     })
 
