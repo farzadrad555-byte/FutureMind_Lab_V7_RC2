@@ -208,6 +208,22 @@
         "Crypto"
       ],
       "download": "FutureMind_Instagram_Sales_Assistant_V1.4.zip"
+    },
+    {
+      "id": "prospect-1",
+      "name": "Prospect 1",
+      "category": "English Learning",
+      "version": "V1",
+      "price": 0,
+      "currency": "USD",
+      "iran_price": 1990000,
+      "status": "Active",
+      "page": "prospect-1.html",
+      "description": "Prospect 1 — complete 11-component English learning package.",
+      "payment_methods": [
+        "ZarinPal"
+      ],
+      "download": "Prospect1_Package_V1.zip"
     }
   ]
 }

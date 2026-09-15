@@ -54,5 +54,10 @@
     "category": "Instagram Sales AI",
     "version": "V1.4",
     "description": "Read-only sales intelligence assistant for Instagram product discovery, sales analysis and workflow assistance."
+  },
+  "prospect-1": {
+    "title": "Prospect 1",
+    "category": "English Learning",
+    "description": "Prospect 1 — complete 11-component English learning package."
   }
 }

@@ -381,8 +381,8 @@
 🏠 <span data-lang="home">Home</span>
 </a>
 
-<a href="../products/hunter-x.html">
-← <span data-lang="hunter">Hunter-X</span>
+<a id="checkout-back-link" href="../index.html">
+← <span id="checkout-back-label">Back</span>
 </a>
 </div>
 
@@ -399,21 +399,15 @@
 
 <div class="product-box">
 
-<h1><span data-lang="hunter">Hunter-X</span></h1>
+<h1 id="checkout-product-title"></h1>
 
-<h2>V44 Professional</h2>
+<h2 id="checkout-product-version"></h2>
 
-<p>
-<span data-lang="ai_platform">AI Market Intelligence Platform</span>
-</p>
+<p id="checkout-product-description"></p>
 
 <hr>
 
-<div class="feature">✓ <span data-lang="market_scanner">Market Scanner</span></div>
-<div class="feature">✓ <span data-lang="risk_analysis">Risk Analysis</span></div>
-<div class="feature">✓ <span data-lang="opportunity_detection">Opportunity Detection</span></div>
-<div class="feature">✓ <span data-lang="professional_reports">Professional Reports</span></div>
-<div class="feature">✓ <span data-lang="professional_insights">AI Assisted Insights</span></div>
+<div id="checkout-product-features"></div>
 
 </div>
 
@@ -633,7 +627,7 @@ if(marketData){
 setTimeout(()=>{
 
 document.getElementById("market-price").innerText =
-(window.futuremindLanguage?.t("total_price") || "💎 Total Price") + ": " + marketData.price + " " + marketData.currency;
+(window.futuremindLanguage?.t("total_price") || "💎 Total Price") + ": " + Number(marketData.price).toLocaleString() + " " + marketData.currency;
 
 document.getElementById("payment-method").innerText =
 (window.futuremindLanguage?.t("payment_method") || "💳 Payment Method") + ": " + marketData.payment;
@@ -697,6 +691,157 @@ if(productDescription){
 </script>
 
 
+
+<script>
+/*
+ * PROSPECT1_CHECKOUT_PRODUCT_UI
+ *
+ * Display-only product rendering.
+ * Canonical source: window.selectedProduct
+ *
+ * No payment, gateway, token, or download changes.
+ */
+(function () {
+
+    function renderCheckoutProductUI() {
+
+        const product = window.selectedProduct;
+
+        if (!product) return;
+
+        const titleEl = document.getElementById(
+            "checkout-product-title"
+        );
+
+        const versionEl = document.getElementById(
+            "checkout-product-version"
+        );
+
+        const descriptionEl = document.getElementById(
+            "checkout-product-description"
+        );
+
+        const featuresEl = document.getElementById(
+            "checkout-product-features"
+        );
+
+        if (titleEl) {
+            titleEl.textContent =
+                product.name || "";
+        }
+
+        if (versionEl) {
+            versionEl.textContent =
+                product.version || "";
+        }
+
+        if (descriptionEl) {
+            descriptionEl.textContent =
+                product.description || "";
+        }
+
+        if (featuresEl) {
+            featuresEl.innerHTML = "";
+
+            if (Array.isArray(product.features)) {
+                product.features.forEach(function (feature) {
+                    const div = document.createElement("div");
+                    div.className = "feature";
+                    div.textContent = "✓ " + feature;
+                    featuresEl.appendChild(div);
+                });
+            }
+        }
+
+        const backLink =
+            document.getElementById("checkout-back-link");
+
+        const backLabel =
+            document.getElementById("checkout-back-label");
+
+        if (backLink) {
+            const id = String(product.id || "");
+
+            if (id === "hunter-x-v44") {
+                backLink.href =
+                    "../products/hunter-x.html";
+            } else if (id === "prospect-1") {
+                backLink.href =
+                    "../pages/prospect-1.html";
+            } else {
+                backLink.href =
+                    "../index.html";
+            }
+        }
+
+        if (backLabel) {
+            backLabel.textContent =
+                product.name || "Back";
+        }
+
+        const priceEl =
+            document.getElementById("market-price");
+
+        if (
+            priceEl &&
+            product.markets
+        ) {
+            const market =
+                typeof getMarket === "function"
+                    ? getMarket()
+                    : "global";
+
+            const marketData =
+                product.markets[market];
+
+            if (marketData) {
+                const numericPrice =
+                    Number(marketData.price);
+
+                const formattedPrice =
+                    Number.isFinite(numericPrice)
+                        ? numericPrice.toLocaleString()
+                        : marketData.price;
+
+                priceEl.innerText =
+                    (
+                        window.futuremindLanguage?.t(
+                            "total_price"
+                        ) || "💎 Total Price"
+                    ) +
+                    ": " +
+                    formattedPrice +
+                    " " +
+                    marketData.currency;
+            }
+        }
+    }
+
+    let attempts = 0;
+
+    const timer = setInterval(function () {
+
+        renderCheckoutProductUI();
+
+        attempts++;
+
+        if (
+            window.productReady &&
+            window.selectedProduct
+        ) {
+            renderCheckoutProductUI();
+            clearInterval(timer);
+        }
+
+        if (attempts >= 100) {
+            clearInterval(timer);
+        }
+
+    }, 100);
+
+})();
+</script>
+
 <script src="../js/checkout.js"></script>
 
 <script src="/js/language_engine.js"></script>
@@ -740,10 +885,14 @@ if(productDescription){
         }
 
         if (priceEl) {
+            const numericPrice = Number(marketData.price);
+            const formattedPrice = Number.isFinite(numericPrice)
+                ? numericPrice.toLocaleString()
+                : marketData.price;
             priceEl.innerText =
                 window.futuremindLanguage.t("total_price") +
                 ": " +
-                marketData.price +
+                formattedPrice +
                 " " +
                 marketData.currency;
         }
