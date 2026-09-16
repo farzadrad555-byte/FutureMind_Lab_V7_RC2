@@ -19,8 +19,29 @@ IMPORTANT:
 import json
 from pathlib import Path
 
-from .zarinpal_gateway import ZarinPalGateway
+from . import zarinpal_gateway
 from .idpay_gateway import IDPayGateway
+
+
+class _ZarinPalCompat:
+    """Compatibility wrapper for the module-level ZarinPal adapter."""
+
+    name = "zarinpal"
+
+    def __init__(self, sandbox=True):
+        self.sandbox = bool(sandbox)
+
+    def status(self):
+        return zarinpal_gateway.gateway_status()
+
+    def create_payment(self, order):
+        return zarinpal_gateway.create_payment(order)
+
+    def verify_payment(self, order, callback):
+        return zarinpal_gateway.verify_payment(
+            order,
+            callback
+        )
 
 
 class MultiGatewayRouter:
@@ -49,7 +70,7 @@ class MultiGatewayRouter:
         )
 
         self.gateways = {
-            "zarinpal": ZarinPalGateway(
+            "zarinpal": _ZarinPalCompat(
                 sandbox=True
             ),
             "idpay": IDPayGateway(

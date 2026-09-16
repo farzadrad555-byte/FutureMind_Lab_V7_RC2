@@ -16,9 +16,16 @@ import urllib.request
 import urllib.error
 
 
-PRODUCT_ID = "iran-teacher-ai-v1"
-AMOUNT = 790000
-CURRENCY = "IRR"
+ZARINPAL_PRODUCT_CONTRACTS = {
+    "iran-teacher-ai-v1": {
+        "amount": 790000,
+        "currency": "IRR",
+    },
+    "prospect-1": {
+        "amount": 1990000,
+        "currency": "IRR",
+    },
+}
 
 
 class ZarinPalGatewayError(Exception):
@@ -81,22 +88,24 @@ def _require_order_contract(order):
     if not order_id:
         raise ZarinPalGatewayError("MISSING_ORDER_ID")
 
-    if product_id != PRODUCT_ID:
+    contract = ZARINPAL_PRODUCT_CONTRACTS.get(product_id)
+
+    if contract is None:
         raise ZarinPalGatewayError(
             "PRODUCT_ID_MISMATCH"
         )
 
-    if amount != AMOUNT:
+    if amount != contract["amount"]:
         raise ZarinPalGatewayError(
             "AMOUNT_MISMATCH"
         )
 
-    if currency != CURRENCY:
+    if currency != contract["currency"]:
         raise ZarinPalGatewayError(
             "CURRENCY_MISMATCH"
         )
 
-    return order_id
+    return order_id, product_id, int(amount), currency
 
 
 def _request_json(url, payload, headers=None):
@@ -150,7 +159,7 @@ def create_payment(order):
     - No download token creation.
     """
 
-    order_id = _require_order_contract(order)
+    order_id, product_id, amount, currency = _require_order_contract(order)
 
     cfg = _config()
     gateway = cfg["gateways"]["zarinpal"]
@@ -206,12 +215,29 @@ def create_payment(order):
         "/pg/v4/payment/request.json"
     )
 
+    # Bind callback to the exact order.
+    # ZarinPal returns Authority/Status, while order_id is supplied
+    # through the callback URL itself.
+    from urllib.parse import urlsplit, urlunsplit, parse_qsl, urlencode
+
+    _cb = urlsplit(callback_url)
+    _cb_query = dict(parse_qsl(_cb.query, keep_blank_values=True))
+    _cb_query["order_id"] = str(order_id)
+
+    bound_callback_url = urlunsplit((
+        _cb.scheme,
+        _cb.netloc,
+        _cb.path,
+        urlencode(_cb_query),
+        _cb.fragment,
+    ))
+
     payload = {
         "merchant_id": merchant_id,
-        "amount": int(AMOUNT),
-        "callback_url": callback_url,
+        "amount": int(amount),
+        "callback_url": bound_callback_url,
         "description": (
-            f"iran-teacher-ai-v1 order {order_id}"
+            f"{product_id} order {order_id}"
         ),
     }
 
@@ -294,7 +320,7 @@ def verify_payment(order, authority):
     No download token creation.
     """
 
-    order_id = _require_order_contract(order)
+    order_id, product_id, amount, currency = _require_order_contract(order)
 
     if not authority:
         return {
@@ -345,7 +371,7 @@ def verify_payment(order, authority):
 
     payload = {
         "merchant_id": merchant_id,
-        "amount": int(AMOUNT),
+        "amount": int(amount),
         "authority": str(authority),
     }
 

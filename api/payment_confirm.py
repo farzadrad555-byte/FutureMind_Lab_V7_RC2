@@ -426,8 +426,6 @@ class PaymentConfirmHandler(BaseHTTPRequestHandler):
                 .isoformat()
             )
 
-            _save_orders(orders)
-
             # ----------------------------------------------------
             # ONLY AFTER PAID + SERVER VERIFY:
             # CREATE DOWNLOAD TOKEN
@@ -456,6 +454,8 @@ class PaymentConfirmHandler(BaseHTTPRequestHandler):
                     "TOKEN_CREATION_FAILED"
                 )
 
+            _save_orders(orders)
+
             # ----------------------------------------------------
             # SUCCESS
             # ----------------------------------------------------
@@ -474,7 +474,7 @@ class PaymentConfirmHandler(BaseHTTPRequestHandler):
                     "token_created": True,
                     "token": token,
                     "download_url": download_url
-                }
+                , "verified": verification.get("verified"), "confirmations": verification.get("confirmations"), "confirmations_required": verification.get("confirmations_required"), "reason": verification.get("reason"), "actual_amount": verification.get("actual_amount"), "expected_amount": verification.get("expected_amount")}
             )
 
         except Exception as e:
