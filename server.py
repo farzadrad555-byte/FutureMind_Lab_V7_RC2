@@ -600,6 +600,7 @@ class Handler(SimpleHTTPRequestHandler):
                 from api.payment_confirm import (
                     _find_order,
                     _safe_product_contract,
+                    _resolve_crypto_contract,
                     _create_download_token,
                 )
 
@@ -659,20 +660,49 @@ class Handler(SimpleHTTPRequestHandler):
                         verify_crypto_confirmation
                     )
 
+                    try:
+                        crypto_contract = _resolve_crypto_contract(
+                            product_id
+                        )
+                    except RuntimeError as exc:
+                        self.send_error(
+                            402,
+                            str(exc)
+                        )
+                        return
+
+                    # Canonical mapping is authoritative.
+                    # Never trust wallet/asset/network from order.
+                    if (
+                        str(
+                            order.get("market", "")
+                        ).lower() != "global"
+                        or crypto_contract["amount"] != int(amount)
+                        or crypto_contract["currency"] != str(currency)
+                    ):
+                        self.send_error(
+                            402,
+                            "CRYPTO_PRODUCT_CONTRACT_MISMATCH"
+                        )
+                        return
+
                     verification = verify_crypto_confirmation(
                         {
                             "order_id": order_id,
                             "product_id": product_id,
-                            "amount": amount,
-                            "currency": currency,
+                            "amount": crypto_contract["amount"],
+                            "currency": crypto_contract["currency"],
                             "payment_method": "crypto",
-                            "wallet": order.get("wallet"),
-                            "asset": order.get("asset"),
-                            "network": order.get("network"),
+                            "wallet": crypto_contract["destination"],
+                            "asset": crypto_contract["asset"],
+                            # Mapping network=TRON and
+                            # standard=TRC20. The current adapter's
+                            # NETWORK contract is TRC20.
+                            "network": crypto_contract["standard"],
                         },
                         tx_hash=authority,
-                        expected_wallet=order.get("wallet"),
-                        expected_amount=amount,
+                        expected_wallet=crypto_contract["destination"],
+                        expected_amount=crypto_contract["amount"],
                         confirmations_required=1,
                     )
                 else:
@@ -827,16 +857,49 @@ class Handler(SimpleHTTPRequestHandler):
                 )
                 return
 
-            if mapping.get("market") != "iran":
+            market = str(
+                mapping.get("market", "")
+            ).lower()
+
+            payment_method = str(
+                mapping.get("payment_method", "")
+            ).lower()
+
+            if market == "iran":
+                if payment_method not in (
+                    "zarinpal",
+                    "idpay",
+                ):
+                    self.send_error(
+                        400,
+                        "Unsupported Iran payment method"
+                    )
+                    return
+
+            elif (
+                market == "global"
+                and payment_method == "crypto"
+            ):
+                try:
+                    _resolve_crypto_contract(
+                        product_id
+                    )
+                except RuntimeError as exc:
+                    self.send_error(
+                        400,
+                        str(exc)
+                    )
+                    return
+
+            else:
                 self.send_error(
                     400,
-                    "Iran market mapping required"
+                    "Unsupported market/payment mapping"
                 )
                 return
 
             amount = mapping.get("amount")
             currency = mapping.get("currency")
-            payment_method = mapping.get("payment_method")
 
             if amount is None or not currency or not payment_method:
                 self.send_error(
@@ -880,8 +943,20 @@ class Handler(SimpleHTTPRequestHandler):
             order["amount"] = amount
             order["currency"] = currency
             order["payment_method"] = payment_method
-            order["market"] = "iran"
+            order["market"] = market
             order["status"] = "PENDING"
+
+            # Client-supplied Crypto destination fields are never
+            # authoritative. They are removed from the persisted order.
+            if (
+                market == "global"
+                and payment_method == "crypto"
+            ):
+                order.pop("wallet", None)
+                order.pop("asset", None)
+                order.pop("network", None)
+                order.pop("standard", None)
+                order.pop("destination", None)
 
             orders.append(order)
 
