@@ -598,10 +598,10 @@ class Handler(SimpleHTTPRequestHandler):
 
             try:
                 from api.payment_confirm import (
-                    _find_order,
+                    _c109_db_order_contract,
+                    _c109_finalize_verified_payment,
                     _safe_product_contract,
                     _resolve_crypto_contract,
-                    _create_download_token,
                 )
 
                 order_id = body.get("order_id")
@@ -615,7 +615,7 @@ class Handler(SimpleHTTPRequestHandler):
                         "Missing order_id or authority"
                     )
 
-                orders, order = _find_order(order_id)
+                order = _c109_db_order_contract(order_id)
 
                 if order is None:
                     self.send_response(404)
@@ -754,25 +754,19 @@ class Handler(SimpleHTTPRequestHandler):
                     }).encode("utf-8"))
                     return
 
-                # Only verified gateway proof may change order state.
-                order["status"] = "PAID"
-                order["payment_verified"] = True
-                order["gateway_reference"] = verification.get("ref_id")
-                order["verification"] = verification
+                # C-109 | POSTGRES ATOMIC FINALIZATION
 
-                token, download_url = _create_download_token(
-                    order_id,
-                    product_id
+                finalization = _c109_finalize_verified_payment(
+                    order_id=order_id,
+                    product_id=product_id,
+                    payment_method=payment_method,
+                    amount=amount,
+                    currency=currency,
+                    verification=verification,
                 )
 
-                ORDERS.write_text(
-                    json.dumps(
-                        orders,
-                        ensure_ascii=False,
-                        indent=2
-                    ),
-                    encoding="utf-8"
-                )
+                token = finalization["token"]
+                download_url = finalization["download_url"]
 
                 self.send_response(200)
                 self.send_header(
@@ -924,50 +918,49 @@ class Handler(SimpleHTTPRequestHandler):
                 )
                 return
 
-            orders = json.loads(
-                ORDERS.read_text(
-                    encoding="utf-8"
-                )
-            )
-
             order_id = (
                 "FM-" +
                 secrets.token_hex(4).upper()
             )
 
-            order = dict(body)
-
-            order["order_id"] = order_id
-            order["date"] = str(datetime.now())
-            order["product_id"] = product_id
-            order["amount"] = amount
-            order["currency"] = currency
-            order["payment_method"] = payment_method
-            order["market"] = market
-            order["status"] = "PENDING"
-
-            # Client-supplied Crypto destination fields are never
-            # authoritative. They are removed from the persisted order.
-            if (
-                market == "global"
-                and payment_method == "crypto"
-            ):
-                order.pop("wallet", None)
-                order.pop("asset", None)
-                order.pop("network", None)
-                order.pop("standard", None)
-                order.pop("destination", None)
-
-            orders.append(order)
-
-            ORDERS.write_text(
-                json.dumps(
-                    orders,
-                    indent=2,
-                    ensure_ascii=False
-                ),
-                encoding="utf-8"
+            # PostgreSQL is authoritative for persisted orders.
+            # Client-supplied payment/crypto fields are never persisted.
+            from data_layer.db import (
+                build_engine,
+                build_session_factory,
+                get_database_url,
             )
+            from data_layer.repository import create_order
+            from data_layer.security import reject_client_payment_fields
+
+            clean_body = reject_client_payment_fields(dict(body))
+
+            engine = build_engine(get_database_url())
+            SessionFactory = build_session_factory(engine)
+
+            with SessionFactory() as session:
+                with session.begin():
+                    db_order = create_order(
+                        session,
+                        order_id=order_id,
+                        product_id=product_id,
+                        market=market,
+                        payment_method=payment_method,
+                        amount=amount,
+                        currency=currency,
+                        name=clean_body.get("name"),
+                        email=clean_body.get("email"),
+                    )
+
+                order = dict(clean_body)
+                order["order_id"] = db_order.order_id
+                order["date"] = db_order.created_at.isoformat()
+                order["product_id"] = db_order.product_id
+                order["amount"] = db_order.amount
+                order["currency"] = db_order.currency
+                order["payment_method"] = db_order.payment_method
+                order["market"] = db_order.market
+                order["status"] = db_order.status
 
             router = MultiGatewayRouter(BASE)
 

@@ -92,6 +92,117 @@ def _safe_product_contract(order):
     return product_id, int(amount), currency
 
 
+
+def _resolve_crypto_contract(product_id):
+    """
+    Resolve the authoritative Global Crypto payment contract.
+
+    Security boundary:
+      - product mapping is authoritative
+      - client/order wallet is never authoritative
+      - amount/currency come from mapping
+      - asset/network/standard/destination come from mapping
+    """
+    import json as _json
+    from pathlib import Path as _Path
+
+    _root = _Path(__file__).resolve().parent.parent
+    _mapping_file = (
+        _root /
+        "store_integration" /
+        "payment_mapping.json"
+    )
+
+    try:
+        _mappings = _json.loads(
+            _mapping_file.read_text(
+                encoding="utf-8"
+            )
+        )
+    except Exception as _exc:
+        raise RuntimeError(
+            "PAYMENT_MAPPING_UNREADABLE"
+        ) from _exc
+
+    _mapping = _mappings.get(product_id)
+
+    if not isinstance(_mapping, dict):
+        raise RuntimeError(
+            "PRODUCT_MAPPING_NOT_FOUND"
+        )
+
+    market = str(
+        _mapping.get("market", "")
+    ).lower()
+
+    payment_method = str(
+        _mapping.get("payment_method", "")
+    ).lower()
+
+    if market != "global":
+        raise RuntimeError(
+            "CRYPTO_GLOBAL_MARKET_REQUIRED"
+        )
+
+    if payment_method != "crypto":
+        raise RuntimeError(
+            "CRYPTO_PAYMENT_METHOD_REQUIRED"
+        )
+
+    crypto = _mapping.get("crypto")
+
+    if not isinstance(crypto, dict):
+        raise RuntimeError(
+            "CRYPTO_CONTRACT_MISSING"
+        )
+
+    required = (
+        "asset",
+        "network",
+        "standard",
+        "destination",
+    )
+
+    for key in required:
+        value = crypto.get(key)
+
+        if not isinstance(value, str) or not value.strip():
+            raise RuntimeError(
+                "CRYPTO_CONTRACT_INCOMPLETE"
+            )
+
+    try:
+        amount = int(
+            _mapping.get("amount")
+        )
+    except (TypeError, ValueError) as exc:
+        raise RuntimeError(
+            "CRYPTO_AMOUNT_INVALID"
+        ) from exc
+
+    currency = _mapping.get("currency")
+
+    if amount <= 0:
+        raise RuntimeError(
+            "CRYPTO_AMOUNT_INVALID"
+        )
+
+    if not isinstance(currency, str) or not currency.strip():
+        raise RuntimeError(
+            "CRYPTO_CURRENCY_INVALID"
+        )
+
+    return {
+        "market": market,
+        "payment_method": payment_method,
+        "amount": amount,
+        "currency": currency.strip(),
+        "asset": crypto["asset"].strip(),
+        "network": crypto["network"].strip(),
+        "standard": crypto["standard"].strip(),
+        "destination": crypto["destination"].strip(),
+    }
+
 def _create_download_token(order_id, product_id):
     """
     Token creation boundary.
@@ -108,6 +219,147 @@ def _create_download_token(order_id, product_id):
         order_id,
         product_id
     )
+
+
+
+# ============================================================
+# C-109 | POSTGRES PAYMENT FINALIZATION
+# ============================================================
+
+def _c109_db_order_contract(order_id):
+    from data_layer.db import (
+        build_engine,
+        build_session_factory,
+        get_database_url,
+    )
+    from data_layer.repository import get_order
+
+    engine = build_engine(get_database_url())
+    SessionFactory = build_session_factory(engine)
+
+    with SessionFactory() as session:
+        order = get_order(session, order_id)
+
+        if order is None:
+            return None
+
+        return {
+            "id": order.id,
+            "order_id": order.order_id,
+            "product_id": order.product_id,
+            "market": order.market,
+            "payment_method": order.payment_method,
+            "amount": order.amount,
+            "currency": order.currency,
+            "status": order.status,
+            "name": order.name,
+            "email": order.email,
+        }
+
+
+def _c109_finalize_verified_payment(
+    *,
+    order_id,
+    product_id,
+    payment_method,
+    amount,
+    currency,
+    verification,
+):
+    import secrets
+
+    from data_layer.db import (
+        build_engine,
+        build_session_factory,
+        get_database_url,
+        transaction,
+    )
+    from data_layer.repository import (
+        get_order_for_update,
+        create_payment_attempt,
+        record_payment_verification,
+        mark_order_paid,
+        create_download_token,
+        get_active_download_token_for_order,
+    )
+
+    engine = build_engine(get_database_url())
+    SessionFactory = build_session_factory(engine)
+
+    with transaction(SessionFactory) as session:
+        order = get_order_for_update(session, order_id)
+
+        if order is None:
+            raise ValueError("order not found")
+
+        if order.product_id != product_id:
+            raise ValueError("product mismatch")
+
+        if order.amount != amount:
+            raise ValueError("amount mismatch")
+
+        if order.currency != currency:
+            raise ValueError("currency mismatch")
+
+        if order.payment_method != payment_method:
+            raise ValueError("payment method mismatch")
+
+        if order.status == "PAID":
+            raise ValueError("order already paid")
+
+        payment = create_payment_attempt(
+            session,
+            order=order,
+            payment_method=payment_method,
+            gateway=(
+                "CRYPTO"
+                if payment_method == "crypto"
+                else "ZarinPal"
+            ),
+            amount=amount,
+            currency=currency,
+        )
+
+        record_payment_verification(
+            session,
+            payment,
+            verified=True,
+            server_verified=True,
+            gateway_reference=verification.get("ref_id"),
+            verification_data=verification,
+        )
+
+        mark_order_paid(
+            session,
+            order,
+            verified=True,
+            server_verified=True,
+        )
+
+        existing_token = get_active_download_token_for_order(
+            session,
+            order_id,
+        )
+
+        if existing_token is not None:
+            token = existing_token.token
+        else:
+            token = secrets.token_hex(16)
+
+            create_download_token(
+                session,
+                order=order,
+                product_id=product_id,
+                token=token,
+            )
+
+        return {
+            "token": token,
+            "download_url": (
+                "/pages/download.html?token=" + token
+            ),
+            "gateway_reference": verification.get("ref_id"),
+        }
 
 
 class PaymentConfirmHandler(BaseHTTPRequestHandler):
@@ -210,7 +462,19 @@ class PaymentConfirmHandler(BaseHTTPRequestHandler):
             # ORDER LOOKUP
             # ----------------------------------------------------
 
-            orders, order = _find_order(order_id)
+            order = _c109_db_order_contract(order_id)
+
+            if order is None:
+                self._json_response(
+                    404,
+                    {
+                        "status": "error",
+                        "message": "order not found",
+                    },
+                )
+                return
+
+            orders = None
 
             if order is None:
                 self._json_response(
@@ -278,20 +542,48 @@ class PaymentConfirmHandler(BaseHTTPRequestHandler):
                     verify_crypto_confirmation
                 )
 
+                try:
+                    crypto_contract = _resolve_crypto_contract(
+                        product_id
+                    )
+                except RuntimeError as exc:
+                    raise RuntimeError(
+                        str(exc)
+                    ) from exc
+
+                # Canonical mapping is authoritative.
+                # Never trust wallet/asset/network from order.
+                if (
+                    str(
+                        order.get("market", "")
+                    ).lower() != "global"
+                    or crypto_contract["amount"] != int(amount)
+                    or crypto_contract["currency"] != str(currency)
+                ):
+                    raise RuntimeError(
+                        "CRYPTO_PRODUCT_CONTRACT_MISMATCH"
+                    )
+
                 verification = verify_crypto_confirmation(
                     {
                         "order_id": order_id,
                         "product_id": product_id,
-                        "amount": amount,
-                        "currency": currency,
+                        "amount": crypto_contract["amount"],
+                        "currency": crypto_contract["currency"],
                         "payment_method": "crypto",
-                        "wallet": order.get("wallet"),
-                        "asset": order.get("asset"),
-                        "network": order.get("network"),
+                        "wallet": crypto_contract["destination"],
+                        "asset": crypto_contract["asset"],
+                        # Mapping:
+                        # network = TRON
+                        # standard = TRC20
+                        #
+                        # Current adapter's NETWORK contract is TRC20,
+                        # therefore the verifier-facing value is standard.
+                        "network": crypto_contract["standard"],
                     },
                     tx_hash=authority,
-                    expected_wallet=order.get("wallet"),
-                    expected_amount=amount,
+                    expected_wallet=crypto_contract["destination"],
+                    expected_amount=crypto_contract["amount"],
                     confirmations_required=1,
                 )
 
@@ -399,66 +691,20 @@ class PaymentConfirmHandler(BaseHTTPRequestHandler):
                 return
 
             # ----------------------------------------------------
-            # ONLY NOW: MARK PAID
+            # C-109 | POSTGRES ATOMIC FINALIZATION
             # ----------------------------------------------------
 
-            order["status"] = "PAID"
-
-            # ------------------------------------------------
-            # PAYMENT PROVIDER METADATA
-            # ------------------------------------------------
-            # Crypto payments must never be recorded as
-            # ZarinPal payments.
-            if payment_method == "crypto":
-                order["payment_method"] = "crypto"
-                order["gateway"] = "CRYPTO"
-            else:
-                pass  # ZARINPAL METADATA NOT APPLIED TO CRYPTO
-                # ZARINPAL GATEWAY OMITTED FOR CRYPTO
-
-            order["authority"] = str(authority)
-            order["ref_id"] = str(ref_id)
-            order["verified"] = True
-            order["server_verified"] = True
-            order["verified_at"] = (
-                __import__("datetime")
-                .datetime.now()
-                .isoformat()
+            finalization = _c109_finalize_verified_payment(
+                order_id=order_id,
+                product_id=product_id,
+                payment_method=payment_method,
+                amount=amount,
+                currency=currency,
+                verification=verification,
             )
 
-            # ----------------------------------------------------
-            # ONLY AFTER PAID + SERVER VERIFY:
-            # CREATE DOWNLOAD TOKEN
-            # ----------------------------------------------------
-
-            token_result = _create_download_token(
-                order_id,
-                product_id
-            )
-
-            if not isinstance(
-                token_result,
-                dict
-            ):
-                raise RuntimeError(
-                    "INVALID_TOKEN_RESPONSE"
-                )
-
-            token = token_result.get("token")
-            download_url = token_result.get(
-                "download_url"
-            )
-
-            if not token:
-                raise RuntimeError(
-                    "TOKEN_CREATION_FAILED"
-                )
-
-            _save_orders(orders)
-
-            # ----------------------------------------------------
-            # SUCCESS
-            # ----------------------------------------------------
+            token = finalization["token"]
+            download_url = finalization["download_url"]
 
             self._json_response(
                 200,
