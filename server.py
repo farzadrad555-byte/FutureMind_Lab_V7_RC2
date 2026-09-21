@@ -38,338 +38,181 @@ class Handler(SimpleHTTPRequestHandler):
 
 
     def secure_download(self):
-
         from urllib.parse import urlparse, parse_qs
 
-        query = parse_qs(
+        token = parse_qs(
             urlparse(self.path).query
-        )
+        ).get("token", [""])[0].strip()
 
-        token = query.get(
-            "token",
-            [""]
-        )[0]
-
-
-        tokens_file = BASE / "orders" / "download_tokens.json"
-
-
-        if not tokens_file.exists():
-
-            self.send_error(404)
+        if not token:
+            self.send_error(403, "Invalid download token")
             return
 
-
-        tokens = json.loads(
-            tokens_file.read_text(
-                encoding="utf-8"
+        try:
+            from data_layer.db import (
+                build_engine,
+                build_session_factory,
+                get_database_url,
+                transaction,
             )
-        )
+            from data_layer.repository import (
+                get_download_token,
+                authorize_download,
+                record_download,
+            )
+            from data_layer.security import (
+                require_active_token,
+                require_known_product,
+            )
 
+            engine = build_engine(get_database_url())
+            SessionFactory = build_session_factory(engine)
 
-        valid = None
+            with transaction(SessionFactory) as session:
 
-        for item in tokens:
+                token_row = get_download_token(
+                    session,
+                    token,
+                )
 
-            if item.get("token") == token and item.get("status") == "ACTIVE":
+                if token_row is None:
+                    raise PermissionError(
+                        "Invalid download token"
+                    )
 
-                valid = item
-                break
+                require_active_token(
+                    token_row.status
+                )
 
+                product_id = require_known_product(
+                    token_row.product_id
+                )
 
-        # Check PAID order status
+                mapping_file = (
+                    BASE
+                    / "store_integration"
+                    / "payment_mapping.json"
+                )
 
-        if valid:
-
-            orders_file = BASE / "orders" / "orders.json"
-
-            if orders_file.exists():
-
-                orders = json.loads(
-                    orders_file.read_text(
+                mappings = json.loads(
+                    mapping_file.read_text(
                         encoding="utf-8"
                     )
                 )
 
-                paid = False
-
-                for order in orders:
-
-                    if (
-                        order.get("order_id") == valid.get("order_id")
-                        and order.get("status") == "PAID"
-                    ):
-                        paid = True
-                        break
-
-
-                if not paid:
-
-                    self.send_error(403)
-                    return
-
-
-        if not valid:
-
-            self.send_error(403)
-
-            return
-
-
-        # Dynamic Product Download Engine
-        # V7 RC2 Multi Product
-
-        mapping_file = BASE / "store_integration" / "payment_mapping.json"
-
-        mappings = json.loads(
-            mapping_file.read_text(
-                encoding="utf-8"
-            )
-        )
-
-        product_id = valid.get("product_id")
-
-        package = None
-
-        if product_id in mappings:
-            package = mappings[product_id].get(
-                "download_package"
-            )
-
-
-        if not package:
-            self.send_error(404)
-            return
-
-
-        file_path = (
-            BASE /
-            "downloads" /
-            package
-        )
-
-
-        if not file_path.exists():
-
-            self.send_error(404)
-
-            return
-
-
-        # Download Limit V6.2
-
-        MAX_DOWNLOADS = 3
-
-        history_file = BASE / "orders" / "download_history.json"
-
-        if history_file.exists():
-
-            history_check = json.loads(
-                history_file.read_text(
-                    encoding="utf-8"
-                )
-            )
-
-        else:
-
-            history_check = []
-
-        download_count = sum(
-            1 for item in history_check
-            if item.get("token") == token
-        )
-
-        if download_count >= MAX_DOWNLOADS:
-            self.send_error(403)
-            return
-
-
-        self.send_response(200)
-
-        self.send_header(
-            "Content-Type",
-            "application/zip"
-        )
-
-        self.end_headers()
-
-
-        # Save Download History V6.2
-
-        history_file = BASE / "orders" / "download_history.json"
-
-        if history_file.exists():
-
-            history = json.loads(
-                history_file.read_text(
-                    encoding="utf-8"
-                )
-            )
-
-        else:
-
-            history = []
-
-
-        history.append({
-
-            "order_id": valid.get("order_id"),
-
-            "product_id": valid.get("product_id"),
-
-            "token": token,
-
-            "date": str(datetime.now()),
-
-            "status": "DOWNLOADED"
-
-        })
-
-
-        history_file.write_text(
-
-            json.dumps(
-                history,
-                indent=2,
-                ensure_ascii=False
-            ),
-
-            encoding="utf-8"
-
-        )
-
-
-        with open(file_path,"rb") as f:
-
-            self.wfile.write(
-                f.read()
-            )
-
-
-    def do_GET(self):
-        # ZarinPal callback — SERVER-SIDE VERIFICATION
-        if self.path.startswith("/api/zarinpal/callback"):
-            from urllib.parse import urlparse, parse_qs
-            from payment.zarinpal_gateway import verify_payment
-            from api.payment_confirm import (
-                _find_order,
-                _safe_product_contract,
-                _create_download_token,
-            )
-
-            parsed = urlparse(self.path)
-            qs = parse_qs(parsed.query)
-
-            order_id = qs.get("order_id", [None])[0]
-            authority = qs.get("Authority", [None])[0]
-            status = qs.get("Status", [None])[0]
-
-            response = {
-                "ok": False,
-                "gateway": "zarinpal",
-                "order_id": order_id,
-                "gateway_reference": authority,
-                "token_created": False,
-                "paid": False,
-            }
-
-            try:
-                if not order_id or not authority:
-                    raise ValueError(
-                        "Missing order_id or Authority"
+                contract = mappings.get(product_id)
+
+                if not isinstance(contract, dict):
+                    raise FileNotFoundError(
+                        "Product mapping not found"
                     )
 
-                # User cancellation is never payment proof.
-                if str(status).upper() != "OK":
-                    raise ValueError(
-                        "ZARINPAL_CALLBACK_NOT_SUCCESS"
-                    )
-
-                orders, order = _find_order(order_id)
-
-                if order is None:
-                    raise ValueError("Order not found")
-
-                if order.get("status") == "PAID":
-                    raise ValueError("ORDER_ALREADY_PAID")
-
-                product_id, amount, currency = _safe_product_contract(order)
-
-                verification = verify_payment(
-                    order,
-                    authority
+                package = contract.get(
+                    "download_package"
                 )
 
-                if not isinstance(verification, dict):
-                    raise ValueError(
-                        "Invalid verification response"
+                if (
+                    not isinstance(package, str)
+                    or not package.strip()
+                ):
+                    raise FileNotFoundError(
+                        "Download package not configured"
                     )
 
-                if verification.get("verified") is not True:
-                    raise ValueError(
-                        "PAYMENT_NOT_VERIFIED"
+                file_path = (
+                    BASE
+                    / "downloads"
+                    / package
+                )
+
+                if not file_path.is_file():
+                    raise FileNotFoundError(
+                        "Download package not found"
                     )
 
-                if verification.get("server_verified") is not True:
-                    raise ValueError(
-                        "SERVER_VERIFICATION_REQUIRED"
-                    )
-
-                # PAID is written only after server verification.
-                order["status"] = "PAID"
-                order["gateway_reference"] = (
-                    verification.get("ref_id")
-                    or verification.get("reference")
-                    or authority
-                )
-                order["verification"] = verification
-
-                token, download_url = _create_download_token(
-                    order_id,
-                    product_id
+                # PostgreSQL is authoritative.
+                # Authorization + record happen in ONE
+                # transaction/session.
+                order = authorize_download(
+                    session,
+                    token_row,
                 )
 
-                orders_path = BASE / "orders" / "orders.json"
-                orders_path.write_text(
-                    json.dumps(
-                        orders,
-                        ensure_ascii=False,
-                        indent=2
-                    ),
-                    encoding="utf-8"
+                record_download(
+                    session,
+                    token=token_row,
+                    order=order,
+                    product_id=product_id,
                 )
 
-                response.update({
-                    "ok": True,
-                    "payment_verified": True,
-                    "download_authorized": True,
-                    "token_created": True,
-                    "download_url": download_url,
-                    "paid": True,
-                })
-
-            except Exception as e:
-                response.update({
-                    "error": str(e),
-                    "payment_verified": False,
-                    "download_authorized": False,
-                })
-
+            # Commit happens before streaming.
             self.send_response(200)
             self.send_header(
                 "Content-Type",
-                "application/json; charset=utf-8"
+                "application/zip",
+            )
+            self.send_header(
+                "Content-Disposition",
+                (
+                    f'attachment; filename="{file_path.name}"'
+                ),
+            )
+            self.end_headers()
+
+            with file_path.open("rb") as f:
+                while True:
+                    chunk = f.read(1024 * 1024)
+
+                    if not chunk:
+                        break
+
+                    self.wfile.write(chunk)
+
+        except PermissionError:
+            self.send_error(
+                403,
+                "Download authorization denied",
+            )
+
+        except FileNotFoundError as exc:
+            self.send_error(
+                404,
+                str(exc),
+            )
+
+        except Exception:
+            self.send_error(
+                500,
+                "Secure download failed",
+            )
+
+    def do_GET(self):
+        # ========================================================
+        # C-109 — LEGACY ZARINPAL CALLBACK RETIRED
+        # Payment finalization is exclusively handled by:
+        # POST /api/payment/confirm
+        # PostgreSQL is the operational payment authority.
+        # ========================================================
+
+        if self.path.startswith("/api/zarinpal/callback"):
+            self.send_response(410)
+            self.send_header(
+                "Content-Type",
+                "application/json; charset=utf-8",
             )
             self.end_headers()
 
             self.wfile.write(
                 json.dumps(
-                    response,
-                    ensure_ascii=False
+                    {
+                        "status": "error",
+                        "message":
+                            "LEGACY_ZARINPAL_CALLBACK_RETIRED",
+                    },
+                    ensure_ascii=False,
                 ).encode("utf-8")
             )
             return
-
 
         if self.path.startswith("/api/secure-download"):
 
@@ -380,80 +223,136 @@ class Handler(SimpleHTTPRequestHandler):
 
         if self.path.startswith("/api/download-info"):
 
-            from urllib.parse import urlparse, parse_qs
-
-            query = parse_qs(
-                urlparse(self.path).query
+            from urllib.parse import (
+                urlparse,
+                parse_qs,
             )
 
-            token = query.get("token", [""])[0]
+            token = parse_qs(
+                urlparse(self.path).query
+            ).get("token", [""])[0].strip()
 
-            tokens_file = BASE / "orders" / "download_tokens.json"
+            response = {
+                "status": "error",
+                "message": "Invalid token",
+            }
 
-            if tokens_file.exists():
-                tokens = json.loads(
-                    tokens_file.read_text(encoding="utf-8")
-                )
-            else:
-                tokens = []
-
-
-            valid = None
-
-            for item in tokens:
-                if item.get("token") == token:
-                    valid = item
-                    break
-
-
-            if not valid:
-
-                response = {
-                    "status": "error",
-                    "message": "Invalid token"
-                }
-
-            else:
-
-                history_file = BASE / "orders" / "download_history.json"
-
-                if history_file.exists():
-                    history = json.loads(
-                        history_file.read_text(encoding="utf-8")
+            if token:
+                try:
+                    from data_layer.db import (
+                        build_engine,
+                        build_session_factory,
+                        get_database_url,
                     )
-                else:
-                    history = []
 
+                    from data_layer.repository import (
+                        get_download_token,
+                        get_order,
+                        count_downloads,
+                    )
 
-                count = sum(
-                    1 for x in history
-                    if x.get("token") == token
-                )
+                    from data_layer.security import (
+                        require_active_token,
+                        require_production_authorization,
+                    )
 
+                    engine = build_engine(
+                        get_database_url()
+                    )
 
-                response = {
-                    "status": "success",
-                    "order_id": valid.get("order_id"),
-                    "product_id": valid.get("product_id"),
-                    "product": valid.get("product", "Hunter-X Professional"),
-                    "downloads": count,
-                    "limit": 3,
-                    "remaining": max(0, 3-count),
-                    "token_status": valid.get("status")
-                }
+                    SessionFactory = (
+                        build_session_factory(engine)
+                    )
 
+                    with SessionFactory() as session:
+
+                        token_row = get_download_token(
+                            session,
+                            token,
+                        )
+
+                        if token_row is not None:
+
+                            require_active_token(
+                                token_row.status
+                            )
+
+                            order = get_order(
+                                session,
+                                token_row.order_id,
+                            )
+
+                            if order is not None:
+
+                                require_production_authorization(
+                                    order.status,
+                                    order.payment_method,
+                                    False,
+                                    False,
+                                )
+
+                                count = count_downloads(
+                                    session,
+                                    token_row,
+                                )
+
+                                mapping_file = (
+                                    BASE
+                                    / "store_integration"
+                                    / "payment_mapping.json"
+                                )
+
+                                mappings = json.loads(
+                                    mapping_file.read_text(
+                                        encoding="utf-8"
+                                    )
+                                )
+
+                                contract = mappings.get(
+                                    token_row.product_id,
+                                    {},
+                                )
+
+                                product_name = contract.get(
+                                    "product_name",
+                                    token_row.product_id,
+                                )
+
+                                response = {
+                                    "status": "success",
+                                    "order_id":
+                                        order.order_id,
+                                    "product_id":
+                                        token_row.product_id,
+                                    "product":
+                                        str(product_name),
+                                    "downloads": count,
+                                    "limit": 3,
+                                    "remaining":
+                                        max(0, 3 - count),
+                                    "token_status":
+                                        token_row.status,
+                                }
+
+                except Exception:
+                    # Do not leak token/order/payment state.
+                    response = {
+                        "status": "error",
+                        "message": "Invalid token",
+                    }
 
             self.send_response(200)
-
             self.send_header(
                 "Content-Type",
-                "application/json"
+                "application/json; charset=utf-8",
             )
-
             self.end_headers()
 
             self.wfile.write(
-                json.dumps(response).encode()
+                json.dumps(
+                    response,
+                    ensure_ascii=False,
+                ).encode("utf-8")
             )
 
             return

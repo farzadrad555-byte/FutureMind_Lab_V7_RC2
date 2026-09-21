@@ -203,25 +203,18 @@ def _resolve_crypto_contract(product_id):
         "destination": crypto["destination"].strip(),
     }
 
-def _create_download_token(order_id, product_id):
+def _create_download_token(
+    *args,
+    **kwargs,
+):
     """
-    Token creation boundary.
+    C-109 compatibility boundary.
 
-    This function is imported only after successful
-    server-side gateway verification.
+    Operational token creation is PostgreSQL-only.
     """
-
-    from payment.token_engine import (
-        create_download_token
+    raise RuntimeError(
+        "LEGACY_TOKEN_ENGINE_RETIRED"
     )
-
-    return create_download_token(
-        order_id,
-        product_id
-    )
-
-
-
 # ============================================================
 # C-109 | POSTGRES PAYMENT FINALIZATION
 # ============================================================
