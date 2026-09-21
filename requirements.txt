@@ -1,2 +1,3 @@
-# FutureMind Lab V7 RC2
-# No external dependencies required
+requests==2.32.4
+SQLAlchemy
+psycopg
