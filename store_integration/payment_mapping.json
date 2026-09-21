@@ -105,5 +105,20 @@
     "sandbox": true,
     "token_creation_enabled": false,
     "download_authorization_enabled": false
+  },
+  "prospect-1": {
+    "product_id": "prospect-1",
+    "product_name": "Prospect 1",
+    "type": "digital_product",
+    "payment_required": true,
+    "download_package": "Prospect1_Package_V1.zip",
+    "market": "iran",
+    "amount": 1990000,
+    "currency": "IRR",
+    "payment_method": "zarinpal",
+    "real_gateway_enabled": true,
+    "sandbox": false,
+    "token_creation_enabled": true,
+    "download_authorization_enabled": true
   }
 }
