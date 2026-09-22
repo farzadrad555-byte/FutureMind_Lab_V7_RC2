@@ -48,7 +48,7 @@ def build_engine(database_url: str) -> Engine:
     normalized_url = database_url.strip()
     parsed_url = make_url(normalized_url)
 
-    if parsed_url.drivername == "postgresql":
+    if parsed_url.drivername in {"postgresql", "postgresql+psycopg2"}:
         normalized_url = parsed_url.set(
             drivername="postgresql+psycopg"
         ).render_as_string(hide_password=False)
