@@ -322,6 +322,28 @@
           "payment": "local"
         }
       }
+    },
+    {
+      "id": "prospect-1",
+      "name": "Prospect 1",
+      "category": "English Learning",
+      "version": "V1",
+      "price": 0,
+      "currency": "USD",
+      "status": "Active",
+      "page": "prospect-1.html",
+      "description": "Prospect 1 — complete 11-component English learning package.",
+      "payment_methods": [
+        "ZarinPal"
+      ],
+      "download": "Prospect1_Package_V1.zip",
+      "markets": {
+        "iran": {
+          "price": 1990000,
+          "currency": "IRR",
+          "payment": "local"
+        }
+      }
     }
   ]
 }
