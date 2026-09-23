@@ -92,6 +92,11 @@ async function submitOrder(){
                 data.order_id
             );
 
+            if(data.payment_url){
+                window.location.href = data.payment_url;
+                return;
+            }
+
             alert(
                 "Order created successfully.\n\n" +
                 "Order ID: " + data.order_id + "\n\n" +
