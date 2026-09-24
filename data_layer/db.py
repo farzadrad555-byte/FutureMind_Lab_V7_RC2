@@ -5,7 +5,7 @@ from contextlib import contextmanager
 from typing import Iterator
 
 from sqlalchemy import create_engine
-from sqlalchemy.engine import Engine
+from sqlalchemy.engine import Engine, make_url
 from sqlalchemy.orm import Session, sessionmaker
 
 
@@ -45,8 +45,16 @@ def build_engine(database_url: str) -> Engine:
             "database_url is empty"
         )
 
+    normalized_url = database_url.strip()
+    parsed_url = make_url(normalized_url)
+
+    if parsed_url.drivername in {"postgresql", "postgresql+psycopg2"}:
+        normalized_url = parsed_url.set(
+            drivername="postgresql+psycopg"
+        ).render_as_string(hide_password=False)
+
     return create_engine(
-        database_url.strip(),
+        normalized_url,
         future=True,
         pool_pre_ping=True,
     )
