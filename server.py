@@ -3,6 +3,7 @@ from http.server import HTTPServer, SimpleHTTPRequestHandler
 import json
 from pathlib import Path
 from datetime import datetime
+from urllib.parse import urlparse, parse_qs
 import secrets
 import sys
 
@@ -252,9 +253,9 @@ class Handler(SimpleHTTPRequestHandler):
             from urllib.parse import urlparse, parse_qs
             from payment.zarinpal_gateway import verify_payment
             from api.payment_confirm import (
-                _find_order,
+                _c109_db_order_contract,
+                _c109_finalize_verified_payment,
                 _safe_product_contract,
-                _create_download_token,
             )
 
             parsed = urlparse(self.path)
@@ -275,17 +276,12 @@ class Handler(SimpleHTTPRequestHandler):
 
             try:
                 if not order_id or not authority:
-                    raise ValueError(
-                        "Missing order_id or Authority"
-                    )
+                    raise ValueError("Missing order_id or Authority")
 
-                # User cancellation is never payment proof.
                 if str(status).upper() != "OK":
-                    raise ValueError(
-                        "ZARINPAL_CALLBACK_NOT_SUCCESS"
-                    )
+                    raise ValueError("ZARINPAL_CALLBACK_NOT_SUCCESS")
 
-                orders, order = _find_order(order_id)
+                order = _c109_db_order_contract(order_id)
 
                 if order is None:
                     raise ValueError("Order not found")
@@ -301,42 +297,25 @@ class Handler(SimpleHTTPRequestHandler):
                 )
 
                 if not isinstance(verification, dict):
-                    raise ValueError(
-                        "Invalid verification response"
-                    )
+                    raise ValueError("Invalid verification response")
 
                 if verification.get("verified") is not True:
-                    raise ValueError(
-                        "PAYMENT_NOT_VERIFIED"
-                    )
+                    raise ValueError("PAYMENT_NOT_VERIFIED")
 
                 if verification.get("server_verified") is not True:
-                    raise ValueError(
-                        "SERVER_VERIFICATION_REQUIRED"
-                    )
+                    raise ValueError("SERVER_VERIFICATION_REQUIRED")
 
-                # PAID is written only after server verification.
-                order["status"] = "PAID"
-                order["gateway_reference"] = (
-                    verification.get("ref_id")
-                    or verification.get("reference")
-                    or authority
-                )
-                order["verification"] = verification
+                payment_method = str(
+                    order.get("payment_method", "zarinpal")
+                ).lower()
 
-                token, download_url = _create_download_token(
-                    order_id,
-                    product_id
-                )
-
-                orders_path = BASE / "orders" / "orders.json"
-                orders_path.write_text(
-                    json.dumps(
-                        orders,
-                        ensure_ascii=False,
-                        indent=2
-                    ),
-                    encoding="utf-8"
+                finalization = _c109_finalize_verified_payment(
+                    order_id=order_id,
+                    product_id=product_id,
+                    payment_method=payment_method,
+                    amount=amount,
+                    currency=currency,
+                    verification=verification,
                 )
 
                 response.update({
@@ -344,8 +323,13 @@ class Handler(SimpleHTTPRequestHandler):
                     "payment_verified": True,
                     "download_authorized": True,
                     "token_created": True,
-                    "download_url": download_url,
+                    "download_url": finalization["download_url"],
                     "paid": True,
+                    "gateway_reference": (
+                        finalization.get("gateway_reference")
+                        or verification.get("ref_id")
+                        or authority
+                    ),
                 })
 
             except Exception as e:
@@ -368,227 +352,6 @@ class Handler(SimpleHTTPRequestHandler):
                     ensure_ascii=False
                 ).encode("utf-8")
             )
-            return
-
-
-        if self.path.startswith("/api/secure-download"):
-
-            return self.secure_download()
-
-
-
-
-        if self.path.startswith("/api/download-info"):
-
-            from urllib.parse import urlparse, parse_qs
-
-            query = parse_qs(
-                urlparse(self.path).query
-            )
-
-            token = query.get("token", [""])[0]
-
-            tokens_file = BASE / "orders" / "download_tokens.json"
-
-            if tokens_file.exists():
-                tokens = json.loads(
-                    tokens_file.read_text(encoding="utf-8")
-                )
-            else:
-                tokens = []
-
-
-            valid = None
-
-            for item in tokens:
-                if item.get("token") == token:
-                    valid = item
-                    break
-
-
-            if not valid:
-
-                response = {
-                    "status": "error",
-                    "message": "Invalid token"
-                }
-
-            else:
-
-                history_file = BASE / "orders" / "download_history.json"
-
-                if history_file.exists():
-                    history = json.loads(
-                        history_file.read_text(encoding="utf-8")
-                    )
-                else:
-                    history = []
-
-
-                count = sum(
-                    1 for x in history
-                    if x.get("token") == token
-                )
-
-
-                response = {
-                    "status": "success",
-                    "order_id": valid.get("order_id"),
-                    "product_id": valid.get("product_id"),
-                    "product": valid.get("product", "Hunter-X Professional"),
-                    "downloads": count,
-                    "limit": 3,
-                    "remaining": max(0, 3-count),
-                    "token_status": valid.get("status")
-                }
-
-
-            self.send_response(200)
-
-            self.send_header(
-                "Content-Type",
-                "application/json"
-            )
-
-            self.end_headers()
-
-            self.wfile.write(
-                json.dumps(response).encode()
-            )
-
-            return
-
-        # ----------------------------------------------------------
-        # R98-STATIC-DOWNLOAD-FAIL-CLOSED
-        # ----------------------------------------------------------
-        # Product ZIP packages must NEVER be served through the
-        # SimpleHTTPRequestHandler static fallback.
-        #
-        # Authorized delivery is handled only by the explicit
-        # token/payment-protected download routes above.
-        #
-        # This blocks direct public access such as:
-        #   /downloads/Hunter-X_Professional.zip
-        #
-        # IMPORTANT:
-        #   - no payment state is created here
-        #   - no token is accepted here
-        #   - no product file is served here
-        #   - explicit secure-download route remains unchanged
-        # ----------------------------------------------------------
-
-        from urllib.parse import urlparse
-
-        _r98_path = urlparse(self.path).path
-
-        if (
-            _r98_path == "/downloads"
-            or _r98_path.startswith("/downloads/")
-        ):
-            self.send_error(403, "Direct download access forbidden")
-            return
-
-        # ----------------------------------------------------------
-        # R98-STATIC-DOWNLOAD-FAIL-CLOSED END
-        # ----------------------------------------------------------
-
-        return SimpleHTTPRequestHandler.do_GET(self)
-
-    def do_POST(self):
-
-        length = int(self.headers.get("Content-Length",0))
-        data = self.rfile.read(length)
-
-        try:
-            body = json.loads(data.decode("utf-8"))
-        except:
-            body = {}
-
-        # Admin Login
-        if self.path == "/api/login":
-
-            username = body.get("username")
-            password = body.get("password")
-
-            if check_login(username,password):
-
-                token = secrets.token_hex(16)
-                SESSIONS.add(token)
-
-                self.send_response(200)
-                self.send_header(
-                    "Content-Type",
-                    "application/json"
-                )
-                self.end_headers()
-
-                self.wfile.write(
-                    json.dumps({
-                        "status":"success",
-                        "token":token
-                    }).encode()
-                )
-
-            else:
-
-                self.send_response(401)
-                self.end_headers()
-
-            return
-
-
-
-        # Payment Request V6.5 Stripe Checkout Ready
-        if self.path == "/api/payment/request":
-
-            payment_id = "PAY-" + secrets.token_hex(4).upper()
-
-            response = {
-                "status": "success",
-                "payment_id": payment_id,
-                "gateway": "TEST",
-                "message": "Test payment mode"
-            }
-
-
-            if False:
-
-                try:
-
-                    checkout_url = create_checkout_session(
-                        STRIPE_SECRET_KEY,
-                        "Hunter-X V44 Professional",
-                        49,
-                        CURRENCY
-                    )
-
-                    response = {
-                        "status": "success",
-                        "payment_id": payment_id,
-                        "gateway": "STRIPE",
-                        "checkout_url": checkout_url
-                    }
-
-
-                except Exception as e:
-
-                    response = {
-                        "status": "error",
-                        "message": str(e)
-                    }
-
-
-            self.send_response(200)
-            self.send_header(
-                "Content-Type",
-                "application/json"
-            )
-            self.end_headers()
-
-            self.wfile.write(
-                json.dumps(response).encode()
-            )
-
             return
 
 
@@ -804,8 +567,269 @@ class Handler(SimpleHTTPRequestHandler):
                 return
 
 
+
+
+
+
+
+
+        # C-109 | POSTGRES AUTHORITATIVE DOWNLOAD INFO
+        if self.path.startswith("/api/download-info"):
+            try:
+                from urllib.parse import urlparse, parse_qs
+                from data_layer.db import (
+                    build_engine,
+                    build_session_factory,
+                    get_database_url,
+                    transaction,
+                )
+                from data_layer.repository import (
+                    get_download_token,
+                    authorize_download,
+                    count_downloads,
+                )
+                from data_layer.security import MAX_DOWNLOADS
+
+                query = parse_qs(urlparse(self.path).query)
+                token_value = query.get("token", [""])[0].strip()
+
+                if not token_value:
+                    self.send_error(400, "missing token")
+                    return
+
+                engine = build_engine(get_database_url())
+                SessionFactory = build_session_factory(engine)
+
+                with transaction(SessionFactory) as session:
+                    token = get_download_token(session, token_value)
+
+                    if token is None:
+                        self.send_error(403, "invalid download token")
+                        return
+
+                    order = authorize_download(
+                        session,
+                        token=token,
+                    )
+
+                    downloads = count_downloads(
+                        session,
+                        token_id=token.id,
+                    )
+
+                    mapping_file = BASE / "store_integration" / "payment_mapping.json"
+                    mappings = json.loads(
+                        mapping_file.read_text(encoding="utf-8")
+                    )
+
+                    product_id = token.product_id
+                    mapping = mappings.get(product_id)
+
+                    if not isinstance(mapping, dict):
+                        self.send_error(404, "unknown product")
+                        return
+
+                    product_name = mapping.get(
+                        "product_name",
+                        product_id,
+                    )
+
+                    order_public_id = getattr(
+                        order,
+                        "order_id",
+                        str(order.id),
+                    )
+
+                    payload = {
+                        "product": product_name,
+                        "order_id": order_public_id,
+                        "downloads": downloads,
+                        "limit": MAX_DOWNLOADS,
+                        "remaining": max(0, MAX_DOWNLOADS - downloads),
+                        "token_status": token.status,
+                    }
+
+                body = json.dumps(
+                    payload,
+                    ensure_ascii=False,
+                ).encode("utf-8")
+
+                self.send_response(200)
+                self.send_header(
+                    "Content-Type",
+                    "application/json; charset=utf-8"
+                )
+                self.send_header(
+                    "Content-Length",
+                    str(len(body))
+                )
+                self.end_headers()
+                self.wfile.write(body)
+                return
+
+            except Exception as e:
+                self.send_error(403, str(e))
+                return
+
+        # C-109 | POSTGRES AUTHORITATIVE SECURE DOWNLOAD
+        if self.path.startswith("/api/secure-download"):
+            try:
+                from urllib.parse import urlparse, parse_qs
+                from data_layer.db import (
+                    build_engine,
+                    build_session_factory,
+                    get_database_url,
+                    transaction,
+                )
+                from data_layer.repository import (
+                    get_download_token,
+                    authorize_download,
+                    record_download,
+                )
+
+                query = parse_qs(urlparse(self.path).query)
+                token_value = query.get("token", [""])[0].strip()
+
+                if not token_value:
+                    self.send_error(400, "missing token")
+                    return
+
+                mapping_file = BASE / "store_integration" / "payment_mapping.json"
+                mappings = json.loads(
+                    mapping_file.read_text(encoding="utf-8")
+                )
+
+                engine = build_engine(get_database_url())
+                SessionFactory = build_session_factory(engine)
+
+                with transaction(SessionFactory) as session:
+                    token = get_download_token(session, token_value)
+
+                    if token is None:
+                        self.send_error(403, "invalid download token")
+                        return
+
+                    order = authorize_download(
+                        session,
+                        token=token,
+                    )
+
+                    product_id = token.product_id
+                    mapping = mappings.get(product_id)
+
+                    if not isinstance(mapping, dict):
+                        self.send_error(404, "unknown product")
+                        return
+
+                    package = mapping.get("download_package")
+
+                    if not isinstance(package, str) or not package.strip():
+                        self.send_error(404, "download package missing")
+                        return
+
+                    file_path = (
+                        BASE /
+                        "downloads" /
+                        package
+                    )
+
+                    if not file_path.exists() or not file_path.is_file():
+                        self.send_error(404, "download file not found")
+                        return
+
+                    record_download(
+                        session,
+                        token=token,
+                        order=order,
+                    )
+
+                file_size = file_path.stat().st_size
+
+                self.send_response(200)
+                self.send_header(
+                    "Content-Type",
+                    "application/zip"
+                )
+                self.send_header(
+                    "Content-Disposition",
+                    f'attachment; filename="{file_path.name}"'
+                )
+                self.send_header(
+                    "Content-Length",
+                    str(file_size)
+                )
+                self.end_headers()
+
+                with file_path.open("rb") as f:
+                    while True:
+                        chunk = f.read(1024 * 1024)
+                        if not chunk:
+                            break
+                        self.wfile.write(chunk)
+
+                return
+
+            except Exception as e:
+                self.send_error(403, str(e))
+                return
+
+        # SECURITY BOUNDARY — FAIL CLOSED FOR INTERNAL FILES
+        from urllib.parse import urlparse
+
+        _static_path = urlparse(self.path).path
+
+        # Product packages must never be served directly.
+        if (
+            _static_path == "/downloads"
+            or _static_path.startswith("/downloads/")
+        ):
+            self.send_error(403, "Direct download access forbidden")
+            return
+
+        _blocked_exact = {
+            "/api",
+            "/api/",
+            "/server.py",
+        }
+
+        _blocked_suffixes = (
+            ".py",
+            ".pyc",
+            ".pyo",
+            ".env",
+            ".ini",
+            ".yaml",
+            ".yml",
+            ".toml",
+        )
+
+        if (
+            _static_path in _blocked_exact
+            or _static_path.endswith(_blocked_suffixes)
+            or "/__pycache__/" in _static_path
+            or "/.git/" in _static_path
+        ):
+            self.send_error(403, "Access forbidden")
+            return
+
+        # Public storefront/static assets remain available.
+        return super().do_GET()
+
+    def do_POST(self):
+        content_length = int(self.headers.get('Content-Length', '0'))
+        raw_body = self.rfile.read(content_length) if content_length else b'{}'
+
+        try:
+            body = json.loads(raw_body.decode('utf-8'))
+        except Exception:
+            self.send_error(400, 'Invalid JSON body')
+            return
+
+        if not isinstance(body, dict):
+            self.send_error(400, 'JSON body must be an object')
+            return
         # Customer Order
-        if self.path == "/api/order":
+        if self.path.split('?', 1)[0] == '/api/order':
 
             mapping_file = (
                 BASE /
@@ -1011,8 +1035,8 @@ class Handler(SimpleHTTPRequestHandler):
 
             return
 
-
-
+        self.send_error(404)
+        return
 
         # Product Download API V6
         self.send_error(404)
@@ -1025,40 +1049,6 @@ PORT = int(os.environ.get("PORT", 8001))
 
 if __name__ == "__main__":
     print(f"FutureMind Lab Security Server V2 running on {PORT}")
-
-    HTTPServer(
-        ("0.0.0.0", PORT),
-        Handler
-    ).serve_forever()
-
-
-
-@app.route("/api/intelligence")
-def intelligence_api():
-
-    import json
-
-    try:
-
-        with open(
-        "smart_engine/reports/daily_intelligence.json",
-        "r",
-        encoding="utf-8"
-        ) as f:
-
-            data=json.load(f)
-
-
-        return jsonify(data)
-
-
-    except Exception as e:
-
-        return jsonify({
-            "status":"ERROR",
-            "message":str(e)
-        })
-
 
     HTTPServer(
         ("0.0.0.0", PORT),
