@@ -355,6 +355,420 @@ class Handler(SimpleHTTPRequestHandler):
             return
 
 
+        # ----------------------------------------------------------
+        # R98-STATIC-DOWNLOAD-FAIL-CLOSED
+        # ----------------------------------------------------------
+        # Product ZIP packages must NEVER be served through the
+        # SimpleHTTPRequestHandler static fallback.
+        #
+        # Authorized delivery is handled only by the explicit
+        # token/payment-protected download routes above.
+        #
+        # This blocks direct public access such as:
+        #   /downloads/Hunter-X_Professional.zip
+        #
+        # IMPORTANT:
+        #   - no payment state is created here
+        #   - no token is accepted here
+        #   - no product file is served here
+        #   - explicit secure-download route remains unchanged
+        # ----------------------------------------------------------
+
+        from urllib.parse import urlparse
+
+        _r98_path = urlparse(self.path).path
+
+        if (
+            _r98_path == "/downloads"
+            or _r98_path.startswith("/downloads/")
+        ):
+            self.send_error(403, "Direct download access forbidden")
+            return
+
+        # ----------------------------------------------------------
+        # R98-STATIC-DOWNLOAD-FAIL-CLOSED END
+        # ----------------------------------------------------------
+
+        # C-109 | POSTGRES AUTHORITATIVE DOWNLOAD INFO
+        if self.path.startswith("/api/download-info"):
+            try:
+                from urllib.parse import urlparse, parse_qs
+                from data_layer.db import (
+                    build_engine,
+                    build_session_factory,
+                    get_database_url,
+                    transaction,
+                )
+                from data_layer.repository import (
+                    get_download_token,
+                    authorize_download,
+                    count_downloads,
+                )
+                from data_layer.security import MAX_DOWNLOADS
+
+                query = parse_qs(urlparse(self.path).query)
+                token_value = query.get("token", [""])[0].strip()
+
+                if not token_value:
+                    self.send_error(400, "missing token")
+                    return
+
+                engine = build_engine(get_database_url())
+                SessionFactory = build_session_factory(engine)
+
+                with transaction(SessionFactory) as session:
+                    token = get_download_token(session, token_value)
+
+                    if token is None:
+                        self.send_error(403, "invalid download token")
+                        return
+
+                    order = authorize_download(
+                        session,
+                        token=token,
+                    )
+
+                    downloads = count_downloads(
+                        session,
+                        token_id=token.id,
+                    )
+
+                    mapping_file = BASE / "store_integration" / "payment_mapping.json"
+                    mappings = json.loads(
+                        mapping_file.read_text(encoding="utf-8")
+                    )
+
+                    product_id = token.product_id
+                    mapping = mappings.get(product_id)
+
+                    if not isinstance(mapping, dict):
+                        self.send_error(404, "unknown product")
+                        return
+
+                    product_name = mapping.get(
+                        "product_name",
+                        product_id,
+                    )
+
+                    order_public_id = getattr(
+                        order,
+                        "order_id",
+                        str(order.id),
+                    )
+
+                    payload = {
+                        "product": product_name,
+                        "order_id": order_public_id,
+                        "downloads": downloads,
+                        "limit": MAX_DOWNLOADS,
+                        "remaining": max(0, MAX_DOWNLOADS - downloads),
+                        "token_status": token.status,
+                    }
+
+                body = json.dumps(
+                    payload,
+                    ensure_ascii=False,
+                ).encode("utf-8")
+
+                self.send_response(200)
+                self.send_header(
+                    "Content-Type",
+                    "application/json; charset=utf-8"
+                )
+                self.send_header(
+                    "Content-Length",
+                    str(len(body))
+                )
+                self.end_headers()
+                self.wfile.write(body)
+                return
+
+            except Exception as e:
+                self.send_error(403, str(e))
+                return
+
+        # C-109 | POSTGRES AUTHORITATIVE SECURE DOWNLOAD
+        if self.path.startswith("/api/secure-download"):
+            try:
+                from urllib.parse import urlparse, parse_qs
+                from data_layer.db import (
+                    build_engine,
+                    build_session_factory,
+                    get_database_url,
+                    transaction,
+                )
+                from data_layer.repository import (
+                    get_download_token,
+                    authorize_download,
+                    record_download,
+                )
+
+                query = parse_qs(urlparse(self.path).query)
+                token_value = query.get("token", [""])[0].strip()
+
+                if not token_value:
+                    self.send_error(400, "missing token")
+                    return
+
+                mapping_file = BASE / "store_integration" / "payment_mapping.json"
+                mappings = json.loads(
+                    mapping_file.read_text(encoding="utf-8")
+                )
+
+                engine = build_engine(get_database_url())
+                SessionFactory = build_session_factory(engine)
+
+                with transaction(SessionFactory) as session:
+                    token = get_download_token(session, token_value)
+
+                    if token is None:
+                        self.send_error(403, "invalid download token")
+                        return
+
+                    order = authorize_download(
+                        session,
+                        token=token,
+                    )
+
+                    product_id = token.product_id
+                    mapping = mappings.get(product_id)
+
+                    if not isinstance(mapping, dict):
+                        self.send_error(404, "unknown product")
+                        return
+
+                    package = mapping.get("download_package")
+
+                    if not isinstance(package, str) or not package.strip():
+                        self.send_error(404, "download package missing")
+                        return
+
+                    file_path = (
+                        BASE /
+                        "downloads" /
+                        package
+                    )
+
+                    if not file_path.exists() or not file_path.is_file():
+                        self.send_error(404, "download file not found")
+                        return
+
+                    record_download(
+                        session,
+                        token=token,
+                        order=order,
+                    )
+
+                file_size = file_path.stat().st_size
+
+                self.send_response(200)
+                self.send_header(
+                    "Content-Type",
+                    "application/zip"
+                )
+                self.send_header(
+                    "Content-Disposition",
+                    f'attachment; filename="{file_path.name}"'
+                )
+                self.send_header(
+                    "Content-Length",
+                    str(file_size)
+                )
+                self.end_headers()
+
+                with file_path.open("rb") as f:
+                    while True:
+                        chunk = f.read(1024 * 1024)
+                        if not chunk:
+                            break
+                        self.wfile.write(chunk)
+
+                return
+
+            except Exception as e:
+                self.send_error(403, str(e))
+                return
+
+        # SECURITY BOUNDARY — FAIL CLOSED FOR INTERNAL FILES
+        from urllib.parse import urlparse
+
+        _static_path = urlparse(self.path).path
+
+        # Product packages must never be served directly.
+        if (
+            _static_path == "/downloads"
+            or _static_path.startswith("/downloads/")
+        ):
+            self.send_error(403, "Direct download access forbidden")
+            return
+
+        _blocked_exact = {
+            "/api",
+            "/api/",
+            "/server.py",
+        }
+
+        _blocked_suffixes = (
+            ".py",
+            ".pyc",
+            ".pyo",
+            ".env",
+            ".ini",
+            ".yaml",
+            ".yml",
+            ".toml",
+        )
+
+        if (
+            _static_path in _blocked_exact
+            or _static_path.endswith(_blocked_suffixes)
+            or "/__pycache__/" in _static_path
+            or "/.git/" in _static_path
+        ):
+            self.send_error(403, "Access forbidden")
+            return
+
+        # Public storefront/static assets remain available.
+        from urllib.parse import urlparse
+
+        _static_path = urlparse(self.path).path
+
+        # Product packages must never be served directly.
+        if (
+            _static_path == "/downloads"
+            or _static_path.startswith("/downloads/")
+        ):
+            self.send_error(403, "Direct download access forbidden")
+            return
+
+        _blocked_exact = {
+            "/api",
+            "/api/",
+            "/server.py",
+        }
+
+        _blocked_suffixes = (
+            ".py",
+            ".pyc",
+            ".pyo",
+            ".env",
+            ".ini",
+            ".yaml",
+            ".yml",
+            ".toml",
+        )
+
+        if (
+            _static_path in _blocked_exact
+            or _static_path.endswith(_blocked_suffixes)
+            or "/__pycache__/" in _static_path
+            or "/.git/" in _static_path
+        ):
+            self.send_error(403, "Access forbidden")
+            return
+
+        # Public storefront/static assets remain available.
+        return SimpleHTTPRequestHandler.do_GET(self)
+
+    def do_POST(self):
+
+        length = int(self.headers.get("Content-Length",0))
+        data = self.rfile.read(length)
+
+        try:
+            body = json.loads(data.decode("utf-8"))
+        except:
+            body = {}
+
+        # Admin Login
+        if self.path == "/api/login":
+
+            username = body.get("username")
+            password = body.get("password")
+
+            if check_login(username,password):
+
+                token = secrets.token_hex(16)
+                SESSIONS.add(token)
+
+                self.send_response(200)
+                self.send_header(
+                    "Content-Type",
+                    "application/json"
+                )
+                self.end_headers()
+
+                self.wfile.write(
+                    json.dumps({
+                        "status":"success",
+                        "token":token
+                    }).encode()
+                )
+
+            else:
+
+                self.send_response(401)
+                self.end_headers()
+
+            return
+
+
+
+        # Payment Request V6.5 Stripe Checkout Ready
+        if self.path == "/api/payment/request":
+
+            payment_id = "PAY-" + secrets.token_hex(4).upper()
+
+            response = {
+                "status": "success",
+                "payment_id": payment_id,
+                "gateway": "TEST",
+                "message": "Test payment mode"
+            }
+
+
+            if False:
+
+                try:
+
+                    checkout_url = create_checkout_session(
+                        STRIPE_SECRET_KEY,
+                        "Hunter-X V44 Professional",
+                        49,
+                        CURRENCY
+                    )
+
+                    response = {
+                        "status": "success",
+                        "payment_id": payment_id,
+                        "gateway": "STRIPE",
+                        "checkout_url": checkout_url
+                    }
+
+
+                except Exception as e:
+
+                    response = {
+                        "status": "error",
+                        "message": str(e)
+                    }
+
+
+            self.send_response(200)
+            self.send_header(
+                "Content-Type",
+                "application/json"
+            )
+            self.end_headers()
+
+            self.wfile.write(
+                json.dumps(response).encode()
+            )
+
+            return
+
+
+
         # Payment Confirm — SERVER-SIDE VERIFICATION
 
         if self.path == "/api/payment/confirm":
