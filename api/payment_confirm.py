@@ -704,7 +704,7 @@ class PaymentConfirmHandler(BaseHTTPRequestHandler):
                 {
                     "status": "success",
                     "order_id": order_id,
-                    "gateway": "CRYPTO",
+                    "gateway": ("CRYPTO" if payment_method == "crypto" else "ZarinPal"),
                     "payment_verified": True,
                     "server_verified": True,
                     "paid": True,
