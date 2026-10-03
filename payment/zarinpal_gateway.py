@@ -211,7 +211,7 @@ def create_payment(order):
     # --------------------------------------------------------
 
     endpoint = (
-        "https://api.zarinpal.com"
+        "https://payment.zarinpal.com"
         "/pg/v4/payment/request.json"
     )
 
@@ -365,7 +365,7 @@ def verify_payment(order, authority):
     # --------------------------------------------------------
 
     endpoint = (
-        "https://api.zarinpal.com"
+        "https://payment.zarinpal.com"
         "/pg/v4/payment/verify.json"
     )
 
