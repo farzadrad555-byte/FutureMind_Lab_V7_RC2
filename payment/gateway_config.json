@@ -1,6 +1,6 @@
 {
   "mode": "FAIL_CLOSED",
-  "real_gateway_enabled": false,
+  "real_gateway_enabled": true,
   "primary": "zarinpal",
   "failover": "idpay",
   "product": {
@@ -10,8 +10,8 @@
   },
   "gateways": {
     "zarinpal": {
-      "enabled": false,
-      "sandbox": true,
+      "enabled": true,
+      "sandbox": false,
       "merchant_id": "",
       "callback_url": "",
       "require_server_verify": true,
