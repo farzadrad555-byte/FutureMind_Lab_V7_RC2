@@ -339,7 +339,7 @@
       "download": "Prospect1_Package_V1.zip",
       "markets": {
         "iran": {
-          "price": 1990000,
+          "price": 100000,
           "currency": "IRR",
           "payment": "local"
         }
