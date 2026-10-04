@@ -98,6 +98,11 @@ async function submitOrder(){
                 "Payment verification is required before download."
             );
 
+            if (data.payment_url) {
+                window.location.href = data.payment_url;
+                return;
+            }
+
             return;
 
 
