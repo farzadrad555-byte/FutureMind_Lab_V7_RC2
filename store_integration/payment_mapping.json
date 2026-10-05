@@ -113,7 +113,7 @@
     "payment_required": true,
     "download_package": "Prospect1_Package_V1.zip",
     "market": "iran",
-    "amount": 1990000,
+    "amount": 100000,
     "currency": "IRR",
     "payment_method": "zarinpal",
     "real_gateway_enabled": true,
