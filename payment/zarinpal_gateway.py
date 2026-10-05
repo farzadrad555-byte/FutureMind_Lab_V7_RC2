@@ -22,7 +22,7 @@ ZARINPAL_PRODUCT_CONTRACTS = {
         "currency": "IRR",
     },
     "prospect-1": {
-        "amount": 1990000,
+        "amount": 100000,
         "currency": "IRR",
     },
 }
