@@ -14,26 +14,27 @@ Contract:
 
 Safety:
     REAL_PAYMENT_ENABLED = False
-    BLOCKCHAIN_RPC_ENABLED = False
+    BLOCKCHAIN_RPC_ENABLED = os.getenv("GLOBAL_CRYPTO_RPC_ENABLED", "false").strip().lower() == "true"
     WALLET_API_ENABLED = False
     PAYMENT_BROADCAST = False
     PRODUCTION_WRITE = False
-    ACTIVATION = False
+    ACTIVATION = os.getenv("GLOBAL_CRYPTO_ACTIVATION", "false").strip().lower() == "true"
 
 This adapter performs no payment, broadcast, token creation,
 gateway activation, or production write by itself.
 """
 
+import os
 from pathlib import Path
 import importlib.util
 
 
 REAL_PAYMENT_ENABLED = False
-BLOCKCHAIN_RPC_ENABLED = False
+BLOCKCHAIN_RPC_ENABLED = os.getenv("GLOBAL_CRYPTO_RPC_ENABLED", "false").strip().lower() == "true"
 WALLET_API_ENABLED = False
 PAYMENT_BROADCAST = False
 PRODUCTION_WRITE = False
-ACTIVATION = False
+ACTIVATION = os.getenv("GLOBAL_CRYPTO_ACTIVATION", "false").strip().lower() == "true"
 
 ASSET = "USDT"
 NETWORK = "TRC20"
@@ -193,8 +194,8 @@ def verify_crypto_confirmation(
     if PRODUCTION_WRITE:
         return _fail("PRODUCTION_WRITE_NOT_ALLOWED")
 
-    if ACTIVATION:
-        return _fail("ACTIVATION_NOT_ALLOWED")
+    if not ACTIVATION:
+        return _fail("TRON_VERIFIER_NOT_ACTIVATED")
 
     # ----------------------------------------------------------
     # LOAD VERIFIER SOURCE
