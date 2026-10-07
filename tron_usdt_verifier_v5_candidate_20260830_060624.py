@@ -6,10 +6,60 @@ import requests
 TRON_API = "https://api.trongrid.io"
 
 USDT_TRC20_CONTRACT = (
-    "TXLAQ63Xg1NAzckPwKHvzw7CSEmLMEqcdj"
+    "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"
 )
 
 USDT_DECIMALS = Decimal("1000000")
+
+
+def _tron_hex_to_base58(address):
+    """
+    Normalize TRON event addresses to Base58.
+    Accepts Base58, 41-prefixed hex, or 0x-prefixed hex.
+    """
+    if not address:
+        return None
+
+    address = str(address)
+
+    if address.startswith("T"):
+        return address
+
+    if address.startswith("0x"):
+        address = address[2:]
+
+    if len(address) == 40:
+        address = "41" + address
+
+    try:
+        raw = bytes.fromhex(address)
+
+        if len(raw) != 21 or raw[0] != 0x41:
+            return None
+
+        return _base58check_encode(raw)
+    except Exception:
+        return None
+
+
+def _base58check_encode(payload):
+    alphabet = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
+
+    checksum = __import__("hashlib").sha256(
+        __import__("hashlib").sha256(payload).digest()
+    ).digest()[:4]
+
+    data = payload + checksum
+    number = int.from_bytes(data, "big")
+    encoded = ""
+
+    while number:
+        number, rem = divmod(number, 58)
+        encoded = alphabet[rem] + encoded
+
+    leading_zeroes = len(data) - len(data.lstrip(b"\\x00"))
+
+    return ("1" * leading_zeroes) + (encoded or "1")
 
 
 def _fail(reason):
@@ -154,7 +204,8 @@ def verify_tron_usdt_payment(
             continue
 
         contract = (
-            event.get("address")
+            event.get("contract_address")
+            or event.get("address")
             or event.get("contract")
             or result.get("contract")
         )
@@ -162,10 +213,15 @@ def verify_tron_usdt_payment(
         if contract != USDT_TRC20_CONTRACT:
             continue
 
-        to_address = (
+        to_address_raw = (
             result.get("to")
             or result.get("_to")
         )
+
+        to_address = _tron_hex_to_base58(to_address_raw)
+
+        if to_address is None:
+            to_address = to_address_raw
 
         value = (
             result.get("value")
@@ -182,6 +238,7 @@ def verify_tron_usdt_payment(
             "contract": contract,
             "to": to_address,
             "value": value,
+            "block_number": event.get("block_number"),
         }
 
         break
@@ -233,6 +290,7 @@ def verify_tron_usdt_payment(
     tx_block_raw = (
         tx.get("blockNumber")
         or tx.get("block_number")
+        or transfer.get("block_number")
     )
 
     try:
