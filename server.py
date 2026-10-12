@@ -601,7 +601,7 @@ class Handler(SimpleHTTPRequestHandler):
                         },
                         tx_hash=authority,
                         expected_wallet=crypto_contract["destination"],
-                        expected_amount=crypto_contract["amount"],
+                        expected_amount=crypto_contract["expected_amount"],
                         confirmations_required=1,
                     )
                 else:
@@ -802,8 +802,25 @@ class Handler(SimpleHTTPRequestHandler):
                 return
 
             try:
-                amount = int(amount)
-            except (TypeError, ValueError):
+                if (
+                    str(market).lower() == "global"
+                    and str(payment_method).lower() == "crypto"
+                    and isinstance(amount, str)
+                    and "." in amount
+                ):
+                    from decimal import Decimal
+                    parsed_amount = Decimal(amount)
+                    scaled_amount = parsed_amount * Decimal("100")
+                    if (
+                        not parsed_amount.is_finite()
+                        or parsed_amount <= 0
+                        or scaled_amount != scaled_amount.to_integral_value()
+                    ):
+                        raise ValueError("INVALID_USD_AMOUNT")
+                    amount = int(scaled_amount)
+                else:
+                    amount = int(amount)
+            except (TypeError, ValueError, ArithmeticError):
                 self.send_error(
                     500,
                     "Invalid payment amount"

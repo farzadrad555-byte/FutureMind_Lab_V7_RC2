@@ -171,11 +171,24 @@ def _resolve_crypto_contract(product_id):
                 "CRYPTO_CONTRACT_INCOMPLETE"
             )
 
+    raw_amount = _mapping.get("amount")
     try:
-        amount = int(
-            _mapping.get("amount")
-        )
-    except (TypeError, ValueError) as exc:
+        if isinstance(raw_amount, str) and "." in raw_amount:
+            from decimal import Decimal
+            parsed_amount = Decimal(raw_amount)
+            scaled_amount = parsed_amount * Decimal("100")
+            if (
+                not parsed_amount.is_finite()
+                or parsed_amount <= 0
+                or scaled_amount != scaled_amount.to_integral_value()
+            ):
+                raise ValueError("INVALID_CRYPTO_AMOUNT")
+            amount = int(scaled_amount)
+            expected_amount = format(parsed_amount, ".2f")
+        else:
+            amount = int(raw_amount)
+            expected_amount = str(amount)
+    except (TypeError, ValueError, ArithmeticError) as exc:
         raise RuntimeError(
             "CRYPTO_AMOUNT_INVALID"
         ) from exc
@@ -196,6 +209,7 @@ def _resolve_crypto_contract(product_id):
         "market": market,
         "payment_method": payment_method,
         "amount": amount,
+        "expected_amount": expected_amount,
         "currency": currency.strip(),
         "asset": crypto["asset"].strip(),
         "network": crypto["network"].strip(),
@@ -576,7 +590,7 @@ class PaymentConfirmHandler(BaseHTTPRequestHandler):
                     },
                     tx_hash=authority,
                     expected_wallet=crypto_contract["destination"],
-                    expected_amount=crypto_contract["amount"],
+                    expected_amount=crypto_contract["expected_amount"],
                     confirmations_required=1,
                 )
 

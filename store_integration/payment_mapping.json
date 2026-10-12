@@ -93,13 +93,13 @@
     "download_package": "FutureMind_Instagram_Sales_Assistant_V1.4.zip",
     "market": "global",
     "currency": "USD",
-    "amount": 29,
+    "amount": "0.10",
     "payment_method": "crypto",
     "crypto": {
       "asset": "USDT",
       "network": "TRON",
       "standard": "TRC20",
-      "destination": "TEST_DESTINATION_ONLY"
+      "destination": "TWZ14JzzPTfaR659Avy7XgQgMeKH98NEbC"
     },
     "real_gateway_enabled": false,
     "sandbox": true,
