@@ -508,11 +508,10 @@ class Handler(SimpleHTTPRequestHandler):
                     body.get("authority")
                     or body.get("Authority")
                 )
+                tx_hash = body.get("tx_hash")
 
-                if not order_id or not authority:
-                    raise ValueError(
-                        "Missing order_id or authority"
-                    )
+                if not order_id:
+                    raise ValueError("Missing order_id")
 
                 order = _c109_db_order_contract(order_id)
 
@@ -553,6 +552,12 @@ class Handler(SimpleHTTPRequestHandler):
                 payment_method = str(
                     order.get("payment_method", "")
                 ).lower()
+
+                if payment_method == "crypto":
+                    if not tx_hash:
+                        raise ValueError("Missing tx_hash")
+                elif not authority:
+                    raise ValueError("Missing authority")
 
                 if payment_method == "crypto":
                     from GLOBAL_CRYPTO_VERIFIER_INTEGRATION_V98_15.payment_confirm_verifier_adapter import (
@@ -599,7 +604,7 @@ class Handler(SimpleHTTPRequestHandler):
                             # NETWORK contract is TRC20.
                             "network": crypto_contract["standard"],
                         },
-                        tx_hash=authority,
+                        tx_hash=tx_hash,
                         expected_wallet=crypto_contract["destination"],
                         expected_amount=crypto_contract["expected_amount"],
                         confirmations_required=1,

@@ -438,8 +438,8 @@ class PaymentConfirmHandler(BaseHTTPRequestHandler):
                 or request.get("Authority")
             )
 
-            # Legacy/client field.
-            # NEVER treated as payment proof.
+            # Client-supplied candidate transaction hash.
+            # Never accepted as proof without server-side on-chain verification.
             tx_hash = request.get("tx_hash")
 
             if not order_id:
@@ -448,19 +448,6 @@ class PaymentConfirmHandler(BaseHTTPRequestHandler):
                     {
                         "status": "error",
                         "message": "Missing order_id"
-                    }
-                )
-                return
-
-            if not authority:
-                self._json_response(
-                    400,
-                    {
-                        "status": "error",
-                        "message": "Missing authority",
-                        "order_id": order_id,
-                        "payment_verified": False,
-                        "download_authorized": False
                     }
                 )
                 return
@@ -544,6 +531,32 @@ class PaymentConfirmHandler(BaseHTTPRequestHandler):
             ).lower()
 
             if payment_method == "crypto":
+                if not tx_hash:
+                    self._json_response(
+                        400,
+                        {
+                            "status": "error",
+                            "message": "Missing tx_hash",
+                            "order_id": order_id,
+                            "payment_verified": False,
+                            "download_authorized": False
+                        }
+                    )
+                    return
+            elif not authority:
+                self._json_response(
+                    400,
+                    {
+                        "status": "error",
+                        "message": "Missing authority",
+                        "order_id": order_id,
+                        "payment_verified": False,
+                        "download_authorized": False
+                    }
+                )
+                return
+
+            if payment_method == "crypto":
 
                 from GLOBAL_CRYPTO_VERIFIER_INTEGRATION_V98_15.payment_confirm_verifier_adapter import (
                     verify_crypto_confirmation
@@ -588,7 +601,7 @@ class PaymentConfirmHandler(BaseHTTPRequestHandler):
                         # therefore the verifier-facing value is standard.
                         "network": crypto_contract["standard"],
                     },
-                    tx_hash=authority,
+                    tx_hash=tx_hash,
                     expected_wallet=crypto_contract["destination"],
                     expected_amount=crypto_contract["expected_amount"],
                     confirmations_required=1,
